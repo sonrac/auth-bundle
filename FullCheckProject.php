@@ -74,6 +74,7 @@ class FullCheckProject
             $process->run();
             if (0 !== (int) $process->wait()) {
                 echo $process->getOutput();
+
                 throw new \Exception("Script $command run with error. Check it first");
             }
             echo $process->getOutput();
