@@ -1,0 +1,24 @@
+{
+    "name": "sonrac/auth-bundle",
+    "description": "OAuth bundle with leaguae oauth2-server",
+    "type": "library",
+    "require-dev": {
+        "refinery29/php-cs-fixer-config": "^0.6.7",
+        "phpunit/phpunit": "^7.0",
+        "squizlabs/php_codesniffer": "^3.2"
+    },
+    "license": "Apache 2.0",
+    "authors": [
+        {
+            "name": "Sergii Donii",
+            "email": "doniysa@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "symfony/config": "^4.0",
+        "symfony/security": "^4.0",
+        "symfony/http-foundation": "^4.0",
+        "doctrine/migrations": "^1.6"
+    }
+}

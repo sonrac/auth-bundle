@@ -1,0 +1,35 @@
+sonrac\Entity\AccessToken:
+  table: access_tokens
+  repositoryClass: sonrac\Repository\AccessTokens
+  type: entity
+  id:
+    id:
+      type: string
+
+  fields:
+    token:
+      type: string
+      nullable: false
+      length: 2000
+    token_scopes:
+      type: string
+      nullable: false
+      length: 5000
+    user_id:
+      type: integer
+      nullable: false
+    client_id:
+      type: integer
+      nullable: true
+    expire_at:
+      type: integer
+      length: 20
+      nullable: false
+    created_at:
+      type: integer
+      length: 20
+      nullable: false
+    updated_at:
+      type: integer
+      length: 20
+      nullable: false
