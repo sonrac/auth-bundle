@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- http://www.phpunit.de/manual/current/en/appendixes.configuration.html -->
+<phpunit
+    backupGlobals               = "false"
+    backupStaticAttributes      = "false"
+    colors                      = "true"
+    convertErrorsToExceptions   = "true"
+    convertNoticesToExceptions  = "true"
+    convertWarningsToExceptions = "true"
+    processIsolation            = "false"
+    stopOnFailure               = "true"
+    bootstrap                   = "vendor/autoload.php">
+
+    <testsuites>
+        <testsuite name="Functional Application Tests">
+            <directory>tests/functional</directory>
+        </testsuite>
+        <testsuite name="Unit Application Tests">
+            <directory>tests/units</directory>
+        </testsuite>
+    </testsuites>
+
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">src/</directory>
+            <exclude>
+                <directory>config</directory>
+                <directory>Migrations</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+    <php>
+        <env name="KERNEL_CLASS" value="\Coupons\Kernel" />
+        <env name="PROJECT_NAME" value="api" />
+        <env name="APP_ENV" value="test" />
+        <env name="DATABASE_URL" value="sqlite:///%kernel.project_dir%/resources/db.testing"/>
+    </php>
+</phpunit>

@@ -1,6 +1,6 @@
 <?php
 
-namespace sonrac\AuthBundle\Entity;
+namespace sonrac\Auth\Entity;
 
 /**
  * Class TimeEntityTrait.

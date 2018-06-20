@@ -1,6 +1,6 @@
 <?php
 
-namespace sonrac\AuthBundle\Repository;
+namespace sonrac\Auth\Repository;
 
 use League\OAuth2\Server\Repositories\AuthCodeRepositoryInterface;
 

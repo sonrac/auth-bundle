@@ -1,13 +1,13 @@
 <?php
 
-namespace sonrac\AuthBundle\Repository;
+namespace sonrac\Auth\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Entities\Traits\TokenEntityTrait;
 use League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface;
-use sonrac\AuthBundle\Entity\AccessToken;
+use sonrac\Auth\Entity\AccessToken;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -51,7 +51,7 @@ class AccessTokens extends ServiceEntityRepository implements AccessTokenReposit
     }
 
     /**
-     * @param \sonrac\AuthBundle\Entity\AccessToken|AccessTokenEntityInterface $accessTokenEntity
+     * @param \sonrac\Auth\Entity\AccessToken|AccessTokenEntityInterface $accessTokenEntity
      *                                                                                            {@inheritdoc}
      */
     public function persistNewAccessToken(AccessTokenEntityInterface $accessTokenEntity)
@@ -84,7 +84,7 @@ class AccessTokens extends ServiceEntityRepository implements AccessTokenReposit
      */
     public function isAccessTokenRevoked($tokenId): bool
     {
-        /** @var \sonrac\AuthBundle\Entity\AccessToken $entity */
+        /** @var \sonrac\Auth\Entity\AccessToken $entity */
         $entity = $this->find($tokenId);
 
         if (!$entity) {

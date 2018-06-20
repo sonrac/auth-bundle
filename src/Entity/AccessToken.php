@@ -1,6 +1,6 @@
 <?php
 
-namespace sonrac\AuthBundle\Entity;
+namespace sonrac\Auth\Entity;
 
 use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
 use League\OAuth2\Server\Entities\ClientEntityInterface;

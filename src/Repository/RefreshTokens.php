@@ -1,11 +1,11 @@
 <?php
 
-namespace sonrac\AuthBundle\Repository;
+namespace sonrac\Auth\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use League\OAuth2\Server\Entities\RefreshTokenEntityInterface;
 use League\OAuth2\Server\Repositories\RefreshTokenRepositoryInterface;
-use sonrac\AuthBundle\Entity\RefreshToken;
+use sonrac\Auth\Entity\RefreshToken;
 
 /**
  * Class RefreshTokens.

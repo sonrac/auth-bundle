@@ -1,10 +1,10 @@
 <?php
 
-namespace sonrac\AuthBundle\Types;
+namespace sonrac\Auth\Types;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
-use sonrac\AuthBundle\Entity\Client;
+use sonrac\Auth\Entity\Client;
 
 /**
  * Class GrantTypesEnum.

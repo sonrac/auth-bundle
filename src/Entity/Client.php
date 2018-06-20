@@ -1,6 +1,6 @@
 <?php
 
-namespace sonrac\AuthBundle\Entity;
+namespace sonrac\Auth\Entity;
 
 use Doctrine\DBAL\Connection;
 use League\OAuth2\Server\Entities\ClientEntityInterface;

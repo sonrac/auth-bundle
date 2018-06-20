@@ -1,11 +1,11 @@
 <?php
 
-namespace sonrac\AuthBundle\Repository;
+namespace sonrac\Auth\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Repositories\ScopeRepositoryInterface;
-use sonrac\AuthBundle\Entity\Scope;
+use sonrac\Auth\Entity\Scope;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**

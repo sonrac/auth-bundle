@@ -1,7 +1,14 @@
 {
     "name": "sonrac/auth-bundle",
-    "description": "OAuth bundle with leaguae oauth2-server",
+    "description": "OAuth bundle with league oauth2-server",
     "type": "library",
+    "require": {
+        "symfony/config": "^4.0",
+        "symfony/dependency-injection": "^4.0",
+        "symfony/orm-pack": "^1.0",
+        "symfony/security": "^4.0",
+        "symfony/http-foundation": "^4.0"
+    },
     "require-dev": {
         "refinery29/php-cs-fixer-config": "^0.6.7",
         "phpunit/phpunit": "^7.0",
@@ -15,10 +22,21 @@
         }
     ],
     "minimum-stability": "stable",
-    "require": {
-        "symfony/config": "^4.0",
-        "symfony/security": "^4.0",
-        "symfony/http-foundation": "^4.0",
-        "doctrine/migrations": "^1.6"
+    "scripts": {
+        "full-check": "php FullCheckProject.php",
+        "fix-code": "php-cs-fixer fix",
+        "test": "phpunit --color=never --coverage-text",
+        "test-coverage-html": "phpunit --coverage-html coverage",
+        "review": "phpcs src && php vendor/bin/phpcs tests",
+        "analyse": "phpstan analyze src tests",
+        "swagger-generate": "swagger --output resources/api.json src"
+    },
+    "autoload": {
+        "sonrac\\Auth\\": "src"
+    },
+    "autoload-dev": {
+        "sonrac\\Auth\\Tests\\": "tests",
+        "sonrac\\Auth\\Tests\\Units\\": "tests/units",
+        "sonrac\\Auth\\Tests\\Functional\\": "tests/functional"
     }
 }
