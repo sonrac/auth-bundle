@@ -1,7 +1,4 @@
 preset: symfony
 
-enabled:
-  - phpdoc_align
-
 disabled:
   - unalign_equals
