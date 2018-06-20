@@ -1,0 +1,34 @@
+build:
+  environment:
+        php:
+            version: 7.2
+  dependencies:
+          before:
+              - composer require kurl/silex-doctrine-migrations-provider doctrine/migrations silex/silex symfony/browser-kit sonrac/symfony-seed-command --prefer-dist --no-interaction
+  tests:
+    override:
+      -
+        command: './vendor/bin/phpunit --coverage-clover coverage.xml'
+        coverage:
+          file: 'coverage.xml'
+          format: clover
+imports:
+    - php
+checks:
+  php:
+    code_rating: true
+    duplication: true
+filter:
+  excluded_paths:
+    - vendor/*
+    - tests/*
+tools:
+    php_sim: false
+    php_cpd: false
+    php_pdepend: true
+    php_analyzer: true
+    php_changetracking: true
+filter:
+    excluded_paths:
+        - tests/*
+        - vendor/*

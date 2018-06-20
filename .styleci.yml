@@ -1,0 +1,10 @@
+preset: symfony
+
+enabled:
+  - phpdoc_align
+  - align_double_arrow
+
+disabled:
+  - unalign_equals
+  - unalign_double_arrow
+  - unalign_double_arrow
