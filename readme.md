@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/sonrac/auth-bundle.svg?branch=master)](https://travis-ci.org/sonrac/auth-bundle) 
-[![StyleCI](https://styleci.io/repos/126492798/shield?branch=master&style=flat)](https://styleci.io/repos/126492798)
+[![StyleCI](https://styleci.io/repos/138038395/shield?branch=master&style=flat)](https://styleci.io/repos/138038395)
 
 [![codecov](https://codecov.io/gh/sonrac/auth-bundle/branch/master/graph/badge.svg)](https://codecov.io/gh/sonrac/auth-bundle)
 
