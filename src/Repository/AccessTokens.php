@@ -52,7 +52,7 @@ class AccessTokens extends ServiceEntityRepository implements AccessTokenReposit
 
     /**
      * @param \sonrac\Auth\Entity\AccessToken|AccessTokenEntityInterface $accessTokenEntity
-     *                                                                                            {@inheritdoc}
+     *                                                                                      {@inheritdoc}
      */
     public function persistNewAccessToken(AccessTokenEntityInterface $accessTokenEntity)
     {

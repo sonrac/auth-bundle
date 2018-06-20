@@ -33,8 +33,12 @@ class Clients extends ServiceEntityRepository implements ClientRepositoryInterfa
      * @throws \InvalidArgumentException If client found
      * @throws \LogicException           If client secret does not match or grant type is not allowed
      */
-    public function getClientEntity($clientIdentifier, $grantType = null, $clientSecret = null, $mustValidateSecret = true)
-    {
+    public function getClientEntity(
+        $clientIdentifier,
+        $grantType = null,
+        $clientSecret = null,
+        $mustValidateSecret = true
+    ) {
         $client = $this->find($clientIdentifier);
 
         if (!$client) {

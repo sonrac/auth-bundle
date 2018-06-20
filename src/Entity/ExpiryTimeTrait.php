@@ -1,6 +1,5 @@
 <?php
 
-
 namespace sonrac\Auth\Entity;
 
 /**

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace sonrac\Auth\Entity;
 
 use League\OAuth2\Server\Entities\ScopeEntityInterface;
@@ -34,7 +33,7 @@ class Scope implements ScopeEntityInterface
      * @var string
      *
      * @OAS\Schema(example="Client scope", format="text")
-    */
+     */
     protected $description;
 
     /**
@@ -56,7 +55,7 @@ class Scope implements ScopeEntityInterface
     protected $updated_at;
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getIdentifier(): string
     {
@@ -74,7 +73,7 @@ class Scope implements ScopeEntityInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function jsonSerialize()
     {

@@ -7,6 +7,7 @@ use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Entities\ScopeEntityInterface;
 use Psr\Container\ContainerInterface;
 use Swagger\Annotations as OAS;
+
 /**
  * Class AuthCode.
  * Auth code entity.
@@ -143,7 +144,7 @@ class AuthCode implements AuthCodeEntityInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getRedirectUri(): string
     {
@@ -151,7 +152,7 @@ class AuthCode implements AuthCodeEntityInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function setRedirectUri($uri): void
     {
@@ -159,7 +160,7 @@ class AuthCode implements AuthCodeEntityInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getIdentifier(): int
     {
@@ -167,7 +168,7 @@ class AuthCode implements AuthCodeEntityInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function setIdentifier($identifier): void
     {
@@ -175,7 +176,7 @@ class AuthCode implements AuthCodeEntityInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function setUserIdentifier($identifier)
     {
@@ -183,7 +184,7 @@ class AuthCode implements AuthCodeEntityInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getUserIdentifier(): ?int
     {
@@ -191,7 +192,7 @@ class AuthCode implements AuthCodeEntityInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getClient()
     {
@@ -207,7 +208,7 @@ class AuthCode implements AuthCodeEntityInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function setClient(ClientEntityInterface $client): void
     {
@@ -217,7 +218,7 @@ class AuthCode implements AuthCodeEntityInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function addScope(ScopeEntityInterface $scope): void
     {
@@ -227,7 +228,7 @@ class AuthCode implements AuthCodeEntityInterface
     /**
      * Get scopes.
      *
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getScopes(): ?array
     {

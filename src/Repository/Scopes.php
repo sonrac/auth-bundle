@@ -25,7 +25,7 @@ class Scopes extends ServiceEntityRepository implements ScopeRepositoryInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      *
      * @throws \InvalidArgumentException
      */
@@ -41,7 +41,7 @@ class Scopes extends ServiceEntityRepository implements ScopeRepositoryInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function finalizeScopes(
         array $scopes,
