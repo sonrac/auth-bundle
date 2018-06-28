@@ -158,7 +158,7 @@ class Client implements ClientEntityInterface
      *
      * @param string|int $identifier
      */
-    public function setIdentifier($identifier): void
+    public function setIdentifier($identifier)
     {
         $this->id = $identifier;
     }
@@ -166,7 +166,7 @@ class Client implements ClientEntityInterface
     /**
      * {@inheritdoc}
      */
-    public function getName(): ?string
+    public function getName()
     {
         return $this->client_name;
     }
@@ -194,7 +194,7 @@ class Client implements ClientEntityInterface
      *
      * @param string $secret
      */
-    public function setSecret(string $secret): void
+    public function setSecret(string $secret)
     {
         $this->secret = $secret;
     }
@@ -214,7 +214,7 @@ class Client implements ClientEntityInterface
      *
      * @param array $allowedGrantTypes
      */
-    public function setAllowedGrantTypes(array $allowedGrantTypes): void
+    public function setAllowedGrantTypes(array $allowedGrantTypes)
     {
         $this->allowedGrantTypes = $allowedGrantTypes;
     }
@@ -232,7 +232,7 @@ class Client implements ClientEntityInterface
     /**
      * @param string $client_name
      */
-    public function setClientName(string $client_name): void
+    public function setClientName(string $client_name)
     {
         $this->client_name = $client_name;
     }
@@ -252,7 +252,7 @@ class Client implements ClientEntityInterface
      *
      * @param array $redirectUris
      */
-    public function setRedirectUris(array $redirectUris): void
+    public function setRedirectUris(array $redirectUris)
     {
         $redirectUris = \array_map(function ($uri) {
             return \mb_strtolower($uri);
@@ -266,7 +266,7 @@ class Client implements ClientEntityInterface
      *
      * @param string $uri
      */
-    public function addRedirectUri(string $uri): void
+    public function addRedirectUri(string $uri)
     {
         $uri = \mb_strtolower($uri);
         if (!\in_array($uri, $this->redirectUris, true)) {

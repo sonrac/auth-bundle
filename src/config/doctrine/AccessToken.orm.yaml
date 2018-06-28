@@ -3,8 +3,10 @@ sonrac\Entity\AccessToken:
   repositoryClass: sonrac\Repository\AccessTokens
   type: entity
   id:
-    id:
+    token:
       type: string
+      generator:
+        strategy: UUID
 
   fields:
     token:

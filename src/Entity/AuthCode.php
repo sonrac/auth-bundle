@@ -154,7 +154,7 @@ class AuthCode implements AuthCodeEntityInterface
     /**
      * {@inheritdoc}
      */
-    public function setRedirectUri($uri): void
+    public function setRedirectUri($uri)
     {
         $this->redirect_uri = $uri;
     }
@@ -170,7 +170,7 @@ class AuthCode implements AuthCodeEntityInterface
     /**
      * {@inheritdoc}
      */
-    public function setIdentifier($identifier): void
+    public function setIdentifier($identifier)
     {
         $this->id = (int) $identifier;
     }
@@ -186,13 +186,15 @@ class AuthCode implements AuthCodeEntityInterface
     /**
      * {@inheritdoc}
      */
-    public function getUserIdentifier(): ?int
+    public function getUserIdentifier()
     {
         return $this->user_id;
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function getClient()
     {
@@ -210,7 +212,7 @@ class AuthCode implements AuthCodeEntityInterface
     /**
      * {@inheritdoc}
      */
-    public function setClient(ClientEntityInterface $client): void
+    public function setClient(ClientEntityInterface $client)
     {
         $this->client_id = $client->getIdentifier();
 
@@ -220,7 +222,7 @@ class AuthCode implements AuthCodeEntityInterface
     /**
      * {@inheritdoc}
      */
-    public function addScope(ScopeEntityInterface $scope): void
+    public function addScope(ScopeEntityInterface $scope)
     {
         $this->scopes[] = $scope;
     }
@@ -230,9 +232,9 @@ class AuthCode implements AuthCodeEntityInterface
      *
      * {@inheritdoc}
      */
-    public function getScopes(): ?array
+    public function getScopes(): array
     {
-        return $this->scopes;
+        return $this->scopes ?? [];
     }
 
     /**
@@ -240,9 +242,9 @@ class AuthCode implements AuthCodeEntityInterface
      *
      * @return string
      */
-    public function getAuthCode(): ?string
+    public function getAuthCode(): string
     {
-        return $this->auth_code;
+        return $this->auth_code ?? '';
     }
 
     /**
@@ -250,7 +252,7 @@ class AuthCode implements AuthCodeEntityInterface
      *
      * @param string $auth_code
      */
-    public function setAuthCode(string $auth_code): void
+    public function setAuthCode(string $auth_code)
     {
         $this->auth_code = $auth_code;
     }
@@ -260,9 +262,9 @@ class AuthCode implements AuthCodeEntityInterface
      *
      * @return bool
      */
-    public function isRevoked(): ?bool
+    public function isRevoked(): bool
     {
-        return $this->is_revoked;
+        return $this->is_revoked ?? false;
     }
 
     /**
@@ -270,7 +272,7 @@ class AuthCode implements AuthCodeEntityInterface
      *
      * @param bool $is_revoked
      */
-    public function setIsRevoked(bool $is_revoked): void
+    public function setIsRevoked(bool $is_revoked)
     {
         $this->is_revoked = $is_revoked;
     }
@@ -278,9 +280,9 @@ class AuthCode implements AuthCodeEntityInterface
     /**
      * Get user identifier.
      *
-     * @return int
+     * @return int|null
      */
-    public function getUserId(): ?int
+    public function getUserId()
     {
         return $this->user_id;
     }
@@ -290,7 +292,7 @@ class AuthCode implements AuthCodeEntityInterface
      *
      * @param int $user_id
      */
-    public function setUserId(int $user_id): void
+    public function setUserId(int $user_id)
     {
         $this->user_id = $user_id;
     }
@@ -298,9 +300,9 @@ class AuthCode implements AuthCodeEntityInterface
     /**
      * Get client identifier.
      *
-     * @return int
+     * @return int|null
      */
-    public function getClientId(): ?int
+    public function getClientId()
     {
         return $this->client_id;
     }
@@ -310,7 +312,7 @@ class AuthCode implements AuthCodeEntityInterface
      *
      * @param int $client_id
      */
-    public function setClientId(int $client_id): void
+    public function setClientId(int $client_id)
     {
         $this->client_id = $client_id;
     }
@@ -318,9 +320,9 @@ class AuthCode implements AuthCodeEntityInterface
     /**
      * Get expired time.
      *
-     * @return int
+     * @return int|null
      */
-    public function getExpireAt(): ?int
+    public function getExpireAt()
     {
         return $this->expire_at;
     }
@@ -330,7 +332,7 @@ class AuthCode implements AuthCodeEntityInterface
      *
      * @param int $expire_at
      */
-    public function setExpireAt(int $expire_at): void
+    public function setExpireAt(int $expire_at)
     {
         $this->expire_at = $expire_at;
     }

@@ -20,7 +20,7 @@ class AuthBundle extends Bundle
         parent::build($container);
 
         $mappings = [
-            __DIR__.'/../config/doctrine' => 'sonrac\Auth\Entity',
+            __DIR__.'/config/doctrine' => 'sonrac\Auth\Entity',
         ];
 
         if (\class_exists('Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappingsPass')) {

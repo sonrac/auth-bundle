@@ -100,15 +100,15 @@ class AccessToken implements AccessTokenEntityInterface
     /**
      * {@inheritdoc}
      */
-    public function getIdentifier(): ?string
+    public function getIdentifier(): string
     {
-        return $this->token;
+        return $this->token ?? '';
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setIdentifier($identifier): void
+    public function setIdentifier($identifier)
     {
         $this->token = $identifier;
     }
@@ -116,7 +116,7 @@ class AccessToken implements AccessTokenEntityInterface
     /**
      * {@inheritdoc}
      */
-    public function setUserIdentifier($identifier): void
+    public function setUserIdentifier($identifier)
     {
         $this->user_id = $identifier;
     }
@@ -124,7 +124,7 @@ class AccessToken implements AccessTokenEntityInterface
     /**
      * {@inheritdoc}
      */
-    public function getUserIdentifier(): ?int
+    public function getUserIdentifier()
     {
         return $this->user_id;
     }
@@ -140,7 +140,7 @@ class AccessToken implements AccessTokenEntityInterface
     /**
      * @param string $token
      */
-    public function setToken(string $token): void
+    public function setToken(string $token)
     {
         $this->token = $token;
     }
@@ -156,7 +156,7 @@ class AccessToken implements AccessTokenEntityInterface
     /**
      * @param int $user_id
      */
-    public function setUserId(int $user_id): void
+    public function setUserId(int $user_id)
     {
         $this->user_id = $user_id;
     }
@@ -172,7 +172,7 @@ class AccessToken implements AccessTokenEntityInterface
     /**
      * @param int $client_id
      */
-    public function setClientId(int $client_id): void
+    public function setClientId(int $client_id)
     {
         $this->client_id = $client_id;
     }
@@ -180,7 +180,7 @@ class AccessToken implements AccessTokenEntityInterface
     /**
      * {@inheritdoc}
      */
-    public function setClient(ClientEntityInterface $client): void
+    public function setClient(ClientEntityInterface $client)
     {
         $this->setClientId($client->getIdentifier());
 
@@ -198,7 +198,7 @@ class AccessToken implements AccessTokenEntityInterface
     /**
      * @param int $expire_at
      */
-    public function setExpireAt(int $expire_at): void
+    public function setExpireAt(int $expire_at)
     {
         $this->expire_at = $expire_at;
     }
@@ -216,7 +216,7 @@ class AccessToken implements AccessTokenEntityInterface
     /**
      * @param bool $is_revoked
      */
-    public function setIsRevoked(bool $is_revoked): void
+    public function setIsRevoked(bool $is_revoked)
     {
         $this->is_revoked = $is_revoked;
     }
@@ -224,7 +224,7 @@ class AccessToken implements AccessTokenEntityInterface
     /**
      * @return string|null
      */
-    public function getTokenScopes(): ?string
+    public function getTokenScopes()
     {
         if (!$this->scopes && $scopes = $this->getScopes()) {
             $this->scopes = '';
@@ -237,11 +237,19 @@ class AccessToken implements AccessTokenEntityInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getClient()
+    {
+        return $this->client;
+    }
+
+    /**
      * Set token scopes.
      *
      * @param string $scopes
      */
-    public function setTokenScopes(string $scopes): void
+    public function setTokenScopes(string $scopes)
     {
         $this->scopes = $scopes;
     }

@@ -3,14 +3,14 @@ sonrac\Entity\Client:
   repositoryClass: sonrac\Repository\Clients
   type: entity
   id:
-    id:
+    name:
       type: string
 
   fields:
-    token:
+    name:
       type: string
       nullable: false
-      length: 2000
+      length: 255
     token_scopes:
       type: string
       nullable: false

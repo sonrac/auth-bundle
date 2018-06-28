@@ -24,7 +24,7 @@ trait TimeEntityTrait
      *
      * @param int|string $created_at
      */
-    public function setCreatedAt($created_at): void
+    public function setCreatedAt($created_at)
     {
         $this->{$this->getCreatedAtFieldName()} = (int) $created_at;
     }
@@ -34,7 +34,7 @@ trait TimeEntityTrait
      *
      * @return int|null
      */
-    public function getUpdatedAt(): ?int
+    public function getUpdatedAt()
     {
         return $this->{$this->getUpdatedAtFieldName()};
     }
@@ -44,7 +44,7 @@ trait TimeEntityTrait
      *
      * @param int|string $updated_at
      */
-    public function setUpdatedAt($updated_at): void
+    public function setUpdatedAt($updated_at)
     {
         $this->{$this->getUpdatedAtFieldName()} = (int) $updated_at;
     }

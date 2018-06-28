@@ -94,7 +94,7 @@ class RefreshToken implements RefreshTokenEntityInterface
     /**
      * {@inheritdoc}
      */
-    public function setIdentifier($identifier): void
+    public function setIdentifier($identifier)
     {
         $this->id = $identifier;
     }
@@ -110,7 +110,7 @@ class RefreshToken implements RefreshTokenEntityInterface
     /**
      * @param string $refresh_token
      */
-    public function setRefreshToken(string $refresh_token): void
+    public function setRefreshToken(string $refresh_token)
     {
         $this->refresh_token = $refresh_token;
     }
@@ -126,7 +126,7 @@ class RefreshToken implements RefreshTokenEntityInterface
     /**
      * @param string $token
      */
-    public function setToken(string $token): void
+    public function setToken(string $token)
     {
         $this->token = $token;
     }
@@ -142,7 +142,7 @@ class RefreshToken implements RefreshTokenEntityInterface
     /**
      * @param int $expire_at
      */
-    public function setExpireAt(int $expire_at): void
+    public function setExpireAt(int $expire_at)
     {
         $this->expire_at = $expire_at;
     }
@@ -158,7 +158,7 @@ class RefreshToken implements RefreshTokenEntityInterface
     /**
      * @param bool $is_revoked
      */
-    public function setIsRevoked(bool $is_revoked): void
+    public function setIsRevoked(bool $is_revoked)
     {
         $this->is_revoked = $is_revoked;
     }
@@ -174,7 +174,7 @@ class RefreshToken implements RefreshTokenEntityInterface
     /**
      * @param int $created_at
      */
-    public function setCreatedAt(int $created_at): void
+    public function setCreatedAt(int $created_at)
     {
         $this->created_at = $created_at;
     }
@@ -182,7 +182,7 @@ class RefreshToken implements RefreshTokenEntityInterface
     /**
      * @return int
      */
-    public function getUpdatedAt(): ?int
+    public function getUpdatedAt()
     {
         return $this->updated_at;
     }
@@ -190,7 +190,7 @@ class RefreshToken implements RefreshTokenEntityInterface
     /**
      * @param int $updated_at
      */
-    public function setUpdatedAt(int $updated_at): void
+    public function setUpdatedAt(int $updated_at)
     {
         $this->updated_at = $updated_at;
     }

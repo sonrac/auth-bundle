@@ -1,0 +1,11 @@
+version: "3.6"
+
+services:
+  fpm:
+    image: sonrac/infomir-php:7.2-fpm
+    volumes:
+      - ./:/home/infomir
+    deploy:
+      mode: global
+      labels:
+

@@ -67,7 +67,7 @@ class Scope implements ScopeEntityInterface
      *
      * @param string $identifier
      */
-    public function setIdentifier(string $identifier): void
+    public function setIdentifier(string $identifier)
     {
         $this->name = $identifier;
     }
@@ -95,7 +95,7 @@ class Scope implements ScopeEntityInterface
      *
      * @param string $description
      */
-    public function setDescription(string $description): void
+    public function setDescription(string $description)
     {
         $this->description = $description;
     }

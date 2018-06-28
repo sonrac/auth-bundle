@@ -26,7 +26,7 @@ trait ExpiryTimeTrait
     /**
      * {@inheritdoc}
      */
-    public function setExpiryDateTime(\DateTime $dateTime): void
+    public function setExpiryDateTime(\DateTime $dateTime)
     {
         $this->{$this->getExpireAtFieldName()} = $dateTime->getTimestamp();
     }
