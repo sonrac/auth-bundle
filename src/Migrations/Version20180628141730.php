@@ -5,22 +5,21 @@ declare(strict_types=1);
 namespace sonrac\Auth\Migrations;
 
 use Doctrine\DBAL\Schema\Schema;
-use Doctrine\DBAL\Types\Type;
 use Doctrine\Migrations\AbstractMigration;
 
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20180628134430 extends AbstractMigration
+final class Version20180628141730 extends AbstractMigration
 {
     /**
      * {@inheritdoc}
      */
     public function up(Schema $schema): void
     {
-        $accessToken = $schema->createTable('access_tokens');
-        $accessToken->addColumn('token', Type::STRING)
-            ->setLength(2000)
+        $accessToken = $schema->createTable('clients');
+        $accessToken->addColumn('name', Type::STRING)
+            ->setLength(255)
             ->setNotnull(true);
         $accessToken->addColumn('token_scopes', Type::TEXT)
             ->setNotnull(true)
@@ -37,7 +36,7 @@ final class Version20180628134430 extends AbstractMigration
                 ->setNotnull($notNull);
         }
 
-        $accessToken->setPrimaryKey(['token']);
+        $accessToken->setPrimaryKey(['name']);
     }
 
     /**
@@ -45,6 +44,6 @@ final class Version20180628134430 extends AbstractMigration
      */
     public function down(Schema $schema): void
     {
-        $schema->dropTable('access_tokens');
+        $schema->dropTable('clients');
     }
 }

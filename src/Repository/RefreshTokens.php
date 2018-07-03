@@ -6,6 +6,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use League\OAuth2\Server\Entities\RefreshTokenEntityInterface;
 use League\OAuth2\Server\Repositories\RefreshTokenRepositoryInterface;
 use sonrac\Auth\Entity\RefreshToken;
+use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
  * Class RefreshTokens.
@@ -18,6 +19,11 @@ use sonrac\Auth\Entity\RefreshToken;
  */
 class RefreshTokens extends ServiceEntityRepository implements RefreshTokenRepositoryInterface
 {
+    public function __construct(RegistryInterface $registry)
+    {
+        parent::__construct($registry, RefreshToken::class);
+    }
+
     /**
      * {@inheritdoc}
      */

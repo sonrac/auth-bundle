@@ -1,0 +1,29 @@
+sonrac\Auth\Entity\Scope:
+  type: entity
+  repostitoryClass: sonrac\Auth\Repository\Scopes
+  table: scopes
+  id:
+    scope:
+      type: string
+  fields:
+    scope:
+      type: string
+      length: 2000
+      uniqueItems: true
+      nullable: false
+    title:
+      type: string
+      length: 255
+      default: false
+    desccription:
+      type: string
+      length: 2000
+      nullable: false
+    created_at:
+      type: integer
+      length: 20
+      nullable: false
+    updated_at:
+      type: integer
+      length: 20
+      nullable: false

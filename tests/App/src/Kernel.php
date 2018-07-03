@@ -2,7 +2,6 @@
 
 namespace sonrac\Auth\Tests\App;
 
-use Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappingsPass;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\Config\Resource\FileResource;
@@ -11,7 +10,7 @@ use Symfony\Component\HttpKernel\Kernel as BaseKernel;
 use Symfony\Component\Routing\RouteCollectionBuilder;
 
 /**
- * Class Kernel
+ * Class Kernel.
  */
 class Kernel extends BaseKernel
 {
@@ -36,13 +35,12 @@ class Kernel extends BaseKernel
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getProjectDir()
     {
-        return __DIR__;
+        return __DIR__.'/../';
     }
-
 
     /**
      * Get log dir.
@@ -62,7 +60,7 @@ class Kernel extends BaseKernel
     public function registerBundles()
     {
         /** @var array $contents */
-        $contents = require __DIR__.'/config/bundles.php';
+        $contents = require __DIR__.'/../config/bundles.php';
         foreach ($contents as $class => $envs) {
             if (isset($envs['all']) || isset($envs[$this->getEnvironment()])) {
                 yield new $class();

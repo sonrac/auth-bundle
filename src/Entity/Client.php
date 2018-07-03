@@ -13,7 +13,7 @@ use Swagger\Annotations as OAS;
  * @OAS\Schema(
  *     title="OAuth clients",
  *     description="Oauth clients list",
- *     required={"redirectUris", "allowedGrantTypes", "client_name"}
+ *     required={"redirect_uris", "allowed_grant_types", "name"}
  * )
  */
 class Client implements ClientEntityInterface
@@ -54,14 +54,14 @@ class Client implements ClientEntityInterface
      *
      * @var string
      */
-    public const GRANT_AUTH_CODE = 'auth_code';
+    public const GRANT_AUTH_CODE = 'code';
 
     /**
      * Client identifier.
      *
      * @var int
      *
-     * @OAS\Property(example=1, uniqueItems=true)
+     * @OAS\Property(example=1)
      */
     protected $id;
 
@@ -75,13 +75,22 @@ class Client implements ClientEntityInterface
     protected $secret;
 
     /**
+     * User identifier.
+     *
+     * @var int
+     *
+     * @OAS\Property(example=1)
+     */
+    protected $user_id;
+
+    /**
      * Allowed grant types.
      *
      * @var array
      *
      * @OAS\Property(example={"client_credentials", "password"})
      */
-    protected $allowedGrantTypes;
+    protected $allowed_grant_types;
 
     /**
      * Random client identifier.
@@ -90,7 +99,7 @@ class Client implements ClientEntityInterface
      *
      * @OAS\Property(example="test_application", uniqueItems=true)
      */
-    protected $client_name;
+    protected $name;
 
     /**
      * Redirect url list.
@@ -99,14 +108,7 @@ class Client implements ClientEntityInterface
      *
      * @OAS\Property(example={"https://test.com", "https://test.com/redirect"})
      */
-    protected $redirectUris;
-
-    /**
-     * Connection.
-     *
-     * @var \Doctrine\DBAL\Connection
-     */
-    protected $connection;
+    protected $redirect_uris;
 
     /**
      * Created time.
@@ -127,25 +129,6 @@ class Client implements ClientEntityInterface
     protected $updated_at;
 
     /**
-     * Container registry.
-     *
-     * @var \Psr\Container\ContainerInterface
-     */
-    protected $container;
-
-    /**
-     * MailTemplates constructor.
-     *
-     * @param \Doctrine\DBAL\Connection         $connection
-     * @param \Psr\Container\ContainerInterface $container
-     */
-    public function __construct(Connection $connection, ContainerInterface $container)
-    {
-        $this->connection = $connection;
-        $this->container  = $container;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function getIdentifier()
@@ -154,21 +137,31 @@ class Client implements ClientEntityInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getName(): string
+    {
+        return $this->name ?? '';
+    }
+
+    /**
+     * Set client name.
+     *
+     * @param string $name
+     */
+    public function setName(string $name): void
+    {
+        $this->name = $name;
+    }
+
+    /**
      * Set identifier.
      *
      * @param string|int $identifier
      */
-    public function setIdentifier($identifier)
+    public function setIdentifier($identifier): void
     {
         $this->id = $identifier;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return $this->client_name;
     }
 
     /**
@@ -194,7 +187,7 @@ class Client implements ClientEntityInterface
      *
      * @param string $secret
      */
-    public function setSecret(string $secret)
+    public function setSecret(string $secret): void
     {
         $this->secret = $secret;
     }
@@ -206,35 +199,17 @@ class Client implements ClientEntityInterface
      */
     public function getAllowedGrantTypes(): array
     {
-        return $this->allowedGrantTypes;
+        return $this->allowed_grant_types;
     }
 
     /**
      * Set allowed grant types.
      *
-     * @param array $allowedGrantTypes
+     * @param array $allowed_grant_types
      */
-    public function setAllowedGrantTypes(array $allowedGrantTypes)
+    public function setAllowedGrantTypes(array $allowed_grant_types): void
     {
-        $this->allowedGrantTypes = $allowedGrantTypes;
-    }
-
-    /**
-     * Get client name.
-     *
-     * @return string
-     */
-    public function getClientName(): string
-    {
-        return $this->client_name;
-    }
-
-    /**
-     * @param string $client_name
-     */
-    public function setClientName(string $client_name)
-    {
-        $this->client_name = $client_name;
+        $this->allowed_grant_types = $allowed_grant_types;
     }
 
     /**
@@ -244,21 +219,21 @@ class Client implements ClientEntityInterface
      */
     public function getRedirectUris(): array
     {
-        return $this->redirectUris ?? [];
+        return $this->redirect_uris ?? [];
     }
 
     /**
      * Set redirect uris.
      *
-     * @param array $redirectUris
+     * @param array $redirect_uris
      */
-    public function setRedirectUris(array $redirectUris)
+    public function setRedirectUris(array $redirect_uris): void
     {
-        $redirectUris = \array_map(function ($uri) {
+        $redirect_uris = \array_map(function ($uri) {
             return \mb_strtolower($uri);
-        }, $redirectUris);
+        }, $redirect_uris);
 
-        $this->redirectUris = $redirectUris;
+        $this->redirect_uris = $redirect_uris;
     }
 
     /**
@@ -266,11 +241,11 @@ class Client implements ClientEntityInterface
      *
      * @param string $uri
      */
-    public function addRedirectUri(string $uri)
+    public function addRedirectUri(string $uri): void
     {
         $uri = \mb_strtolower($uri);
-        if (!\in_array($uri, $this->redirectUris, true)) {
-            $this->redirectUris[] = $uri;
+        if (!\in_array($uri, $this->redirect_uris, true)) {
+            $this->redirect_uris[] = $uri;
         }
     }
 }

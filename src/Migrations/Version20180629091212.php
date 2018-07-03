@@ -11,33 +11,36 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20180628134430 extends AbstractMigration
+final class Version20180629091212 extends AbstractMigration
 {
     /**
      * {@inheritdoc}
      */
     public function up(Schema $schema): void
     {
-        $accessToken = $schema->createTable('access_tokens');
-        $accessToken->addColumn('token', Type::STRING)
+        $authCodes = $schema->createTable('auth_codes');
+        $authCodes->addColumn('code', Type::STRING)
             ->setLength(2000)
             ->setNotnull(true);
-        $accessToken->addColumn('token_scopes', Type::TEXT)
-            ->setNotnull(true)
-            ->setDefault('default');
-        $accessToken->addColumn('user_id', Type::INTEGER)
-            ->setNotnull(false);
-        $accessToken->addColumn('client_id', Type::INTEGER)
+        $authCodes->addColumn('redirect_uris', Type::TEXT)
             ->setNotnull(true);
-
+        $authCodes->addColumn('is_revoked', Type::BOOLEAN)
+            ->setNotnull(true)
+            ->setDefault(false);
+        $authCodes->addColumn('scopes', Type::TEXT)
+            ->setNotnull(true);
+        $authCodes->addColumn('user_id', Type::INTEGER)
+            ->setNotnull(true);
+        $authCodes->addColumn('client_id', Type::INTEGER)
+            ->setNotnull(true);
         foreach (['expire_at', 'created_at', 'updated_at'] as $columnName) {
             $notNull = $columnName === 'updated_at';
-            $accessToken->addColumn($columnName, Type::BIGINT)
+            $authCodes->addColumn($columnName, Type::BIGINT)
                 ->setLength(20)
                 ->setNotnull($notNull);
         }
 
-        $accessToken->setPrimaryKey(['token']);
+        $authCodes->setPrimaryKey(['code']);
     }
 
     /**
@@ -45,6 +48,6 @@ final class Version20180628134430 extends AbstractMigration
      */
     public function down(Schema $schema): void
     {
-        $schema->dropTable('access_tokens');
+        $schema->dropTable('auth_codes');
     }
 }

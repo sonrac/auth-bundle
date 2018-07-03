@@ -25,16 +25,25 @@ class Scope implements ScopeEntityInterface
      *
      * @OAS\Property(example=1, uniqueItems=true)
      */
-    protected $name;
+    protected $scope;
 
     /**
      * Scope description.
      *
      * @var string
      *
-     * @OAS\Schema(example="Client scope", format="text")
+     * @OAS\Schema(example="Client scope description", format="text")
      */
     protected $description;
+
+    /**
+     * Scope description.
+     *
+     * @var string
+     *
+     * @OAS\Schema(example="Client scope title")
+     */
+    protected $title;
 
     /**
      * Created time.
@@ -59,7 +68,7 @@ class Scope implements ScopeEntityInterface
      */
     public function getIdentifier(): string
     {
-        return $this->name;
+        return $this->scope;
     }
 
     /**
@@ -67,9 +76,9 @@ class Scope implements ScopeEntityInterface
      *
      * @param string $identifier
      */
-    public function setIdentifier(string $identifier)
+    public function setIdentifier(string $identifier): void
     {
-        $this->name = $identifier;
+        $this->scope = $identifier;
     }
 
     /**
@@ -95,8 +104,28 @@ class Scope implements ScopeEntityInterface
      *
      * @param string $description
      */
-    public function setDescription(string $description)
+    public function setDescription(string $description): void
     {
         $this->description = $description;
+    }
+
+    /**
+     * Get scope title.
+     *
+     * @return string
+     */
+    public function getTitle(): string
+    {
+        return $this->title ?? '';
+    }
+
+    /**
+     * Set scope title.
+     *
+     * @param string $title
+     */
+    public function setTitle(string $title): void
+    {
+        $this->title = $title;
     }
 }

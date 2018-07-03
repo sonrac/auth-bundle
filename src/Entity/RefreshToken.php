@@ -57,6 +57,15 @@ class RefreshToken implements RefreshTokenEntityInterface
     protected $expire_at;
 
     /**
+     * Refresh token scopes.
+     *
+     * @var array
+     *
+     * @OAS\Property(example={"client", "admin"})
+     */
+    protected $token_scopes;
+
+    /**
      * Is revoked token.
      *
      * @var bool
@@ -193,5 +202,25 @@ class RefreshToken implements RefreshTokenEntityInterface
     public function setUpdatedAt(int $updated_at)
     {
         $this->updated_at = $updated_at;
+    }
+
+    /**
+     * Get scopes.
+     *
+     * @return array|null
+     */
+    public function getScopes(): ?array
+    {
+        return $this->token_scopes;
+    }
+
+    /**
+     * Set scopes.
+     *
+     * @param array $scopes
+     */
+    public function setScopes(array  $scopes): void
+    {
+        $this->token_scopes = $scopes;
     }
 }

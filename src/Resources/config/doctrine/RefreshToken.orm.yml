@@ -1,0 +1,41 @@
+sonrac\Auth\Entity\RefreshToken:
+  table: refresh_tokens
+  repositoryClass: sonrac\Repository\RefreshTokens
+  type: entity
+  id:
+    refresh_token:
+      type: string
+      nullable: false
+      length: 2000
+      generator:
+        strategy: UUID
+  OneToOne:
+    token:
+      targetEntity: AccessToken
+      joinColumn:
+        name: token
+        referenceColumnName: token
+  fields:
+    token:
+      type: string
+      nullable: false
+      length: 2000
+    token_scopes:
+      type: text
+      nullable: false
+    is_revoked:
+      type: bool
+      nullable: false
+      default: false
+    expire_at:
+      type: integer
+      length: 20
+      nullable: false
+    created_at:
+      type: integer
+      length: 20
+      nullable: false
+    updated_at:
+      type: integer
+      length: 20
+      nullable: false

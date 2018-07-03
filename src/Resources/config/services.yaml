@@ -1,0 +1,44 @@
+services:
+  League\OAuth2\Server\Repositories\ClientRepositoryInterface:
+    class: sonrac\Auth\Repository\Clients
+    public: true
+    arguments: ['@doctrine', '@service_container']
+  League\OAuth2\Server\Repositories\ScopeRepositoryInterface:
+    class: sonrac\Auth\Repository\Scopes
+    public: true
+    arguments: ['@doctrine']
+  League\OAuth2\Server\Repositories\RefreshTokenRepositoryInterface:
+    class: sonrac\Auth\Repository\RefreshTokens
+    public: true
+    arguments: ['@doctrine']
+  League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface:
+    class: sonrac\Auth\Repository\AccessTokens
+    public: true
+    arguments: ['@doctrine', '@service_container']
+  League\OAuth2\Server\Repositories\AuthCodeRepositoryInterface:
+    class: sonrac\Auth\Repository\AuthCodes
+    public: true
+    arguments: ['@doctrine']
+  League\OAuth2\Server\Repositories\UserRepositoryInterface:
+    class: sonrac\Auth\Repository\Users
+    public: true
+    arguments: ['@doctrine']
+  League\OAuth2\Server\Entities\ClientEntityInterface:
+    class: sonrac\Auth\Entity\Client
+    public: true
+  League\OAuth2\Server\Entities\RefreshTokenEntityInterface:
+    class: sonrac\Auth\Entity\RefreshToken
+    public: true
+  League\OAuth2\Server\Entities\AccessTokenEntityInterface:
+    class: sonrac\Auth\Entity\AccessToken
+    public: true
+    arguments: ['@League\OAuth2\Server\Repositories\ClientRepositoryInterface']
+  League\OAuth2\Server\Entities\ScopeEntityInterface:
+    class: sonrac\Auth\Entity\Scope
+    public: true
+  League\OAuth2\Server\Entities\UserEntityInterface:
+    class: sonrac\Auth\Entity\User
+    public: true
+  League\OAuth2\Server\Entities\AuthCodeEntityInterface:
+    class: sonrac\Auth\Entity\AuthCode
+    public: true

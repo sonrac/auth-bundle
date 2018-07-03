@@ -1,28 +1,35 @@
-sonrac\Entity\AccessToken:
+sonrac\Auth\Entity\AccessToken:
   table: access_tokens
   repositoryClass: sonrac\Repository\AccessTokens
   type: entity
   id:
     token:
       type: string
-      generator:
-        strategy: UUID
-
-  fields:
-    token:
-      type: string
       nullable: false
       length: 2000
+      generator:
+        strategy: UUID
+  OneToOne:
+    user_id:
+      targetEntity: User
+      joinColumn:
+        name: user_id
+        referenceColumnName: id
+    client_id:
+      targetEntity: Client
+      joinColumn:
+        name: client_id
+        referenceColumnName: id
+  fields:
     token_scopes:
-      type: string
+      type: text
       nullable: false
-      length: 5000
     user_id:
       type: integer
-      nullable: false
+      nullable: true
     client_id:
       type: integer
-      nullable: true
+      nullable: false
     expire_at:
       type: integer
       length: 20
@@ -34,4 +41,4 @@ sonrac\Entity\AccessToken:
     updated_at:
       type: integer
       length: 20
-      nullable: false
+      nullable: true

@@ -5,8 +5,8 @@ namespace sonrac\Auth\Tests\Functional;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class FunctionalTester.
+ * Class AuthorizeTest.
  */
-class FunctionalTester extends TestCase
+class AuthorizeTest extends TestCase
 {
 }

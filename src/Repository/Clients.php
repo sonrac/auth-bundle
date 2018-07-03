@@ -3,7 +3,9 @@
 namespace sonrac\Auth\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
+use Psr\Container\ContainerInterface;
 use sonrac\Auth\Entity\Client;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -45,7 +47,7 @@ class Clients extends ServiceEntityRepository implements ClientRepositoryInterfa
             throw new \InvalidArgumentException('Client not found');
         }
 
-        if ($grantType && !\in_array(\mb_strtolower($grantType), $client->getAllowedGrantTypes(), true)) {
+        if ($grantType && !\in_array(\mb_strtolower($grantType), $client->getAllowedGranttypes(), true)) {
             throw new \LogicException('Grant type is not allowed for client application');
         }
 

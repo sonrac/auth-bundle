@@ -1,11 +1,46 @@
-version: "3.6"
+version: "3"
 
 services:
   fpm:
-    image: sonrac/infomir-php:7.2-fpm
+    image: sonrac/infomir-php:php-fpm-7.2
     volumes:
       - ./:/home/infomir
     deploy:
-      mode: global
+      mode: replicated
+      replicas: 1
+      restart_policy:
+        condition: on-failure
       labels:
+        - "traefik.enable=false"
+    networks:
+      - auth-net
 
+  nginx:
+    image: sonrac/infomir-nginx
+    volumes:
+     - ./:/home/infomir
+     - ./.docker/vhost.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - fpm
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      labels:
+        - "traefik.enable=true"
+        - "traefik.auth.api.enable=true"
+        - "traefik.docker.network=traefik-net"
+        - "traefik.auth.api.docker.network=auth-net"
+        - "traefik.auth.api.frontend.rule=Host:auth.devinf"
+        - "traefik.auth.api.backend=auth"
+        - "traefik.auth.api.port=80"
+    networks:
+      - traefik-net
+      - auth-net
+
+networks:
+  traefik-net:
+    external: true
+  auth-net:
+    driver: overlay

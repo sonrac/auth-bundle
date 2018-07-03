@@ -7,6 +7,7 @@ use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Entities\Traits\TokenEntityTrait;
 use League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface;
+use Psr\Container\ContainerInterface;
 use sonrac\Auth\Entity\AccessToken;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -23,12 +24,20 @@ class AccessTokens extends ServiceEntityRepository implements AccessTokenReposit
     use TokenEntityTrait;
 
     /**
+     * Access token entity classname.
+     *
+     * @var string
+     */
+    private $container;
+
+    /**
      * AccessTokens constructor.
      *
      * @param \Symfony\Bridge\Doctrine\RegistryInterface $registry
      */
-    public function __construct(RegistryInterface $registry)
+    public function __construct(RegistryInterface $registry, ContainerInterface $container)
     {
+        $this->container = $container;
         parent::__construct($registry, AccessToken::class);
     }
 
@@ -37,7 +46,7 @@ class AccessTokens extends ServiceEntityRepository implements AccessTokenReposit
      */
     public function getNewToken(ClientEntityInterface $clientEntity, array $scopes, $userIdentifier = null)
     {
-        $token = new AccessToken();
+        $token = $this->container->get('service_container')->get(AccessTokenEntityInterface::class);
         foreach ($scopes as $scope) {
             $token->addScope($scope);
         }

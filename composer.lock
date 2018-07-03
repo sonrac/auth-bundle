@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "988b17a009f2854c68c14c7b76a5bd13",
+    "content-hash": "6249fed58876e223653adc8a264867e3",
     "packages": [
         {
             "name": "defuse/php-encryption",
@@ -4722,6 +4722,47 @@
             "description": "Library that helps with managing the version number of Git-hosted PHP projects",
             "homepage": "https://github.com/sebastianbergmann/version",
             "time": "2016-10-03T07:35:21+00:00"
+        },
+        {
+            "name": "sonrac/symfony-seed-command",
+            "version": "0.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sonrac/symfony-seed-command.git",
+                "reference": "96d741511fa7de3b8a1c69cde83f6ce0adf26cc7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sonrac/symfony-seed-command/zipball/96d741511fa7de3b8a1c69cde83f6ce0adf26cc7",
+                "reference": "96d741511fa7de3b8a1c69cde83f6ce0adf26cc7",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/dbal": ">=2.2.0",
+                "php": ">=5.3",
+                "symfony/console": ">=2.3"
+            },
+            "require-dev": {
+                "phpunit/phpunit": ">=4.8"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "sonrac\\SimpleSeed\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Sergii Donii",
+                    "email": "doniysa@gmail.com"
+                }
+            ],
+            "description": "Symfony simple seed command",
+            "time": "2018-02-06T12:49:47+00:00"
         },
         {
             "name": "squizlabs/php_codesniffer",
