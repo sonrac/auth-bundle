@@ -5,12 +5,12 @@ namespace sonrac\Auth\Tests\Seeds;
 use sonrac\SimpleSeed\SimpleSeedWithCheckExists;
 
 /**
- * Class Clients
+ * Class Clients.
  */
 class Clients extends SimpleSeedWithCheckExists
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function getTable(): string
     {
@@ -18,25 +18,24 @@ class Clients extends SimpleSeedWithCheckExists
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function getData(): array
     {
         return [
             [
-                'name' => 'Test Client',
+                'name'        => 'Test Client',
                 'description' => 'First test client',
-                'created_at' => time(),
-            ]
+                'created_at'  => \time(),
+            ],
         ];
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function getWhereForRow($data): array
     {
         return ['name' => $data['name']];
     }
-
 }

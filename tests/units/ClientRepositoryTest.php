@@ -11,6 +11,5 @@ class ClientRepositoryTest extends TestCase
 {
     public function testGetClientEntity()
     {
-
     }
 }

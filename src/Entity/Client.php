@@ -2,9 +2,7 @@
 
 namespace sonrac\Auth\Entity;
 
-use Doctrine\DBAL\Connection;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
-use Psr\Container\ContainerInterface;
 use Swagger\Annotations as OAS;
 
 /**

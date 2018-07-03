@@ -6,17 +6,15 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Class AuthorizeController
+ * Class AuthorizeController.
  */
 class AuthorizeController extends AbstractController
 {
     public function authorize(Request $request)
     {
-
     }
 
     public function authenticate(Request $request)
     {
-
     }
 }

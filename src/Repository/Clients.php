@@ -3,9 +3,7 @@
 namespace sonrac\Auth\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
-use Psr\Container\ContainerInterface;
 use sonrac\Auth\Entity\Client;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 

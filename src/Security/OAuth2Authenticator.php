@@ -15,7 +15,7 @@ use Symfony\Component\Security\Guard\AuthenticatorInterface;
 class OAuth2Authenticator implements AuthenticatorInterface
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function start(Request $request, AuthenticationException $authException = null)
     {
@@ -23,7 +23,7 @@ class OAuth2Authenticator implements AuthenticatorInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function supports(Request $request)
     {
@@ -31,7 +31,7 @@ class OAuth2Authenticator implements AuthenticatorInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getCredentials(Request $request)
     {
@@ -39,7 +39,7 @@ class OAuth2Authenticator implements AuthenticatorInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
@@ -47,7 +47,7 @@ class OAuth2Authenticator implements AuthenticatorInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function checkCredentials($credentials, UserInterface $user)
     {
@@ -55,7 +55,7 @@ class OAuth2Authenticator implements AuthenticatorInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function createAuthenticatedToken(UserInterface $user, $providerKey)
     {
@@ -63,7 +63,7 @@ class OAuth2Authenticator implements AuthenticatorInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
     {
@@ -71,7 +71,7 @@ class OAuth2Authenticator implements AuthenticatorInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
@@ -79,11 +79,10 @@ class OAuth2Authenticator implements AuthenticatorInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function supportsRememberMe()
     {
         // TODO: Implement supportsRememberMe() method.
     }
-
 }

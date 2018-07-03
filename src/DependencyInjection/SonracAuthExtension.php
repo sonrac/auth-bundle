@@ -9,17 +9,17 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\Routing\Loader\YamlFileLoader as RoutesYamlLoader;
 
 /**
- * Class SonracAuthExtension
+ * Class SonracAuthExtension.
  */
 class SonracAuthExtension extends Extension
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function load(array $configs, ContainerBuilder $container)
     {
         $fileLocator = new FileLocator(__DIR__.'/../Resources/config');
-        $loader = new YamlFileLoader(
+        $loader      = new YamlFileLoader(
             $container,
             $fileLocator
         );

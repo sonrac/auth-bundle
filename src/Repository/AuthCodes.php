@@ -4,7 +4,6 @@ namespace sonrac\Auth\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use League\OAuth2\Server\Entities\AuthCodeEntityInterface;
-use League\OAuth2\Server\Exception\UniqueTokenIdentifierConstraintViolationException;
 use League\OAuth2\Server\Repositories\AuthCodeRepositoryInterface;
 use sonrac\Auth\Entity\AuthCode;
 use Symfony\Bridge\Doctrine\RegistryInterface;
@@ -25,7 +24,7 @@ class AuthCodes extends ServiceEntityRepository implements AuthCodeRepositoryInt
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getNewAuthCode()
     {
@@ -33,7 +32,7 @@ class AuthCodes extends ServiceEntityRepository implements AuthCodeRepositoryInt
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function persistNewAuthCode(AuthCodeEntityInterface $authCodeEntity)
     {
@@ -41,7 +40,7 @@ class AuthCodes extends ServiceEntityRepository implements AuthCodeRepositoryInt
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function revokeAuthCode($codeId)
     {
@@ -49,7 +48,7 @@ class AuthCodes extends ServiceEntityRepository implements AuthCodeRepositoryInt
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function isAuthCodeRevoked($codeId)
     {
