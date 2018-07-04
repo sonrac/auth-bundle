@@ -30,7 +30,7 @@ class RefreshTokens extends ServiceEntityRepository implements RefreshTokenRepos
     public function getNewRefreshToken()
     {
         $token = new RefreshToken();
-        $token->setCreatedAt(time());
+        $token->setCreatedAt(\time());
 
         return $token;
     }
@@ -40,7 +40,7 @@ class RefreshTokens extends ServiceEntityRepository implements RefreshTokenRepos
      */
     public function persistNewRefreshToken(RefreshTokenEntityInterface $refreshTokenEntity)
     {
-        /** @var \sonrac\Auth\Entity\RefreshToken $refreshTokenEntity  */
+        /** @var \sonrac\Auth\Entity\RefreshToken $refreshTokenEntity */
         $refreshTokenEntity->preparePersist();
         $this->_em->persist($refreshTokenEntity);
         $this->_em->flush();

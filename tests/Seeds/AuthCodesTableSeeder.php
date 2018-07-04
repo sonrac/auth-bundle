@@ -5,12 +5,12 @@ namespace sonrac\Auth\Tests\Seeds;
 use sonrac\SimpleSeed\RollBackSeedWithCheckExists;
 
 /**
- * Class AuthCodesTableSeeder
+ * Class AuthCodesTableSeeder.
  */
 class AuthCodesTableSeeder extends RollBackSeedWithCheckExists
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function getTable(): string
     {
@@ -18,7 +18,7 @@ class AuthCodesTableSeeder extends RollBackSeedWithCheckExists
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function getData()
     {
@@ -29,14 +29,14 @@ class AuthCodesTableSeeder extends RollBackSeedWithCheckExists
                 'scopes'        => 'client|admin',
                 'client_id'     => 'Test Client',
                 'user_id'       => 1,
-                'expire_at'     => time(),
-                'created_at'    => time(),
+                'expire_at'     => \time(),
+                'created_at'    => \time(),
             ],
         ];
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function checkDeleted($data): array
     {
@@ -44,12 +44,10 @@ class AuthCodesTableSeeder extends RollBackSeedWithCheckExists
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function getWhereForRow($data): array
     {
         return ['code' => $data['code']];
     }
-
-
 }

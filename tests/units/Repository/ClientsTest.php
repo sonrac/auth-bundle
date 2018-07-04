@@ -1,6 +1,7 @@
 <?php
 
 namespace sonrac\Auth\Tests\Units\Repository;
+
 use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
 use sonrac\Auth\Entity\Client;
 use sonrac\Auth\Repository\Clients;
@@ -38,7 +39,6 @@ class ClientsTest extends BaseUnitTester
      */
     public function testGetClientEntity(): void
     {
-
         $this->assertInstanceOf(Clients::class, $this->repository);
 
         $data = $this->repository->find(['name' => 'Test Client']);

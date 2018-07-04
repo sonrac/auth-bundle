@@ -1,6 +1,7 @@
 <?php
 
 namespace sonrac\Auth\Tests\Units\Repository;
+
 use League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface;
 use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
 use League\OAuth2\Server\Repositories\ScopeRepositoryInterface;
@@ -51,9 +52,9 @@ class AccessTokensTest extends BaseUnitTester
     {
         parent::setUp();
 
-        $this->repository = static::$container->get(AccessTokenRepositoryInterface::class);
+        $this->repository       = static::$container->get(AccessTokenRepositoryInterface::class);
         $this->clientRepository = static::$container->get(ClientRepositoryInterface::class);
-        $this->scopeRepository = static::$container->get(ScopeRepositoryInterface::class);
+        $this->scopeRepository  = static::$container->get(ScopeRepositoryInterface::class);
     }
 
     /**
@@ -65,7 +66,7 @@ class AccessTokensTest extends BaseUnitTester
     {
         $client = $this->clientRepository->find('Test Client');
         $scopes = $this->scopeRepository->findAll();
-        $token = $this->repository->getNewToken($client, $scopes, 1);
+        $token  = $this->repository->getNewToken($client, $scopes, 1);
         $token->setIdentifier('token-token');
         $token->setGrantType(Client::GRANT_CLIENT_CREDENTIALS);
         $token->setExpiryDateTime((new \DateTime())->modify('+3600 seconds'));

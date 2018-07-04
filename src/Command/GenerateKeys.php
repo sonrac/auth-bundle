@@ -25,8 +25,8 @@ class GenerateKeys extends ContainerAwareCommand
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $force = false !== $input->getOption('force');
-        $phrase = $input->getOption('passphrase');
+        $force      = false !== $input->getOption('force');
+        $phrase     = $input->getOption('passphrase');
         $disableOut = false !== $input->getOption('disable-out');
 
         if (!$phrase) {
@@ -37,9 +37,9 @@ class GenerateKeys extends ContainerAwareCommand
             \ob_start();
         }
 
-        $keyPath = $this->getContainer()->getParameter('sonrac_auth.private_key_path');
+        $keyPath     = $this->getContainer()->getParameter('sonrac_auth.private_key_path');
         $privateName = $this->getContainer()->getParameter('sonrac_auth.private_key_name');
-        $pubName = $this->getContainer()->getParameter('sonrac_auth.public_key_name');
+        $pubName     = $this->getContainer()->getParameter('sonrac_auth.public_key_name');
 
         if ($force || !\file_exists($keyPath.'/'.$privateName)) {
             $this->generatePrivateKey($keyPath.'/'.$privateName, $phrase);
@@ -60,7 +60,7 @@ class GenerateKeys extends ContainerAwareCommand
      * Generate private outh2 key.
      *
      * @param string      $keyPath
-     * @param null|string $phrase Secret phrase
+     * @param null|string $phrase  Secret phrase
      *
      * @author Donii Sergii <doniysa@gmail.com>
      */
@@ -80,7 +80,7 @@ class GenerateKeys extends ContainerAwareCommand
      *
      * @param string      $keyPath
      * @param string      $privateKeyPath
-     * @param string|null $phrase Secret phrase
+     * @param string|null $phrase         Secret phrase
      */
     protected function generatePublicKey(string $keyPath, string $privateKeyPath, $phrase = null): void
     {

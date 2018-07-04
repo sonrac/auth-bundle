@@ -6,7 +6,7 @@ use sonrac\SimpleSeed\RollBackSeedWithCheckExists;
 use Symfony\Component\Security\Core\Encoder\BCryptPasswordEncoder;
 
 /**
- * Class UsersTableSeeder
+ * Class UsersTableSeeder.
  */
 class UsersTableSeeder extends RollBackSeedWithCheckExists
 {
@@ -36,7 +36,7 @@ class UsersTableSeeder extends RollBackSeedWithCheckExists
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function getDeleteFields($data): array
     {

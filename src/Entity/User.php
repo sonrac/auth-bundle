@@ -564,9 +564,8 @@ class User implements UserEntityInterface, UserInterface
      */
     public function getAdditionalPermissions(): array
     {
-        if (!$this->additional_permissions || \is_string($this->additional_permissions))
-        {
-            $this->additional_permissions = explode('|', $this->additional_permissions ?? '') ?? [];
+        if (!$this->additional_permissions || \is_string($this->additional_permissions)) {
+            $this->additional_permissions = \explode('|', $this->additional_permissions ?? '') ?? [];
         }
 
         return $this->additional_permissions;

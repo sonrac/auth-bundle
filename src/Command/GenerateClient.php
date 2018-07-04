@@ -56,10 +56,10 @@ class GenerateClient extends DoctrineCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $name = $input->getOption('name');
-        $grantTypes = $input->getOption('grant-types');
+        $name        = $input->getOption('name');
+        $grantTypes  = $input->getOption('grant-types');
         $description = $input->getOption('description');
-        $secret = $this->generateRandomString();
+        $secret      = $this->generateRandomString();
         /** @var \sonrac\Auth\Entity\Client $entity */
         $entity = $this->getContainer()->get(ClientEntityInterface::class);
         $entity->setName($name);
@@ -87,9 +87,9 @@ class GenerateClient extends DoctrineCommand
      */
     private function generateRandomString($length = 255): string
     {
-        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()<>?.,+=-_';
+        $characters       = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()<>?.,+=-_';
         $charactersLength = \mb_strlen($characters);
-        $randomString = '';
+        $randomString     = '';
         for ($i = 0; $i < $length; ++$i) {
             $randomString .= $characters[\rand(0, $charactersLength - 1)];
         }

@@ -1,12 +1,10 @@
 <?php
 
-
 namespace sonrac\Auth\Controller\OAuth;
 
 /**
- * Class RefreshTokensController
+ * Class RefreshTokensController.
  */
 class RefreshTokensController extends RESTController
 {
-
 }

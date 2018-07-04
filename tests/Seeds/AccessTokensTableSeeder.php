@@ -6,12 +6,12 @@ use sonrac\Auth\Entity\Client;
 use sonrac\SimpleSeed\RollBackSeedWithCheckExists;
 
 /**
- * Class AccessTokensTableSeeder
+ * Class AccessTokensTableSeeder.
  */
 class AccessTokensTableSeeder extends RollBackSeedWithCheckExists
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function getTable(): string
     {
@@ -19,7 +19,7 @@ class AccessTokensTableSeeder extends RollBackSeedWithCheckExists
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function getData()
     {
@@ -28,21 +28,21 @@ class AccessTokensTableSeeder extends RollBackSeedWithCheckExists
                 'token'      => 'test_token',
                 'grant_type' => Client::GRANT_CLIENT_CREDENTIALS,
                 'client_id'  => 'Test Client',
-                'expire_at'  => time() - 3600,
-                'created_at' => time()
+                'expire_at'  => \time() - 3600,
+                'created_at' => \time(),
             ],
             [
                 'token'      => 'test_token1',
                 'grant_type' => Client::GRANT_CLIENT_CREDENTIALS,
                 'client_id'  => 'Test Client',
-                'expire_at'  => time() + 3600,
-                'created_at' => time()
+                'expire_at'  => \time() + 3600,
+                'created_at' => \time(),
             ],
         ];
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function getWhereForRow($data): array
     {
@@ -50,12 +50,10 @@ class AccessTokensTableSeeder extends RollBackSeedWithCheckExists
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function checkDeleted($data): array
     {
         return $this->getWhereForRow($data);
     }
-
-
 }

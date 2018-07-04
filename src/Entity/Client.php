@@ -222,7 +222,7 @@ class Client implements ClientEntityInterface
     public function getAllowedGrantTypes(): array
     {
         if (\is_string($this->allowed_grant_types)) {
-            $this->allowed_grant_types = explode('|', $this->allowed_grant_types);
+            $this->allowed_grant_types = \explode('|', $this->allowed_grant_types);
         }
 
         return $this->allowed_grant_types;
@@ -277,11 +277,11 @@ class Client implements ClientEntityInterface
     public function preparePersist(): void
     {
         if (\is_array($this->allowed_grant_types)) {
-            $this->allowed_grant_types = implode('|', $this->allowed_grant_types);
+            $this->allowed_grant_types = \implode('|', $this->allowed_grant_types);
         }
 
         if (\is_array($this->redirect_uris)) {
-            $this->redirect_uris = implode('|', $this->redirect_uris);
+            $this->redirect_uris = \implode('|', $this->redirect_uris);
         }
     }
 }

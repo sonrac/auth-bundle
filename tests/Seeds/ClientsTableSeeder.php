@@ -41,7 +41,7 @@ class ClientsTableSeeder extends RollBackSeedWithCheckExists
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function getDeleteFields($data): array
     {

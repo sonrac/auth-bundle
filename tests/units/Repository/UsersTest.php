@@ -9,7 +9,7 @@ use sonrac\Auth\Entity\User;
 use sonrac\Auth\Tests\Units\BaseUnitTester;
 
 /**
- * Class UsersTest
+ * Class UsersTest.
  */
 class UsersTest extends BaseUnitTester
 {
@@ -39,7 +39,7 @@ class UsersTest extends BaseUnitTester
     {
         parent::setUp();
 
-        $this->repository = static::$container->get(UserRepositoryInterface::class);
+        $this->repository        = static::$container->get(UserRepositoryInterface::class);
         $this->clientsRepository = static::$container->get(ClientRepositoryInterface::class);
     }
 
@@ -51,7 +51,12 @@ class UsersTest extends BaseUnitTester
         $this->expectException(\InvalidArgumentException::class);
 
         $client = $this->clientsRepository->find('Test Client');
-        $this->repository->getUserEntityByUserCredentials('user', 'password', Client::GRANT_CLIENT_CREDENTIALS, $client);
+        $this->repository->getUserEntityByUserCredentials(
+            'user',
+            'password',
+            Client::GRANT_CLIENT_CREDENTIALS,
+            $client
+        );
     }
 
     /**
@@ -62,7 +67,12 @@ class UsersTest extends BaseUnitTester
         $this->expectException(\InvalidArgumentException::class);
 
         $client = $this->clientsRepository->find('Test Client');
-        $this->repository->getUserEntityByUserCredentials('username', 'password1', Client::GRANT_CLIENT_CREDENTIALS, $client);
+        $this->repository->getUserEntityByUserCredentials(
+            'username',
+            'password1',
+            Client::GRANT_CLIENT_CREDENTIALS,
+            $client
+        );
     }
 
     /**
@@ -73,7 +83,12 @@ class UsersTest extends BaseUnitTester
         $this->expectException(\LogicException::class);
 
         $client = $this->clientsRepository->find('Test Client');
-        $this->repository->getUserEntityByUserCredentials('username', 'password', Client::GRANT_CLIENT_CREDENTIALS.'1', $client);
+        $this->repository->getUserEntityByUserCredentials(
+            'username',
+            'password',
+            Client::GRANT_CLIENT_CREDENTIALS.'1',
+            $client
+        );
     }
 
     /**
@@ -82,7 +97,12 @@ class UsersTest extends BaseUnitTester
     public function testGetUserByCredentials(): void
     {
         $client = $this->clientsRepository->find('Test Client');
-        $user = $this->repository->getUserEntityByUserCredentials('username', 'password', Client::GRANT_CLIENT_CREDENTIALS, $client);
+        $user   = $this->repository->getUserEntityByUserCredentials(
+            'username',
+            'password',
+            Client::GRANT_CLIENT_CREDENTIALS,
+            $client
+        );
 
         $this->assertInstanceOf(User::class, $user);
     }

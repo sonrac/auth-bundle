@@ -5,7 +5,7 @@ namespace sonrac\Auth\Tests\Units\Commands;
 use sonrac\Auth\Tests\Units\BaseUnitTester;
 
 /**
- * Class ClearTokenTest
+ * Class ClearTokenTest.
  */
 class ClearTokenTest extends BaseUnitTester
 {
@@ -35,7 +35,7 @@ class ClearTokenTest extends BaseUnitTester
     {
         $output = $this->runCommand('sonrac_auth:clear:tokens', [
             '--with-expired' => true,
-            '--with-refresh' => true
+            '--with-refresh' => true,
         ]);
 
         $this->assertContains('Drop access tokens.', $output);
@@ -50,7 +50,7 @@ class ClearTokenTest extends BaseUnitTester
     public function testDeleteAllTokens(): void
     {
         $output = $this->runCommand('sonrac_auth:clear:tokens', [
-            '--all' => true
+            '--all' => true,
         ]);
 
         $this->assertContains('Drop access tokens.', $output);
@@ -65,7 +65,7 @@ class ClearTokenTest extends BaseUnitTester
     public function testDeleteWithRefreshTokens(): void
     {
         $output = $this->runCommand('sonrac_auth:clear:tokens', [
-            '--with-refresh' => true
+            '--with-refresh' => true,
         ]);
 
         $this->assertContains('Drop access tokens.', $output);
@@ -82,7 +82,7 @@ class ClearTokenTest extends BaseUnitTester
     {
         $output = $this->runCommand('sonrac_auth:clear:tokens', [
             '--with-refresh' => true,
-            '--all' => true
+            '--all'          => true,
         ]);
 
         $this->assertContains('Drop access tokens.', $output);

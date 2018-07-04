@@ -12,7 +12,7 @@ use Symfony\Component\Console\Output\Output;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Class ClearAccessTokens
+ * Class ClearAccessTokens.
  */
 class ClearTokens extends DoctrineCommand
 {
@@ -49,7 +49,7 @@ class ClearTokens extends DoctrineCommand
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      *
      * @throws \LogicException
      * @throws \Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException
@@ -70,15 +70,18 @@ class ClearTokens extends DoctrineCommand
 
             if (false !== $input->getOption('with-expired')) {
                 $query->orWhere('access_token.expire_at <= :expire')
-                    ->setParameter('expire', time());
+                    ->setParameter('expire', \time());
             }
-
         }
 
         try {
             if (false !== $input->getOption('with-refresh')) {
                 $output->writeln('Drop refresh tokens.', Output::OUTPUT_PLAIN);
-                $this->dropRefreshTokens($em, false !== $input->getOption('all'), false !== $input->getOption('with-expired'));
+                $this->dropRefreshTokens(
+                    $em,
+                    false !== $input->getOption('all'),
+                    false !== $input->getOption('with-expired')
+                );
             }
 
             $output->writeln('Drop access tokens.', Output::OUTPUT_PLAIN);
@@ -95,18 +98,25 @@ class ClearTokens extends DoctrineCommand
     }
 
     /**
-     * Drop refresh tokens
+     * Drop refresh tokens.
      *
      * @param \Doctrine\ORM\EntityManager $em
      * @param bool                        $all
      * @param bool                        $expired
+     * @param int                         $limit
+     * @param int                         $offset
      *
      * @throws \LogicException
      * @throws \Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException
      * @throws \Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException
      */
-    protected function dropRefreshTokens(EntityManager $em, bool $all, bool $expired): void
-    {
+    protected function dropRefreshTokens(
+        EntityManager $em,
+        bool $all,
+        bool $expired,
+        int $limit = 1000,
+        int $offset = 0
+    ): void {
         $builder = $em->createQueryBuilder();
 
         $builder->delete()
@@ -117,17 +127,30 @@ class ClearTokens extends DoctrineCommand
                 ->select('token.token')
                 ->from(\get_class($this->getContainer()->get(AccessTokenEntityInterface::class)), 'token')
                 ->orWhere('token.is_revoked = :is_revoked')
+                ->setMaxResults($limit)
+                ->setFirstResult($offset)
                 ->setParameter('is_revoked', true);
 
             if ($expired) {
                 $queryToken->orWhere('token.expire_at <= :expired')
-                    ->setParameter('expired', time());
+                    ->setParameter('expired', \time());
+            }
+
+            $tokens = $queryToken->getQuery()->getArrayResult();
+
+            if (count($tokens) === 0) {
+                return;
             }
 
             $builder->where('refresh_token.token in (:tokens)')
-                ->setParameter('tokens', $queryToken->getQuery()->getArrayResult());
+                ->setParameter('tokens', $tokens);
         }
 
         $builder->getQuery()->execute();
+
+        if (!$all) {
+            $offset += $limit;
+            $this->dropRefreshTokens($em, $all, $expired, $limit, $offset);
+        }
     }
 }

@@ -7,7 +7,7 @@ use sonrac\Auth\Entity\RefreshToken;
 use sonrac\Auth\Tests\Units\BaseUnitTester;
 
 /**
- * Class RefreshTokensTest
+ * Class RefreshTokensTest.
  */
 class RefreshTokensTest extends BaseUnitTester
 {
@@ -37,7 +37,7 @@ class RefreshTokensTest extends BaseUnitTester
 
         $this->assertInstanceOf(RefreshToken::class, $token);
         $this->assertTrue($token->getCreatedAt() > 0);
-        $this->assertTrue((int)$token->getUpdatedAt() === 0);
+        $this->assertTrue((int) $token->getUpdatedAt() === 0);
 
         return $token;
     }
@@ -54,7 +54,7 @@ class RefreshTokensTest extends BaseUnitTester
         $token->setIdentifier('token2');
         $token->setToken('test_token1');
         $token->setScopes(['test', 'test1']);
-        $token->setExpireAt(time());
+        $token->setExpireAt(\time());
         $this->repository->persistNewRefreshToken($token);
 
         $this->seeCountInDatabase(2, 'refresh_tokens');

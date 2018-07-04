@@ -5,7 +5,7 @@ namespace sonrac\Auth\Tests\Units\Commands;
 use sonrac\Auth\Tests\Units\BaseUnitTester;
 
 /**
- * Class GenerateClientTest
+ * Class GenerateClientTest.
  */
 class GenerateClientTest extends BaseUnitTester
 {
@@ -20,8 +20,8 @@ class GenerateClientTest extends BaseUnitTester
     public function testGenerateClient(): void
     {
         $output = $this->runCommand('sonrac_auth:generate:client', [
-           '--name' => 'client_tester',
-           '--description' => 'Test application'
+           '--name'        => 'client_tester',
+           '--description' => 'Test application',
         ]);
 
         $this->seeCountInDatabase(1, 'clients', ['name' => 'client_tester']);

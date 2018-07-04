@@ -7,7 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
- * Class BaseUnitTester
+ * Class BaseUnitTester.
  */
 abstract class BaseUnitTester extends KernelTestCase
 {
@@ -76,10 +76,11 @@ abstract class BaseUnitTester extends KernelTestCase
      *
      * @return string
      */
-    protected function getSeedClassName(string $class): string {
-        $className = class_exists($class) ? $class : $this->seedNameSpace.$class;
+    protected function getSeedClassName(string $class): string
+    {
+        $className = \class_exists($class) ? $class : $this->seedNameSpace.$class;
 
-        return class_exists($className) ? $className : $this->seedNameSpace.ucfirst($class).'TableSeeder';
+        return \class_exists($className) ? $className : $this->seedNameSpace.\ucfirst($class).'TableSeeder';
     }
 
     /**
@@ -93,7 +94,7 @@ abstract class BaseUnitTester extends KernelTestCase
     protected function runCommand(string $commandName, array $arguments = []): ?string
     {
         $command = $this->app->find($commandName);
-        $tester = new CommandTester($command);
+        $tester  = new CommandTester($command);
         $tester->execute($arguments);
 
         return $tester->getDisplay();

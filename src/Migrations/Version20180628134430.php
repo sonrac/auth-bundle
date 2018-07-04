@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 namespace sonrac\Auth\Migrations;
 
-use Doctrine\DBAL\Driver\PDOException;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\Migrations\AbstractMigration;
-use sonrac\Auth\Types\GrantTypesEnum;
 
 /**
  * Auto-generated Migration: Please modify to your needs!

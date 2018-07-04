@@ -3,11 +3,10 @@
 namespace sonrac\Auth\Tests\Units\Repository;
 
 use League\OAuth2\Server\Repositories\AuthCodeRepositoryInterface;
-use sonrac\Auth\Entity\AuthCode;
 use sonrac\Auth\Tests\Units\BaseUnitTester;
 
 /**
- * Class AuthCodesTest
+ * Class AuthCodesTest.
  */
 class AuthCodesTest extends BaseUnitTester
 {

@@ -35,7 +35,7 @@ final class Version20180628141730 extends AbstractMigration
 
         $clients->addColumn('allowed_grant_types', Type::TEXT)
             ->setNotnull(true)
-            ->setDefault(implode('|', [
+            ->setDefault(\implode('|', [
                 Client::GRANT_IMPLICIT,
                 Client::GRANT_AUTH_CODE,
                 Client::GRANT_PASSWORD,

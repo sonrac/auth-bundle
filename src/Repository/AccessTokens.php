@@ -69,7 +69,7 @@ class AccessTokens extends ServiceEntityRepository implements AccessTokenReposit
     public function persistNewAccessToken(AccessTokenEntityInterface $accessTokenEntity)
     {
         if (!$accessTokenEntity->getCreatedAt()) {
-            $accessTokenEntity->setCreatedAt(time());
+            $accessTokenEntity->setCreatedAt(\time());
         }
 
         $this->_em->persist($accessTokenEntity);
@@ -107,6 +107,6 @@ class AccessTokens extends ServiceEntityRepository implements AccessTokenReposit
             throw new \InvalidArgumentException('Token not found');
         }
 
-        return (bool)$entity->isRevoked();
+        return (bool) $entity->isRevoked();
     }
 }

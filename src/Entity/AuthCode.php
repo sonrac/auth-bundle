@@ -175,7 +175,7 @@ class AuthCode implements AuthCodeEntityInterface
      */
     public function setIdentifier($identifier): void
     {
-        $this->id = (int)$identifier;
+        $this->id = (int) $identifier;
     }
 
     /**
@@ -267,7 +267,7 @@ class AuthCode implements AuthCodeEntityInterface
      */
     public function isRevoked(): bool
     {
-        return (bool)($this->is_revoked ?? false);
+        return (bool) ($this->is_revoked ?? false);
     }
 
     /**
@@ -287,7 +287,7 @@ class AuthCode implements AuthCodeEntityInterface
      */
     public function getUserId(): int
     {
-        return (int)$this->user_id;
+        return (int) $this->user_id;
     }
 
     /**
@@ -307,7 +307,7 @@ class AuthCode implements AuthCodeEntityInterface
      */
     public function getClientId(): int
     {
-        return (int)$this->client_id;
+        return (int) $this->client_id;
     }
 
     /**
@@ -327,7 +327,7 @@ class AuthCode implements AuthCodeEntityInterface
      */
     public function getExpireAt(): int
     {
-        return (int)$this->expire_at;
+        return (int) $this->expire_at;
     }
 
     /**

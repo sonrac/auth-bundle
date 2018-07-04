@@ -9,7 +9,7 @@ use sonrac\Auth\Entity\Scope;
 use sonrac\Auth\Tests\Units\BaseUnitTester;
 
 /**
- * Class ScopesTest
+ * Class ScopesTest.
  */
 class ScopesTest extends BaseUnitTester
 {
@@ -39,7 +39,7 @@ class ScopesTest extends BaseUnitTester
     {
         parent::setUp();
 
-        $this->repository = static::$container->get(ScopeRepositoryInterface::class);
+        $this->repository       = static::$container->get(ScopeRepositoryInterface::class);
         $this->clientRepository = static::$container->get(ClientRepositoryInterface::class);
     }
 
@@ -71,7 +71,7 @@ class ScopesTest extends BaseUnitTester
         $client = $this->clientRepository->find('Test Client');
 
         $scopesOrigin = $this->repository->findAll();
-        $scopes = $this->repository->finalizeScopes($scopesOrigin, Client::GRANT_CLIENT_CREDENTIALS, $client);
+        $scopes       = $this->repository->finalizeScopes($scopesOrigin, Client::GRANT_CLIENT_CREDENTIALS, $client);
 
         $this->assertEquals($scopes, $scopesOrigin);
     }

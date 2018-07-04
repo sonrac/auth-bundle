@@ -1,12 +1,10 @@
 <?php
 
-
 namespace sonrac\Auth\Controller\OAuth;
 
 /**
- * Class ScopesController
+ * Class ScopesController.
  */
 class ScopesController extends RESTController
 {
-
 }

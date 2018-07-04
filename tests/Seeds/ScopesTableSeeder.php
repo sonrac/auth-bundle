@@ -5,12 +5,12 @@ namespace sonrac\Auth\Tests\Seeds;
 use sonrac\SimpleSeed\RollBackSeedWithCheckExists;
 
 /**
- * Class ScopesTableSeeder
+ * Class ScopesTableSeeder.
  */
 class ScopesTableSeeder extends RollBackSeedWithCheckExists
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function getTable(): string
     {
@@ -18,28 +18,28 @@ class ScopesTableSeeder extends RollBackSeedWithCheckExists
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function getData(): array
     {
         return [
             [
-                'scope' => 'default',
-                'title' => 'Default scope',
+                'scope'       => 'default',
+                'title'       => 'Default scope',
                 'description' => 'Default scope',
-                'created_at' => time(),
+                'created_at'  => \time(),
             ],
             [
-                'scope' => 'client',
-                'title' => 'Default scope',
+                'scope'       => 'client',
+                'title'       => 'Default scope',
                 'description' => 'Client scope',
-                'created_at' => time(),
-            ]
+                'created_at'  => \time(),
+            ],
         ];
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function getWhereForRow($data): array
     {
@@ -47,7 +47,7 @@ class ScopesTableSeeder extends RollBackSeedWithCheckExists
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function checkDeleted($data): array
     {

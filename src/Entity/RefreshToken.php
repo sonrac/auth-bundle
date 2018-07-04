@@ -187,7 +187,7 @@ class RefreshToken implements RefreshTokenEntityInterface
     public function getScopes(): array
     {
         if (!$this->token_scopes || \is_string($this->token_scopes)) {
-            $this->token_scopes = explode('|', $this->token_scopes || '');
+            $this->token_scopes = \explode('|', $this->token_scopes || '');
         }
 
         return $this->token_scopes;
@@ -209,7 +209,7 @@ class RefreshToken implements RefreshTokenEntityInterface
     public function preparePersist(): void
     {
         if (\is_array($this->token_scopes)) {
-            $this->token_scopes = implode('|', $this->token_scopes);
+            $this->token_scopes = \implode('|', $this->token_scopes);
         }
     }
 }

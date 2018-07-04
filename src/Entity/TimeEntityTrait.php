@@ -36,7 +36,7 @@ trait TimeEntityTrait
      */
     public function setCreatedAt($created_at): void
     {
-        $this->{$this->getCreatedAtFieldName()} = (int)$created_at;
+        $this->{$this->getCreatedAtFieldName()} = (int) $created_at;
     }
 
     /**
@@ -66,6 +66,6 @@ trait TimeEntityTrait
      */
     public function setUpdatedAt($updated_at): void
     {
-        $this->{$this->getUpdatedAtFieldName()} = (int)$updated_at;
+        $this->{$this->getUpdatedAtFieldName()} = (int) $updated_at;
     }
 }

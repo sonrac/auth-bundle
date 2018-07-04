@@ -21,7 +21,7 @@ class SonracAuthExtension extends Extension
     public function load(array $configs, ContainerBuilder $container): void
     {
         $fileLocator = new FileLocator(__DIR__.'/../Resources/config');
-        $loader = new YamlFileLoader(
+        $loader      = new YamlFileLoader(
             $container,
             $fileLocator
         );
@@ -31,7 +31,7 @@ class SonracAuthExtension extends Extension
         $routerLoader->load('routes.yaml');
 
         $configuration = $this->getConfiguration($configs, $container);
-        $config = $this->processConfiguration($configuration, $configs);
+        $config        = $this->processConfiguration($configuration, $configs);
 
         $this->setParameters($config, $container);
     }

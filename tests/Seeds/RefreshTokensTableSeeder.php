@@ -5,12 +5,12 @@ namespace sonrac\Auth\Tests\Seeds;
 use sonrac\SimpleSeed\RollBackSeedWithCheckExists;
 
 /**
- * Class RefreshTokensTableSeeder
+ * Class RefreshTokensTableSeeder.
  */
 class RefreshTokensTableSeeder extends RollBackSeedWithCheckExists
 {
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function getTable(): string
     {
@@ -18,22 +18,22 @@ class RefreshTokensTableSeeder extends RollBackSeedWithCheckExists
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function getData(): array
     {
         return [
             [
                 'refresh_token' => 'refresh_token1',
-                'token' => 'test_token',
-                'expire_at' => time() + 3600,
-                'created_at' => time()
-            ]
+                'token'         => 'test_token',
+                'expire_at'     => \time() + 3600,
+                'created_at'    => \time(),
+            ],
         ];
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function getWhereForRow($data): array
     {
@@ -41,7 +41,7 @@ class RefreshTokensTableSeeder extends RollBackSeedWithCheckExists
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     protected function checkDeleted($data): array
     {

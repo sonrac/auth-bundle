@@ -145,8 +145,8 @@ class Scope implements ScopeEntityInterface
      */
     public function getPermissions(): array
     {
-        if (is_string($this->permissions)) {
-            $this->permissions = explode('|', $this->permissions);
+        if (\is_string($this->permissions)) {
+            $this->permissions = \explode('|', $this->permissions);
         }
 
         return $this->permissions;

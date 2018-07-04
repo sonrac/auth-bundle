@@ -7,7 +7,6 @@ use Doctrine\ORM\Query;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Entities\UserEntityInterface;
 use League\OAuth2\Server\Repositories\UserRepositoryInterface;
-use Psr\Log\InvalidArgumentException;
 use sonrac\Auth\Entity\User;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
