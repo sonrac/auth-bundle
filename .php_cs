@@ -198,7 +198,7 @@ $config = new Php72Config();
 
 $config->getFinder()->in([
     __DIR__
-]);
+])->exclude(__DIR__.'/tests/App/resources');
 
 return $config
     ->setLineEnding(PHP_EOL);

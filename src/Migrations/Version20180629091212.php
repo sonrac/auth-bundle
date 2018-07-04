@@ -34,7 +34,7 @@ final class Version20180629091212 extends AbstractMigration
         $authCodes->addColumn('client_id', Type::INTEGER)
             ->setNotnull(true);
         foreach (['expire_at', 'created_at', 'updated_at'] as $columnName) {
-            $notNull = $columnName === 'updated_at';
+            $notNull = $columnName !== 'updated_at';
             $authCodes->addColumn($columnName, Type::BIGINT)
                 ->setLength(20)
                 ->setNotnull($notNull);

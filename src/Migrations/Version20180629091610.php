@@ -34,7 +34,7 @@ final class Version20180629091610 extends AbstractMigration
             ->setDefault(false);
 
         foreach (['expire_at', 'created_at', 'updated_at'] as $columnName) {
-            $notNull = $columnName === 'updated_at';
+            $notNull = $columnName !== 'updated_at';
             $refreshToken->addColumn($columnName, Type::BIGINT)
                 ->setLength(20)
                 ->setNotnull($notNull);

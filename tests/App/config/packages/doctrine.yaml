@@ -9,6 +9,8 @@ doctrine:
   dbal:
     # configure these for your database server
     default_connection: default
+    types:
+      enum_grant_type: sonrac\Auth\Types\GrantTypesEnum
     connections:
       default:
         driver: 'pdo_sqlite'

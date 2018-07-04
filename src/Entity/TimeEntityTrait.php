@@ -16,37 +16,7 @@ trait TimeEntityTrait
      */
     public function getCreatedAt(): int
     {
-        return (int) ($this->{$this->getCreatedAtFieldName()} ?? \time());
-    }
-
-    /**
-     * Set created time.
-     *
-     * @param int|string $created_at
-     */
-    public function setCreatedAt($created_at)
-    {
-        $this->{$this->getCreatedAtFieldName()} = (int) $created_at;
-    }
-
-    /**
-     * Get updated time.
-     *
-     * @return int|null
-     */
-    public function getUpdatedAt()
-    {
-        return $this->{$this->getUpdatedAtFieldName()};
-    }
-
-    /**
-     * Set updated time.
-     *
-     * @param int|string $updated_at
-     */
-    public function setUpdatedAt($updated_at)
-    {
-        $this->{$this->getUpdatedAtFieldName()} = (int) $updated_at;
+        return (int) ($this->{$this->getCreatedAtFieldName()});
     }
 
     /**
@@ -60,6 +30,26 @@ trait TimeEntityTrait
     }
 
     /**
+     * Set created time.
+     *
+     * @param int|string $created_at
+     */
+    public function setCreatedAt($created_at): void
+    {
+        $this->{$this->getCreatedAtFieldName()} = (int)$created_at;
+    }
+
+    /**
+     * Get updated time.
+     *
+     * @return int|null
+     */
+    public function getUpdatedAt(): ?int
+    {
+        return $this->{$this->getUpdatedAtFieldName()};
+    }
+
+    /**
      * Get updated at field name.
      *
      * @return string
@@ -67,5 +57,15 @@ trait TimeEntityTrait
     protected function getUpdatedAtFieldName(): string
     {
         return 'updated_at';
+    }
+
+    /**
+     * Set updated time.
+     *
+     * @param int|string $updated_at
+     */
+    public function setUpdatedAt($updated_at): void
+    {
+        $this->{$this->getUpdatedAtFieldName()} = (int)$updated_at;
     }
 }

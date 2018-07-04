@@ -55,15 +55,6 @@ class Client implements ClientEntityInterface
     public const GRANT_AUTH_CODE = 'code';
 
     /**
-     * Client identifier.
-     *
-     * @var int
-     *
-     * @OAS\Property(example=1)
-     */
-    protected $id;
-
-    /**
      * Client secret key.
      *
      * @var string
@@ -100,6 +91,15 @@ class Client implements ClientEntityInterface
     protected $name;
 
     /**
+     * Client app description,.
+     *
+     * @var string
+     *
+     * @OAS\Property(example="Test application", format="text")
+     */
+    protected $description;
+
+    /**
      * Redirect url list.
      *
      * @var array
@@ -129,9 +129,9 @@ class Client implements ClientEntityInterface
     /**
      * {@inheritdoc}
      */
-    public function getIdentifier()
+    public function getIdentifier(): ?string
     {
-        return $this->id;
+        return $this->name;
     }
 
     /**
@@ -157,9 +157,9 @@ class Client implements ClientEntityInterface
      *
      * @param string|int $identifier
      */
-    public function setIdentifier($identifier): void
+    public function setIdentifier(string $identifier): void
     {
-        $this->id = $identifier;
+        $this->name = $identifier;
     }
 
     /**
@@ -168,6 +168,30 @@ class Client implements ClientEntityInterface
     public function getRedirectUri()
     {
         return $this->getRedirectUris();
+    }
+
+    /**
+     * Get redirect uris.
+     *
+     * @return array
+     */
+    public function getRedirectUris(): array
+    {
+        return $this->redirect_uris ?? [];
+    }
+
+    /**
+     * Set redirect uris.
+     *
+     * @param array $redirect_uris
+     */
+    public function setRedirectUris(array $redirect_uris): void
+    {
+        $redirect_uris = \array_map(function ($uri) {
+            return \mb_strtolower($uri);
+        }, $redirect_uris);
+
+        $this->redirect_uris = $redirect_uris;
     }
 
     /**
@@ -197,6 +221,10 @@ class Client implements ClientEntityInterface
      */
     public function getAllowedGrantTypes(): array
     {
+        if (\is_string($this->allowed_grant_types)) {
+            $this->allowed_grant_types = explode('|', $this->allowed_grant_types);
+        }
+
         return $this->allowed_grant_types;
     }
 
@@ -211,30 +239,6 @@ class Client implements ClientEntityInterface
     }
 
     /**
-     * Get redirect uris.
-     *
-     * @return array
-     */
-    public function getRedirectUris(): array
-    {
-        return $this->redirect_uris ?? [];
-    }
-
-    /**
-     * Set redirect uris.
-     *
-     * @param array $redirect_uris
-     */
-    public function setRedirectUris(array $redirect_uris): void
-    {
-        $redirect_uris = \array_map(function ($uri) {
-            return \mb_strtolower($uri);
-        }, $redirect_uris);
-
-        $this->redirect_uris = $redirect_uris;
-    }
-
-    /**
      * Add redirect uri.
      *
      * @param string $uri
@@ -245,5 +249,25 @@ class Client implements ClientEntityInterface
         if (!\in_array($uri, $this->redirect_uris, true)) {
             $this->redirect_uris[] = $uri;
         }
+    }
+
+    /**
+     * Get client app description.
+     *
+     * @return string
+     */
+    public function getDescription(): string
+    {
+        return $this->description ?? '';
+    }
+
+    /**
+     * Set client app description.
+     *
+     * @param string $description
+     */
+    public function setDescription(string $description): void
+    {
+        $this->description = $description;
     }
 }

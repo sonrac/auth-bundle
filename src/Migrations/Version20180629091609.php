@@ -27,8 +27,12 @@ final class Version20180629091609 extends AbstractMigration
         $scopes->addColumn('description', Type::TEXT)
             ->setLength(2000)
             ->setNotnull(true);
+        $scopes->addColumn('permissions', Type::TEXT)
+            ->setNotnull(false)
+            ->setDefault('');
+
         foreach (['created_at', 'updated_at'] as $columnName) {
-            $notNull = $columnName === 'updated_at';
+            $notNull = $columnName !== 'updated_at';
             $scopes->addColumn($columnName, Type::BIGINT)
                 ->setLength(20)
                 ->setNotnull($notNull);

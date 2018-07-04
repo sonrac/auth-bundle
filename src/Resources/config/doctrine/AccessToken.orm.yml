@@ -7,8 +7,6 @@ sonrac\Auth\Entity\AccessToken:
       type: string
       nullable: false
       length: 2000
-      generator:
-        strategy: UUID
   OneToOne:
     user_id:
       targetEntity: User
@@ -24,6 +22,14 @@ sonrac\Auth\Entity\AccessToken:
     token_scopes:
       type: text
       nullable: false
+    grant_type:
+      type: string
+      nullable: false
+      length: 50
+    is_revoked:
+      type: boolean
+      nullable: false
+      default: false
     user_id:
       type: integer
       nullable: true

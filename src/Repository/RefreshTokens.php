@@ -29,7 +29,10 @@ class RefreshTokens extends ServiceEntityRepository implements RefreshTokenRepos
      */
     public function getNewRefreshToken()
     {
-        return new RefreshToken();
+        $token = new RefreshToken();
+        $token->setCreatedAt(time());
+
+        return $token;
     }
 
     /**
@@ -37,11 +40,16 @@ class RefreshTokens extends ServiceEntityRepository implements RefreshTokenRepos
      */
     public function persistNewRefreshToken(RefreshTokenEntityInterface $refreshTokenEntity)
     {
+        /** @var \sonrac\Auth\Entity\RefreshToken $refreshTokenEntity  */
+        $refreshTokenEntity->preparePersist();
         $this->_em->persist($refreshTokenEntity);
+        $this->_em->flush();
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \InvalidArgumentException If refresh token not found
      */
     public function revokeRefreshToken($tokenId)
     {
@@ -52,8 +60,10 @@ class RefreshTokens extends ServiceEntityRepository implements RefreshTokenRepos
         }
 
         $token->setIsRevoked(true);
+        $token->preparePersist();
 
         $this->_em->persist($token);
+        $this->_em->flush();
     }
 
     /**

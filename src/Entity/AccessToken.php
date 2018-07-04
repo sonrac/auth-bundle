@@ -4,6 +4,7 @@ namespace sonrac\Auth\Entity;
 
 use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
+use League\OAuth2\Server\Entities\ScopeEntityInterface;
 use League\OAuth2\Server\Entities\Traits\AccessTokenTrait;
 use League\OAuth2\Server\Entities\Traits\TokenEntityTrait;
 use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
@@ -20,9 +21,10 @@ use Swagger\Annotations as OAS;
  */
 class AccessToken implements AccessTokenEntityInterface
 {
-    use AccessTokenTrait, TimeEntityTrait, TokenEntityTrait {
+    use AccessTokenTrait, TimeEntityTrait, ExpiryTimeTrait, TokenEntityTrait {
         setExpiryDateTime as setExpiryDateTimeTrait;
         setClient as setClientTrait;
+        addScope as addScopeTrait;
     }
 
     /**
@@ -55,7 +57,7 @@ class AccessToken implements AccessTokenEntityInterface
     /**
      * Client identifier.
      *
-     * @var int
+     * @var string
      *
      * @OAS\Property(example=1)
      */
@@ -95,7 +97,16 @@ class AccessToken implements AccessTokenEntityInterface
      *
      * @OAS\Property(example=false, default=false)
      */
-    protected $is_revoked;
+    protected $is_revoked = false;
+
+    /**
+     * Access token grant_type.
+     *
+     * @var string
+     *
+     * @OAS\Property(example="client_credentials", enum={"password", "code", "client_credentials", "implicit"})
+     */
+    protected $grant_type;
 
     /**
      * @var \sonrac\Auth\Repository\Clients
@@ -140,22 +151,6 @@ class AccessToken implements AccessTokenEntityInterface
     }
 
     /**
-     * @return string
-     */
-    public function getToken(): ?string
-    {
-        return $this->token;
-    }
-
-    /**
-     * @param string $token
-     */
-    public function setToken(string $token): void
-    {
-        $this->token = $token;
-    }
-
-    /**
      * @return int
      */
     public function getUserId(): ?int
@@ -172,17 +167,19 @@ class AccessToken implements AccessTokenEntityInterface
     }
 
     /**
-     * @return int
+     * Get client identifier.
+     *
+     * @return string
      */
-    public function getClientId(): ?int
+    public function getClientId(): ?string
     {
         return $this->client_id;
     }
 
     /**
-     * @param int $client_id
+     * @param string $client_id
      */
-    public function setClientId(int $client_id): void
+    public function setClientId(string $client_id): void
     {
         $this->client_id = $client_id;
     }
@@ -247,6 +244,16 @@ class AccessToken implements AccessTokenEntityInterface
     }
 
     /**
+     * Set token scopes.
+     *
+     * @param string $scopes
+     */
+    public function setTokenScopes(string $scopes): void
+    {
+        $this->scopes = $scopes;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getClient()
@@ -259,12 +266,41 @@ class AccessToken implements AccessTokenEntityInterface
     }
 
     /**
-     * Set token scopes.
-     *
-     * @param string $scopes
+     * {@inheritdoc}
      */
-    public function setTokenScopes(string $scopes): void
+    public function addScope(ScopeEntityInterface $scope)
     {
-        $this->scopes = $scopes;
+        $this->token_scopes .= ($this->token_scopes ? '|' : '').$scope->getIdentifier();
+        $this->addScopeTrait($scope);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setExpiryDateTime(\DateTime $dateTime): void
+    {
+        $this->setExpiryDateTimeAsInt($dateTime);
+
+        $this->setExpiryDateTimeTrait($dateTime);
+    }
+
+    /**
+     * Get grant type.
+     *
+     * @return string
+     */
+    public function getGrantType(): string
+    {
+        return $this->grant_type ?? '';
+    }
+
+    /**
+     * Set grant type.
+     *
+     * @param string $grantType
+     */
+    public function setGrantType(string $grantType): void
+    {
+        $this->grant_type = $grantType;
     }
 }

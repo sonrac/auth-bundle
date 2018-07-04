@@ -30,3 +30,21 @@ Without orm dependency:
 ```bash
 composer require sonrac/auth-bundle:^1.0
 ```
+
+# Run locally from package
+
+* Test application are located in tests/App
+
+
+## Run from docker with traefik
+
+*  [Read this for setting up traefik and dev host](https://github.com/sonrac/instructions/blob/master/TRAEFIK.MD)
+
+* Deploy containers to swarm
+
+```bash
+docker stack deploy -c docker-compose.yml auth-bundle
+```
+
+* [Open local application with bundle for test](http://auth.devinf)
+

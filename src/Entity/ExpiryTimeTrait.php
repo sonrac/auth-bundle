@@ -10,7 +10,7 @@ trait ExpiryTimeTrait
     /**
      * {@inheritdoc}
      */
-    public function getExpiryDateTime()
+    public function getExpiryDateTimeAsInt()
     {
         if ($this->{$this->getExpireAtFieldName()} instanceof \DateTime) {
             return $this->{$this->getExpireAtFieldName()};
@@ -23,16 +23,16 @@ trait ExpiryTimeTrait
         return null;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setExpiryDateTime(\DateTime $dateTime)
-    {
-        $this->{$this->getExpireAtFieldName()} = $dateTime->getTimestamp();
-    }
-
     public function getExpireAtFieldName(): string
     {
         return 'expire_at';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setExpiryDateTimeAsInt(\DateTime $dateTime): void
+    {
+        $this->{$this->getExpireAtFieldName()} = $dateTime->getTimestamp();
     }
 }

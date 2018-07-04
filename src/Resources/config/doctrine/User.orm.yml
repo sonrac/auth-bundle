@@ -1,0 +1,67 @@
+sonrac\Auth\Entity\User:
+  table: users
+  repositoryClass: sonrac\Repository\Users
+  type: entity
+  id:
+    id:
+      type: string
+      generator:
+        strategy: auto
+  fields:
+    username:
+      type: string
+      nullable: false
+      length: 255
+    email:
+      type: string
+      nullable: false
+      length: 512
+    first_name:
+      type: string
+      nullable: false
+      length: 255
+    last_name:
+      type: string
+      nullable: false
+      length: 255
+    middle_name:
+      type: string
+      nullable: true
+      length: 255
+    password:
+      type: string
+      nullable: false
+      length: 2000
+    avatar:
+      type: string
+      nullable: false
+      length: 2000
+    birthday:
+      type: integer
+      length: 20
+      nullable: true
+    roles:
+      type: string
+      length: 2000
+      nullable: false
+      default: ROLE_USER
+    api_token:
+      type: string
+      length: 2000
+      nullable: false
+    api_token_expire_at:
+      type: integer
+      length: 20
+      nullable: false
+    created_at:
+      type: integer
+      length: 20
+      nullable: false
+    last_login:
+      type: integer
+      length: 20
+      nullable: false
+    updated_at:
+      type: integer
+      length: 20
+      nullable: false

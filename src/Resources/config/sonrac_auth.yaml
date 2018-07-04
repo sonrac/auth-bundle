@@ -1,4 +1,4 @@
-parameters:
-  encryptionKey:
-  privateKeyPath:
-  passPhrase:
+encryption_key:
+private_key_path:
+pass_phrase:
+password_salt:

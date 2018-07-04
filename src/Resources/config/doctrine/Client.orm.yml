@@ -3,10 +3,11 @@ sonrac\Auth\Entity\Client:
   repositoryClass: sonrac\Repository\Clients
   type: entity
   id:
-    id:
-      type: integer
-      generator:
-        strategy: auto
+    name:
+      type: string
+      nullable: false
+      uniqueItems: true
+      length: 255
   OneToOne:
     user_id:
       targetEntity: User
@@ -14,14 +15,15 @@ sonrac\Auth\Entity\Client:
         name: user_id
         referenceColumnName: id
   fields:
-    name:
+    description:
       type: string
       nullable: false
-      uniqueItems: true
-      length: 255
+      default: ''
+      length: 2000
     secret:
-      type: text
+      type: string
       nullable: false
+      length: 2000
     allowed_grant_types:
       type: text
       nullable: false

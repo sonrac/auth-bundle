@@ -15,12 +15,15 @@ use Swagger\Annotations as OAS;
  * @OAS\Schema(
  *     title="AuthCode",
  *     description="Auth code entity",
- *     required={"code", "redirect_uri", "client_id", "scopes"}
+ *     required={"code", "redirect_uris", "client_id", "scopes"}
  * )
  */
 class AuthCode implements AuthCodeEntityInterface
 {
-    use TimeEntityTrait, ExpiryTimeTrait;
+    use TimeEntityTrait, ExpiryTimeTrait {
+        getExpiryDateTimeAsInt as getExpiryDateTime;
+        setExpiryDateTimeAsInt as setExpiryDateTime;
+    }
 
     /**
      * Auth code identifier.
@@ -56,7 +59,7 @@ class AuthCode implements AuthCodeEntityInterface
      *
      * @OAS\Property(example="http://example.com./redirect")
      */
-    protected $redirect_uri;
+    protected $redirect_uris;
 
     /**
      * User identifier.
@@ -104,7 +107,7 @@ class AuthCode implements AuthCodeEntityInterface
     protected $updated_at;
 
     /**
-     * Conteiner.
+     * Container.
      *
      * @var \Psr\Container\ContainerInterface
      */
@@ -148,7 +151,7 @@ class AuthCode implements AuthCodeEntityInterface
      */
     public function getRedirectUri(): string
     {
-        return $this->redirect_uri ?? '';
+        return $this->redirect_uris ?? '';
     }
 
     /**
@@ -156,7 +159,7 @@ class AuthCode implements AuthCodeEntityInterface
      */
     public function setRedirectUri($uri): void
     {
-        $this->redirect_uri = $uri;
+        $this->redirect_uris = $uri;
     }
 
     /**
@@ -172,7 +175,7 @@ class AuthCode implements AuthCodeEntityInterface
      */
     public function setIdentifier($identifier): void
     {
-        $this->id = (int) $identifier;
+        $this->id = (int)$identifier;
     }
 
     /**
@@ -206,7 +209,7 @@ class AuthCode implements AuthCodeEntityInterface
             return null;
         }
 
-        return $this->container->get('service_container')->get('oauth.repository.client')->find($this->client_id);
+        return $this->client = $this->container->get('oauth.repository.client')->find($this->client_id);
     }
 
     /**
@@ -264,7 +267,7 @@ class AuthCode implements AuthCodeEntityInterface
      */
     public function isRevoked(): bool
     {
-        return (bool) ($this->is_revoked ?? false);
+        return (bool)($this->is_revoked ?? false);
     }
 
     /**
@@ -284,7 +287,7 @@ class AuthCode implements AuthCodeEntityInterface
      */
     public function getUserId(): int
     {
-        return (int) $this->user_id;
+        return (int)$this->user_id;
     }
 
     /**
@@ -304,7 +307,7 @@ class AuthCode implements AuthCodeEntityInterface
      */
     public function getClientId(): int
     {
-        return (int) $this->client_id;
+        return (int)$this->client_id;
     }
 
     /**
@@ -324,7 +327,7 @@ class AuthCode implements AuthCodeEntityInterface
      */
     public function getExpireAt(): int
     {
-        return (int) $this->expire_at;
+        return (int)$this->expire_at;
     }
 
     /**

@@ -20,4 +20,5 @@ services:
     public: true
     shared: true
     synthetic: true
-
+  sonrac_seed_command:
+    class: sonrac\SimpleSeed\SeedCommand

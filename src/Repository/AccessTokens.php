@@ -47,12 +47,14 @@ class AccessTokens extends ServiceEntityRepository implements AccessTokenReposit
      */
     public function getNewToken(ClientEntityInterface $clientEntity, array $scopes, $userIdentifier = null)
     {
-        $token = $this->container->get('service_container')->get(AccessTokenEntityInterface::class);
+        /** @var \sonrac\Auth\Entity\Client $clientEntity */
+        $token = $this->container->get(AccessTokenEntityInterface::class);
         foreach ($scopes as $scope) {
             $token->addScope($scope);
         }
 
         $token->setClient($clientEntity);
+
         if ($userIdentifier) {
             $this->setUserIdentifier($userIdentifier);
         }
@@ -67,24 +69,28 @@ class AccessTokens extends ServiceEntityRepository implements AccessTokenReposit
     public function persistNewAccessToken(AccessTokenEntityInterface $accessTokenEntity)
     {
         if (!$accessTokenEntity->getCreatedAt()) {
-            $accessTokenEntity->setCreatedAt(\time());
+            $accessTokenEntity->setCreatedAt(time());
         }
 
         $this->_em->persist($accessTokenEntity);
+        $this->_em->flush();
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \InvalidArgumentException If token does not find.
      */
-    public function revokeAccessToken($tokenId)
+    public function revokeAccessToken($tokenId): void
     {
-        return $this->_em->createQueryBuilder()
-            ->update('access_token')
-            ->where('id = :id')
-            ->set('is_revoked', true)
-            ->setParameter('id', $tokenId)
-            ->getQuery()
-            ->execute();
+        $token = $this->find($tokenId);
+        if (!$token) {
+            throw new \InvalidArgumentException('Token does not find');
+        }
+
+        $token->setIsRevoked(true);
+        $this->_em->persist($token);
+        $this->_em->flush();
     }
 
     /**
@@ -101,6 +107,6 @@ class AccessTokens extends ServiceEntityRepository implements AccessTokenReposit
             throw new \InvalidArgumentException('Token not found');
         }
 
-        return (bool) $entity->isRevoked();
+        return (bool)$entity->isRevoked();
     }
 }

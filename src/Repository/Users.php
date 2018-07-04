@@ -7,6 +7,7 @@ use Doctrine\ORM\Query;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Entities\UserEntityInterface;
 use League\OAuth2\Server\Repositories\UserRepositoryInterface;
+use Psr\Log\InvalidArgumentException;
 use sonrac\Auth\Entity\User;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -31,25 +32,6 @@ class Users extends ServiceEntityRepository implements UserRepositoryInterface
     }
 
     /**
-     * Load user by username or email.
-     *
-     * @param string $username
-     *
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     *
-     * @return \sonrac\Auth\Entity\User|null
-     */
-    protected function loadByUsernameOrEmail(string $username): ?UserEntityInterface
-    {
-        return $this->createQueryBuilder('user')
-            ->orWhere('user.username = :username')
-            ->orWhere('user.email = :username')
-            ->setParameter('username', $username)
-            ->getQuery()
-            ->getOneOrNullResult(Query::HYDRATE_OBJECT);
-    }
-
-    /**
      * {@inheritdoc}
      *
      * @param \sonrac\Auth\Entity\Client $clientEntity
@@ -66,16 +48,38 @@ class Users extends ServiceEntityRepository implements UserRepositoryInterface
     ) {
         $user = $this->loadByUsernameOrEmail($username);
 
-        if (!$user) {
-            throw new \InvalidArgumentException('User not found');
-        }
-
         if (!\password_verify($password, $user->getPassword())) {
             throw new \InvalidArgumentException('User not found');
         }
 
         if (!\in_array($grantType, $clientEntity->getAllowedGrantTypes(), true)) {
             throw new \LogicException('Grant type does not allowed for client');
+        }
+
+        return $user;
+    }
+
+    /**
+     * Load user by username or email.
+     *
+     * @param string $username
+     *
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws \InvalidArgumentException
+     *
+     * @return \sonrac\Auth\Entity\User|null
+     */
+    public function loadByUsernameOrEmail(string $username): ?UserEntityInterface
+    {
+        $user = $this->createQueryBuilder('user')
+            ->orWhere('user.username = :username')
+            ->orWhere('user.email = :username')
+            ->setParameter('username', $username)
+            ->getQuery()
+            ->getOneOrNullResult(Query::HYDRATE_OBJECT);
+
+        if (!$user) {
+            throw new InvalidArgumentException('User not found');
         }
 
         return $user;

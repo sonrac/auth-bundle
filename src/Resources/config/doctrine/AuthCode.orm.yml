@@ -7,8 +7,6 @@ sonrac\Auth\Entity\AuthCode:
       type: string
       length: 2000
       nullable: false
-      generate:
-        strategy: UUID
   OneToOne:
     user_id:
       targetEntity: User
@@ -25,7 +23,7 @@ sonrac\Auth\Entity\AuthCode:
       type: boolean
       nullable: false
       default: false
-    redirect_uri:
+    redirect_uris:
       type: string
       nullable: false
     scopes:

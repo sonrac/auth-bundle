@@ -21,15 +21,6 @@ class RefreshToken implements RefreshTokenEntityInterface
     use TimeEntityTrait, RefreshTokenTrait;
 
     /**
-     * Refresh token identifier.
-     *
-     * @var int
-     *
-     * @OAS\Property(example=1)
-     */
-    protected $id;
-
-    /**
      * Refresh token.
      *
      * @var string
@@ -43,7 +34,7 @@ class RefreshToken implements RefreshTokenEntityInterface
      *
      * @var string
      *
-     * @OAS\Property(example="token", maxLength=2000)
+     * @OAS\Property(example="token", maxLength=2000, uniqueItems=true)
      */
     protected $token;
 
@@ -61,7 +52,7 @@ class RefreshToken implements RefreshTokenEntityInterface
      *
      * @var array
      *
-     * @OAS\Property(example={"client", "admin"})
+     * @OAS\Property(example={"client", "admin"}, default={"default"})
      */
     protected $token_scopes;
 
@@ -72,7 +63,7 @@ class RefreshToken implements RefreshTokenEntityInterface
      *
      * @OAS\Property(example=false, default=false)
      */
-    protected $is_revoked;
+    protected $is_revoked = false;
 
     /**
      * Created time.
@@ -95,17 +86,17 @@ class RefreshToken implements RefreshTokenEntityInterface
     /**
      * {@inheritdoc}
      */
-    public function getIdentifier(): int
+    public function getIdentifier(): string
     {
-        return $this->id ?? 0;
+        return $this->refresh_token ?? '';
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setIdentifier($identifier)
+    public function setIdentifier($identifier): void
     {
-        $this->id = $identifier;
+        $this->refresh_token = $identifier;
     }
 
     /**
@@ -119,7 +110,7 @@ class RefreshToken implements RefreshTokenEntityInterface
     /**
      * @param string $refresh_token
      */
-    public function setRefreshToken(string $refresh_token)
+    public function setRefreshToken(string $refresh_token): void
     {
         $this->refresh_token = $refresh_token;
     }
@@ -135,7 +126,7 @@ class RefreshToken implements RefreshTokenEntityInterface
     /**
      * @param string $token
      */
-    public function setToken(string $token)
+    public function setToken(string $token): void
     {
         $this->token = $token;
     }
@@ -151,7 +142,7 @@ class RefreshToken implements RefreshTokenEntityInterface
     /**
      * @param int $expire_at
      */
-    public function setExpireAt(int $expire_at)
+    public function setExpireAt(int $expire_at): void
     {
         $this->expire_at = $expire_at;
     }
@@ -167,7 +158,7 @@ class RefreshToken implements RefreshTokenEntityInterface
     /**
      * @param bool $is_revoked
      */
-    public function setIsRevoked(bool $is_revoked)
+    public function setIsRevoked(bool $is_revoked): void
     {
         $this->is_revoked = $is_revoked;
     }
@@ -183,34 +174,22 @@ class RefreshToken implements RefreshTokenEntityInterface
     /**
      * @param int $created_at
      */
-    public function setCreatedAt(int $created_at)
+    public function setCreatedAt(int $created_at): void
     {
         $this->created_at = $created_at;
     }
 
     /**
-     * @return int
-     */
-    public function getUpdatedAt()
-    {
-        return $this->updated_at;
-    }
-
-    /**
-     * @param int $updated_at
-     */
-    public function setUpdatedAt(int $updated_at)
-    {
-        $this->updated_at = $updated_at;
-    }
-
-    /**
      * Get scopes.
      *
-     * @return array|null
+     * @return array
      */
-    public function getScopes(): ?array
+    public function getScopes(): array
     {
+        if (!$this->token_scopes || \is_string($this->token_scopes)) {
+            $this->token_scopes = explode('|', $this->token_scopes || '');
+        }
+
         return $this->token_scopes;
     }
 
@@ -219,8 +198,18 @@ class RefreshToken implements RefreshTokenEntityInterface
      *
      * @param array $scopes
      */
-    public function setScopes(array  $scopes): void
+    public function setScopes(array $scopes): void
     {
         $this->token_scopes = $scopes;
+    }
+
+    /**
+     * Prepare data before persist.
+     */
+    public function preparePersist(): void
+    {
+        if (\is_array($this->token_scopes)) {
+            $this->token_scopes = implode('|', $this->token_scopes);
+        }
     }
 }

@@ -7,8 +7,6 @@ sonrac\Auth\Entity\RefreshToken:
       type: string
       nullable: false
       length: 2000
-      generator:
-        strategy: UUID
   OneToOne:
     token:
       targetEntity: AccessToken
@@ -23,8 +21,9 @@ sonrac\Auth\Entity\RefreshToken:
     token_scopes:
       type: text
       nullable: false
+      default: default
     is_revoked:
-      type: bool
+      type: boolean
       nullable: false
       default: false
     expire_at:

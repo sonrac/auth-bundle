@@ -46,6 +46,15 @@ class Scope implements ScopeEntityInterface
     protected $title;
 
     /**
+     * Scope permissions.
+     *
+     * @var array
+     *
+     * @OAS\Property(example={"permission1", "permission2"}, items="string")
+     */
+    protected $permissions;
+
+    /**
      * Created time.
      *
      * @var int
@@ -64,14 +73,6 @@ class Scope implements ScopeEntityInterface
     protected $updated_at;
 
     /**
-     * {@inheritdoc}
-     */
-    public function getIdentifier(): string
-    {
-        return $this->scope;
-    }
-
-    /**
      * Set scope identifier.
      *
      * @param string $identifier
@@ -87,6 +88,14 @@ class Scope implements ScopeEntityInterface
     public function jsonSerialize()
     {
         return [$this->getIdentifier()];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIdentifier(): string
+    {
+        return $this->scope;
     }
 
     /**
@@ -127,5 +136,29 @@ class Scope implements ScopeEntityInterface
     public function setTitle(string $title): void
     {
         $this->title = $title;
+    }
+
+    /**
+     * Get permissions.
+     *
+     * @return array
+     */
+    public function getPermissions(): array
+    {
+        if (is_string($this->permissions)) {
+            $this->permissions = explode('|', $this->permissions);
+        }
+
+        return $this->permissions;
+    }
+
+    /**
+     * Set scope permissions.
+     *
+     * @param array $permissions
+     */
+    public function setPermissions(array $permissions): void
+    {
+        $this->permissions = $permissions;
     }
 }

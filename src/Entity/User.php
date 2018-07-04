@@ -3,6 +3,7 @@
 namespace sonrac\Auth\Entity;
 
 use League\OAuth2\Server\Entities\UserEntityInterface;
+use Psr\Container\ContainerInterface;
 use Swagger\Annotations as OAS;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -11,11 +12,57 @@ use Symfony\Component\Security\Core\User\UserInterface;
  *
  * @OAS\Schema(
  *     title="User",
- *     description="User entity"
+ *     description="User entity",
+ *     required={"email", "username", "first_name", "last_name", "password", "avatar"}
  * )
  */
 class User implements UserEntityInterface, UserInterface
 {
+    /**
+     * User role name.
+     *
+     * @const
+     *
+     * @var string
+     */
+    public const ROLE_USER = 'ROLE_USER';
+
+    /**
+     * Manager role name.
+     *
+     * @const
+     *
+     * @var string
+     */
+    public const ROLE_MANAGER = 'ROLE_MANAGER';
+
+    /**
+     * Grant manager role name.
+     *
+     * @const
+     *
+     * @var string
+     */
+    public const ROLE_GRANT_MANAGER = 'ROLE_GRANT_MANAGER';
+
+    /**
+     * Administrator role name.
+     *
+     * @const
+     *
+     * @var string
+     */
+    public const ROLE_ADMIN = 'ROLE_ADMIN';
+
+    /**
+     * Root (superuser) role name.
+     *
+     * @const
+     *
+     * @var string
+     */
+    const ROLE_ROOT = 'ROLE_ROOT';
+
     /**
      * User status active.
      *
@@ -23,7 +70,7 @@ class User implements UserEntityInterface, UserInterface
      *
      * @var string
      */
-    public const STATUS_ACTIVE='active';
+    public const STATUS_ACTIVE = 'active';
 
     /**
      * User status disabled.
@@ -32,7 +79,7 @@ class User implements UserEntityInterface, UserInterface
      *
      * @var string
      */
-    public const STATUS_DISABLED='disabled';
+    public const STATUS_DISABLED = 'disabled';
 
     /**
      * User status pending.
@@ -41,7 +88,7 @@ class User implements UserEntityInterface, UserInterface
      *
      * @var string
      */
-    public const STATUS_PENDING='pending';
+    public const STATUS_PENDING = 'pending';
 
     /**
      * User status deleted.
@@ -50,7 +97,7 @@ class User implements UserEntityInterface, UserInterface
      *
      * @var string
      */
-    public const STATUS_DELETED='deleted';
+    public const STATUS_DELETED = 'deleted';
 
     use TimeEntityTrait;
 
@@ -109,11 +156,22 @@ class User implements UserEntityInterface, UserInterface
     protected $first_name;
 
     /**
+     * Last name.
+     *
      * @var string
      *
      * @OAS\Property(example="Doe")
      */
     protected $last_name;
+
+    /**
+     * Middle name.
+     *
+     * @var string
+     *
+     * @OAS\Property(example="Middle")
+     */
+    protected $middle_name;
 
     /**
      * User avatar.
@@ -125,6 +183,15 @@ class User implements UserEntityInterface, UserInterface
     protected $avatar;
 
     /**
+     * User api token.
+     *
+     * @var string
+     *
+     * @OAS\Property(example="example-token")
+     */
+    protected $api_token;
+
+    /**
      * Created time.
      *
      * @var int
@@ -132,6 +199,33 @@ class User implements UserEntityInterface, UserInterface
      * @OAS\Property(format="bigInt", example="1529397813")
      */
     protected $created_at;
+
+    /**
+     * Lst login time.
+     *
+     * @var int
+     *
+     * @OAS\Property(format="bigInt", example="1529397813")
+     */
+    protected $last_login;
+
+    /**
+     * User api token expire date.
+     *
+     * @var int
+     *
+     * @OAS\Property(format="bigInt", example="1529397813")
+     */
+    protected $api_token_expire_at;
+
+    /**
+     * Birth date.
+     *
+     * @var int
+     *
+     * @OAS\Property(format="bigInt", example="1529397813")
+     */
+    protected $birthday;
 
     /**
      * Updated time.
@@ -155,6 +249,32 @@ class User implements UserEntityInterface, UserInterface
      * )
      */
     protected $status;
+
+    /**
+     * Additional user permissions.
+     *
+     * @var array
+     *
+     * @OAS\Schema(example={"permission1", "permission2"}, items="string"}
+     */
+    protected $additional_permissions;
+
+    /**
+     * Container.
+     *
+     * @var \Psr\Container\ContainerInterface
+     */
+    private $container;
+
+    /**
+     * User constructor.
+     *
+     * @param \Psr\Container\ContainerInterface $container
+     */
+    public function __construct(ContainerInterface $container)
+    {
+        $this->container = $container;
+    }
 
     /**
      * {@inheritdoc}
@@ -337,7 +457,17 @@ class User implements UserEntityInterface, UserInterface
      */
     public function getSalt()
     {
-        return null;
+        return $this->getContainer()->get('service_container')->get('oauth.pass_salt') ?? null;
+    }
+
+    /**
+     * Get container.
+     *
+     * @return \Psr\Container\ContainerInterface
+     */
+    public function getContainer(): ContainerInterface
+    {
+        return $this->container;
     }
 
     /**
@@ -345,5 +475,110 @@ class User implements UserEntityInterface, UserInterface
      */
     public function eraseCredentials()
     {
+    }
+
+    /**
+     * Get user api token.
+     *
+     * @return string
+     */
+    public function getApiToken(): string
+    {
+        return $this->api_token;
+    }
+
+    /**
+     * Set user api token.
+     *
+     * @param string $api_token
+     */
+    public function setApiToken(string $api_token): void
+    {
+        $this->api_token = $api_token;
+    }
+
+    /**
+     * Get api token expire date.
+     *
+     * @return int
+     */
+    public function getApiTokenExpireAt(): ?int
+    {
+        return $this->api_token_expire_at;
+    }
+
+    /**
+     * Set expire date for user api token.
+     *
+     * @param int $api_token_expire_at
+     */
+    public function setApiTokenExpireAt(int $api_token_expire_at): void
+    {
+        $this->api_token_expire_at = $api_token_expire_at;
+    }
+
+    /**
+     * Get birth date.
+     *
+     * @return int
+     */
+    public function getBirthday(): ?int
+    {
+        return $this->birthday;
+    }
+
+    /**
+     * Set birth date.
+     *
+     * @param int $birthday
+     */
+    public function setBirthday(int $birthday): void
+    {
+        $this->birthday = $birthday;
+    }
+
+    /**
+     * Get last login time.
+     *
+     * @return int
+     */
+    public function getLastLogin(): ?int
+    {
+        return $this->last_login;
+    }
+
+    /**
+     * Set last login time.
+     *
+     * @param int $last_login
+     */
+    public function setLastLogin(int $last_login): void
+    {
+        $this->last_login = $last_login;
+    }
+
+    /**
+     * Get additional user permissions.
+     *
+     * @return array
+     */
+    public function getAdditionalPermissions(): array
+    {
+        if (!$this->additional_permissions || \is_string($this->additional_permissions))
+        {
+            $this->additional_permissions = explode('|', $this->additional_permissions ?? '') ?? [];
+        }
+
+        return $this->additional_permissions;
+    }
+
+    /**
+     * Get additional user permissions.
+     *
+     * @param array $additionalPermissions
+     */
+    public function setAdditionalPermissions(array $additionalPermissions): void
+    {
+        $this->additional_permissions = $additionalPermissions;
     }
 }

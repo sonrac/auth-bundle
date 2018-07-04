@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace sonrac\Auth\Migrations;
 
 use Doctrine\DBAL\Schema\Schema;
+use Doctrine\DBAL\Types\Type;
 use Doctrine\Migrations\AbstractMigration;
+use sonrac\Auth\Entity\Client;
 
 /**
  * Auto-generated Migration: Please modify to your needs!
@@ -17,26 +19,40 @@ final class Version20180628141730 extends AbstractMigration
      */
     public function up(Schema $schema): void
     {
-        $accessToken = $schema->createTable('clients');
-        $accessToken->addColumn('name', Type::STRING)
+        $clients = $schema->createTable('clients');
+        $clients->addColumn('name', Type::STRING)
             ->setLength(255)
             ->setNotnull(true);
-        $accessToken->addColumn('token_scopes', Type::TEXT)
+        $clients->addColumn('description', Type::STRING)
+            ->setLength(2000)
             ->setNotnull(true)
-            ->setDefault('default');
-        $accessToken->addColumn('user_id', Type::INTEGER)
-            ->setNotnull(false);
-        $accessToken->addColumn('client_id', Type::INTEGER)
+            ->setDefault('');
+        $clients->addColumn('secret', Type::STRING)
+            ->setLength(2000)
             ->setNotnull(true);
+        $clients->addColumn('redirect_uris', Type::TEXT)
+            ->setNotnull(false);
+
+        $clients->addColumn('allowed_grant_types', Type::TEXT)
+            ->setNotnull(true)
+            ->setDefault(implode('|', [
+                Client::GRANT_IMPLICIT,
+                Client::GRANT_AUTH_CODE,
+                Client::GRANT_PASSWORD,
+                Client::GRANT_CLIENT_CREDENTIALS,
+            ]));
+
+        $clients->addColumn('user_id', Type::INTEGER)
+            ->setNotnull(false);
 
         foreach (['expire_at', 'created_at', 'updated_at'] as $columnName) {
-            $notNull = $columnName === 'updated_at';
-            $accessToken->addColumn($columnName, Type::BIGINT)
+            $notNull = $columnName === 'created_at';
+            $clients->addColumn($columnName, Type::BIGINT)
                 ->setLength(20)
                 ->setNotnull($notNull);
         }
 
-        $accessToken->setPrimaryKey(['name']);
+        $clients->setPrimaryKey(['name']);
     }
 
     /**

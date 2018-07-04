@@ -2,12 +2,12 @@
 
 namespace sonrac\Auth\Tests\Seeds;
 
-use sonrac\SimpleSeed\SimpleSeedWithCheckExists;
+use sonrac\SimpleSeed\RollBackSeedWithCheckExists;
 
 /**
  * Class Clients.
  */
-class Clients extends SimpleSeedWithCheckExists
+class ClientsTableSeeder extends RollBackSeedWithCheckExists
 {
     /**
      * {@inheritdoc}
@@ -26,6 +26,7 @@ class Clients extends SimpleSeedWithCheckExists
             [
                 'name'        => 'Test Client',
                 'description' => 'First test client',
+                'secret'      => 'secret-key',
                 'created_at'  => \time(),
             ],
         ];
@@ -37,5 +38,13 @@ class Clients extends SimpleSeedWithCheckExists
     protected function getWhereForRow($data): array
     {
         return ['name' => $data['name']];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function getDeleteFields($data): array
+    {
+        return $this->getWhereForRow($data);
     }
 }

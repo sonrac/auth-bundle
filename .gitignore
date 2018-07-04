@@ -1,4 +1,8 @@
-vendor/
-.idea/
+/vendor/
+/.idea/
 /*.iml
-.php_cs.cache
+/.php_cs.cache
+/docker-compose.override.yml
+.bash_history
+/coverage
+/.rnd

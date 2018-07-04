@@ -5,17 +5,18 @@ sonrac\Auth\Entity\Scope:
   id:
     scope:
       type: string
-  fields:
-    scope:
-      type: string
       length: 2000
       uniqueItems: true
       nullable: false
+  fields:
     title:
       type: string
       length: 255
       default: false
-    desccription:
+    permissions:
+      type: text
+      nullable: false
+    description:
       type: string
       length: 2000
       nullable: false
