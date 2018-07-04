@@ -47,7 +47,7 @@
     "autoload-dev": {
         "psr-4": {
             "sonrac\\Auth\\Tests\\": "tests",
-            "sonrac\\Auth\\Tests\\App\\": "tests/App/src",
+            "sonrac\\Auth\\Tests\\App\\": "tests/app/src",
             "sonrac\\Auth\\Tests\\Units\\": "tests/units",
             "sonrac\\Auth\\Tests\\Functional\\": "tests/functional"
         }

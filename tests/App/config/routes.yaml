@@ -1,4 +1,0 @@
-index:
-    path: /
-    controller: sonrac\Auth\Tests\App\Controller\DefaultController::index
-    requirements: ['@request_stack', 'League\OAuth2\Server\Repositories\ClientRepositoryInterface']

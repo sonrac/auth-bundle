@@ -27,6 +27,8 @@
             <exclude>
                 <directory>src/Resources</directory>
                 <directory>src/Types</directory>
+                <directory>src/Migrations</directory>
+                <directory>src/DependencyInjection</directory>
                 <directory>src/AuthBundle.php</directory>
             </exclude>
         </whitelist>

@@ -270,4 +270,18 @@ class Client implements ClientEntityInterface
     {
         $this->description = $description;
     }
+
+    /**
+     * Prepare entity persist.
+     */
+    public function preparePersist(): void
+    {
+        if (\is_array($this->allowed_grant_types)) {
+            $this->allowed_grant_types = implode('|', $this->allowed_grant_types);
+        }
+
+        if (\is_array($this->redirect_uris)) {
+            $this->redirect_uris = implode('|', $this->redirect_uris);
+        }
+    }
 }

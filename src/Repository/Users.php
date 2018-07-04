@@ -67,7 +67,7 @@ class Users extends ServiceEntityRepository implements UserRepositoryInterface
      * @throws \Doctrine\ORM\NonUniqueResultException
      * @throws \InvalidArgumentException
      *
-     * @return \sonrac\Auth\Entity\User|null
+     * @return \sonrac\Auth\Entity\User|\League\OAuth2\Server\Entities\UserEntityInterface
      */
     public function loadByUsernameOrEmail(string $username): ?UserEntityInterface
     {
@@ -79,7 +79,7 @@ class Users extends ServiceEntityRepository implements UserRepositoryInterface
             ->getOneOrNullResult(Query::HYDRATE_OBJECT);
 
         if (!$user) {
-            throw new InvalidArgumentException('User not found');
+            throw new \InvalidArgumentException('User not found');
         }
 
         return $user;

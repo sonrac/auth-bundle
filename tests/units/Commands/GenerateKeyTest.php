@@ -128,15 +128,13 @@ class GenerateKeyTest extends BaseUnitTester
     {
         parent::setUp();
 
+        $this->keyPath = __DIR__.'/../../app/resources/keys/';
+
         foreach (['pub.key', 'priv.key'] as $file) {
-            @unlink(__DIR__.'/../../App/resources/keys/'.$file);
+            @unlink($this->keyPath.$file);
         }
 
-        $kernel = self::bootKernel();
-        $application = new Application($kernel);
-        $application->add(new GenerateKeys());
-        $this->command = $application->find('sonrac_auth:generate:keys');
+        $this->command = $this->app->find('sonrac_auth:generate:keys');
         $this->commandTester = new CommandTester($this->command);
-        $this->keyPath = __DIR__.'/../../App/resources/keys/';
     }
 }

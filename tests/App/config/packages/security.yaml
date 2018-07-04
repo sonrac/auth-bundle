@@ -1,5 +1,0 @@
-security:
-  firewalls:
-    admin:
-      pattern: ^/
-      security: false

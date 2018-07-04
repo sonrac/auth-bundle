@@ -25,17 +25,9 @@ class GenerateClient extends DoctrineCommand
 
         $this->addOption(
             'name',
-            'n',
+            'm',
             InputOption::VALUE_REQUIRED,
             'Client application name'
-        )->addOption(
-            'scopes',
-            's',
-            InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
-            'Client scopes',
-            [
-                'default',
-            ]
         )->addOption(
             'description',
             'd',
@@ -66,18 +58,24 @@ class GenerateClient extends DoctrineCommand
     {
         $name = $input->getOption('name');
         $grantTypes = $input->getOption('grant-types');
-        $scopes = $input->getOption('scopes');
         $description = $input->getOption('description');
         $secret = $this->generateRandomString();
+        /** @var \sonrac\Auth\Entity\Client $entity */
         $entity = $this->getContainer()->get(ClientEntityInterface::class);
         $entity->setName($name);
         $entity->setAllowedGrantTypes($grantTypes);
         $entity->setSecret($secret);
         $entity->setCreatedAt(\time());
-        $entity->setDescription($description);
+        $entity->setDescription($description ?? '');
 
+        $entity->preparePersist();
         $em = $this->getEntityManager('default');
         $em->persist($entity);
+        $em->flush($entity);
+
+        $output->writeln('Client successfully generated');
+        $output->writeln('Client ID: '.$entity->getIdentifier());
+        $output->writeln('Client secret: '.$entity->getSecret());
     }
 
     /**

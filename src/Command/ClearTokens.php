@@ -64,20 +64,20 @@ class ClearTokens extends DoctrineCommand
             ->from(\get_class($this->getContainer()->get(AccessTokenEntityInterface::class)), 'access_token')
             ->delete();
 
-        if (false !== $input->getOption('all')) {
+        if (false === $input->getOption('all')) {
             $query->orWhere('access_token.is_revoked = :is_revoked')
                 ->setParameter('is_revoked', true);
 
             if (false !== $input->getOption('with-expired')) {
-                $query->orWhere('access_token.expire_at < :expire')
+                $query->orWhere('access_token.expire_at <= :expire')
                     ->setParameter('expire', time());
             }
 
         }
 
         try {
-            $output->writeln('Drop refresh tokens.', Output::OUTPUT_PLAIN);
             if (false !== $input->getOption('with-refresh')) {
+                $output->writeln('Drop refresh tokens.', Output::OUTPUT_PLAIN);
                 $this->dropRefreshTokens($em, false !== $input->getOption('all'), false !== $input->getOption('with-expired'));
             }
 
@@ -89,6 +89,8 @@ class ClearTokens extends DoctrineCommand
             $em->getConnection()->commit();
         } catch (\Exception $e) {
             $em->getConnection()->rollBack();
+
+            throw $e;
         }
     }
 
@@ -112,17 +114,18 @@ class ClearTokens extends DoctrineCommand
 
         if (!$all) {
             $queryToken = $em->createQueryBuilder()
-                ->select('token.access_token')
+                ->select('token.token')
                 ->from(\get_class($this->getContainer()->get(AccessTokenEntityInterface::class)), 'token')
-                ->orWhere('is_revoked = :is_revoked')
+                ->orWhere('token.is_revoked = :is_revoked')
                 ->setParameter('is_revoked', true);
 
             if ($expired) {
-                $queryToken->orWhere('expired_at < :expired')
+                $queryToken->orWhere('token.expire_at <= :expired')
                     ->setParameter('expired', time());
             }
+
             $builder->where('refresh_token.token in (:tokens)')
-                ->setParameter('tokens', $queryToken);
+                ->setParameter('tokens', $queryToken->getQuery()->getArrayResult());
         }
 
         $builder->getQuery()->execute();
