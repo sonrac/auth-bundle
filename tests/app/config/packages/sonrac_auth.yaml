@@ -9,7 +9,8 @@ sonrac_auth:
   refresh_token_lifetime: 3600
   auth_code_lifetime: 3600
   enable_grant_types:
-    client_credentials: true
+    clientCredentials: true
+    refreshToken: true
     password: true
     code: true
     implicit: true

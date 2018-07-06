@@ -8,9 +8,11 @@ sonrac_auth:
   access_token_lifetime: 3600
   refresh_token_lifetime: 3600
   auth_code_lifetime: 3600
+  query_delimiter: "#"
   enable_grant_types:
-    client_credentials: true
+    clientCredentials: true
     password: true
+    refreshToken: true
     code: true
     implicit: true
 

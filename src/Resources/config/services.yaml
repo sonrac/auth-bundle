@@ -42,3 +42,8 @@ services:
   League\OAuth2\Server\Entities\AuthCodeEntityInterface:
     class: sonrac\Auth\Entity\AuthCode
     public: true
+  sonrac_auth.authorization_server:
+    class: sonrac\Auth\Security\AuthorizationServer
+    public: true
+    arguments:
+      ['@service_container']

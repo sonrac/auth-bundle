@@ -55,6 +55,15 @@ class Client implements ClientEntityInterface
     public const GRANT_AUTH_CODE = 'code';
 
     /**
+     * Auth code grant type.
+     *
+     * @const
+     *
+     * @var string
+     */
+    public const GRANT_REFRESH_TOKEN = 'refreshToken';
+
+    /**
      * Client secret key.
      *
      * @var string
