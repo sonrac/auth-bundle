@@ -1,10 +1,18 @@
 parameters:
 
 sonrac_auth:
-  encryption_key: 123
+  encryption_key:
   private_key_path: '%kernel.project_dir%/resources/keys'
   pass_phrase:
   password_salt:
+  access_token_lifetime: 3600
+  refresh_token_lifetime: 3600
+  auth_code_lifetime: 3600
+  enable_grant_types:
+    client_credentials: true
+    password: true
+    code: true
+    implicit: true
 
 services:
   sonrac.oauth.generate_client:

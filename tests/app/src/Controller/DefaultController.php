@@ -12,7 +12,7 @@ class DefaultController extends AbstractController
 {
     public function index(Request $request)
     {
-        \var_dump($this->get('service_container')->getParameter('doctrine.connections'));
+        \var_dump($this->get('service_container')->getParameter('sonrac_auth.enable_grant_types'));
 
         return $this->json([]);
     }

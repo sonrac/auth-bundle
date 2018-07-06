@@ -19,7 +19,7 @@ class OAuth2Authenticator implements AuthenticatorInterface
      */
     public function start(Request $request, AuthenticationException $authException = null)
     {
-        // TODO: Implement start() method.
+
     }
 
     /**
@@ -81,8 +81,8 @@ class OAuth2Authenticator implements AuthenticatorInterface
     /**
      * {@inheritdoc}
      */
-    public function supportsRememberMe()
+    public function supportsRememberMe(): bool
     {
-        // TODO: Implement supportsRememberMe() method.
+        return false;
     }
 }
