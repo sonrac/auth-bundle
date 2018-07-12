@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace sonrac\Auth\Providers;
 
-use sonrac\Auth\Entity\User;
 use sonrac\Auth\Repository\Users;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
@@ -16,6 +17,7 @@ class UserProvider extends Users implements UserProviderInterface
      * {@inheritdoc}
      *
      * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws \InvalidArgumentException
      */
     public function loadUserByUsername($username)
     {
@@ -38,8 +40,8 @@ class UserProvider extends Users implements UserProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function supportsClass($class)
+    public function supportsClass($class): bool
     {
-        return User::class;
+        return \in_array(UserProviderInterface::class, class_implements($class), true);
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace sonrac\Auth\Command;
 
 use Doctrine\Bundle\DoctrineBundle\Command\DoctrineCommand;

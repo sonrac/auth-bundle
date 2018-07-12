@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace sonrac\Auth\Providers;
 
+use Doctrine\ORM\EntityManagerInterface;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
 use Psr\Cache\CacheItemPoolInterface;
@@ -15,9 +18,16 @@ class ClientProvider implements ClientProviderInterface
     /**
      * Client repository.
      *
-     * @var \League\OAuth2\Server\Repositories\ClientRepositoryInterface
+     * @var \League\OAuth2\Server\Repositories\ClientRepositoryInterface|\sonrac\Auth\Repository\Clients
      */
     protected $clientRepository;
+
+    /**
+     * Entity manager.
+     *
+     * @var EntityManagerInterface
+     */
+    protected $em;
 
     /**
      * Cache item pools.
@@ -28,10 +38,9 @@ class ClientProvider implements ClientProviderInterface
 
     public function __construct(
         ClientRepositoryInterface $clientRepository,
-        CacheItemPoolInterface $pool
+        EntityManagerInterface $entity
     ) {
         $this->clientRepository = $clientRepository;
-        $this->cachePool = $pool;
     }
 
     /**
@@ -45,26 +54,37 @@ class ClientProvider implements ClientProviderInterface
 
     /**
      * @inheritDoc
-     *
-     * @throws \InvalidArgumentException If attribute not found.
      */
-    public function authenticate(TokenInterface $token)
+    public function findByToken(string $token)
     {
-        $client = $this->clientRepository->getClientEntity(
-            $token->getAttribute('client_id'),
-            $token->getAttribute('grant_type'),
-            $token->getAttribute('client_secret'),
-            true
-        );
+        // TODO: Implement findByToken() method.
     }
 
     /**
      * @inheritDoc
      */
-    public function supports(TokenInterface $token)
+    public function findByName(string $name)
     {
-        $attributes = $token->getAttributes();
-
-        return isset($attributes['client_id']) && !isset($attributes['username']);
+        // TODO: Implement findByName() method.
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function supportsClass($class): bool
+    {
+        return \in_array(ClientEntityInterface::class, \class_implements($class), true);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function refreshClient(ClientEntityInterface $client): ClientEntityInterface
+    {
+        $this->em->refresh($client);
+
+        return $client;
+    }
+
+
 }

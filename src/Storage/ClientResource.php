@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace sonrac\Auth\Storage;
 
 use League\OAuth2\Server\AuthorizationValidators\AuthorizationValidatorInterface;

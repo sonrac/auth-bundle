@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace sonrac\Auth;
 
 use Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappingsPass;

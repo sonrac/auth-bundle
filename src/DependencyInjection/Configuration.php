@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace sonrac\Auth\DependencyInjection;
 
 use sonrac\Auth\Entity\Client;
@@ -83,6 +85,9 @@ class Configuration implements ConfigurationInterface
                     ->booleanNode(Client::GRANT_IMPLICIT)->end()
                     ->booleanNode(Client::GRANT_REFRESH_TOKEN)->end()
                 ->end()
+            ->end()
+            ->scalarNode('header_token_name')
+                ->isRequired()
             ->end()
             ->end()
         ;

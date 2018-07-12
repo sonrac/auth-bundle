@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace sonrac\Auth\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;

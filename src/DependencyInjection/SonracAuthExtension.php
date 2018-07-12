@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace sonrac\Auth\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
@@ -52,6 +54,7 @@ class SonracAuthExtension extends Extension
      *
      * @param array                                                   $config
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @throws \Exception
      */
     private function setParameters(array $config, ContainerBuilder $container): void
     {
@@ -67,6 +70,7 @@ class SonracAuthExtension extends Extension
         $container->setParameter('sonrac_auth.enable_grant_types', $config['enable_grant_types']);
         $container->setParameter('sonrac_auth.query_delimiter', $config['query_delimiter']);
         $container->setParameter('sonrac_auth.default_scopes', $config['default_scopes'] ?? ['default']);
+        $container->setParameter('sonrac_auth.header_token_name', $config['header_token_name']);
 
         if (isset($config['swagger_constants']) && \is_array($config['swagger_constants'])) {
             foreach ($config['swagger_constants'] as $swagger_constant => $value) {

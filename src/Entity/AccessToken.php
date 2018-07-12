@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace sonrac\Auth\Entity;
 
 use Lcobucci\JWT\Builder;

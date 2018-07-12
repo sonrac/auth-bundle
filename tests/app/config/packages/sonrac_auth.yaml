@@ -9,6 +9,7 @@ sonrac_auth:
   refresh_token_lifetime: 3600
   auth_code_lifetime: 3600
   query_delimiter: "?"
+  header_token_name: "API-TOKEN"
   swagger_constants:
     url: ~
   enable_grant_types:

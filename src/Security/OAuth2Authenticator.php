@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace sonrac\Auth\Security;
 
+use sonrac\Auth\Providers\ClientProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
@@ -15,6 +18,23 @@ use Symfony\Component\Security\Guard\AuthenticatorInterface;
 class OAuth2Authenticator implements AuthenticatorInterface
 {
     /**
+     * Token header name.
+     *
+     * @var string
+     */
+    private $tokenName;
+
+    /**
+     * OAuth2Authenticator constructor.
+     *
+     * @param string $tokenName
+     */
+    public function __construct(string $tokenName)
+    {
+        $this->tokenName = $tokenName;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function start(Request $request, AuthenticationException $authException = null)
@@ -25,9 +45,9 @@ class OAuth2Authenticator implements AuthenticatorInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(Request $request)
+    public function supports(Request $request): bool
     {
-        // TODO: Implement supports() method.
+        return $request->headers->has($this->tokenName);
     }
 
     /**
@@ -35,7 +55,9 @@ class OAuth2Authenticator implements AuthenticatorInterface
      */
     public function getCredentials(Request $request)
     {
-        // TODO: Implement getCredentials() method.
+        return [
+            'token' => $request->headers->get($this->tokenName)
+        ];
     }
 
     /**
@@ -43,15 +65,35 @@ class OAuth2Authenticator implements AuthenticatorInterface
      */
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
-        // TODO: Implement getUser() method.
+        $token = $credentials['token'];
+
+        if (null === $token) {
+            return;
+        }
+
+        return $userProvider->loadUserByUsername($token);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function checkCredentials($credentials, UserInterface $user)
+    public function getClient($token, ClientProviderInterface $clientProvider)
     {
-        // TODO: Implement checkCredentials() method.
+        $token = $credentials['token'];
+
+        if (null === $token) {
+            return;
+        }
+
+        return $clientProvider->loadUserByUsername($token);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function checkCredentials($credentials, UserInterface $user): bool
+    {
+        return true;
     }
 
     /**

@@ -12,7 +12,7 @@ class DefaultController extends AbstractController
 {
     public function index(Request $request)
     {
-        \var_dump($this->get('service_container')->get('sonrac_auth.authorization_server'));
+        \var_dump($this->get('service_container')->get('sonrac_auth.resource_server'));
 
         return $this->json([]);
     }
