@@ -11,7 +11,7 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 /**
- * Class ClientResource
+ * Class ClientResource.
  */
 class ClientResource extends ResourceServer implements TokenStorageInterface
 {
@@ -28,7 +28,7 @@ class ClientResource extends ResourceServer implements TokenStorageInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getToken()
     {
@@ -36,11 +36,10 @@ class ClientResource extends ResourceServer implements TokenStorageInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function setToken(TokenInterface $token = null)
     {
         // TODO: Implement setToken() method.
     }
-
 }

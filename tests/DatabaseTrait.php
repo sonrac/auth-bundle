@@ -6,7 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
- * Trait DatabaseTrait
+ * Trait DatabaseTrait.
  */
 trait DatabaseTrait
 {

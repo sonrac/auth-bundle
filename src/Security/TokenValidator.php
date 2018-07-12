@@ -15,7 +15,7 @@ use League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
- * Class TokenValidator
+ * Class TokenValidator.
  */
 class TokenValidator implements AuthorizationValidatorInterface
 {
@@ -28,7 +28,7 @@ class TokenValidator implements AuthorizationValidatorInterface
     /**
      * Token header name.
      *
-     * @var string $tokenName
+     * @var string
      */
     protected $tokenName;
     /**
@@ -47,11 +47,11 @@ class TokenValidator implements AuthorizationValidatorInterface
         string $tokenName
     ) {
         $this->accessTokenRepository = $accessTokenRepository;
-        $this->tokenName = $tokenName;
+        $this->tokenName             = $tokenName;
     }
 
     /**
-     * Set the public key
+     * Set the public key.
      *
      * @param \League\OAuth2\Server\CryptKey $key
      */
@@ -70,7 +70,7 @@ class TokenValidator implements AuthorizationValidatorInterface
         }
 
         $header = $request->getHeader($this->tokenName);
-        $jwt = trim(preg_replace('/^(?:\s+)?Bearer\s/', '', $header[0]));
+        $jwt    = \trim(\preg_replace('/^(?:\s+)?Bearer\s/', '', $header[0]));
 
         try {
             // Attempt to parse and validate the JWT
@@ -85,7 +85,7 @@ class TokenValidator implements AuthorizationValidatorInterface
 
             // Ensure access token hasn't expired
             $data = new ValidationData();
-            $data->setCurrentTime(time());
+            $data->setCurrentTime(\time());
 
             if ($token->validate($data) === false) {
                 throw OAuthServerException::accessDenied('Access token is invalid');

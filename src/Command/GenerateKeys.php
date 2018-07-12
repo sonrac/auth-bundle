@@ -45,7 +45,7 @@ class GenerateKeys extends ContainerAwareCommand
         $pubName     = $this->getContainer()->getParameter('sonrac_auth.public_key_name');
 
         if ($force || !\file_exists($keyPath.'/'.$privateName)) {
-            if (!is_dir($keyPath) && !@mkdir($keyPath, 0755, true)) {
+            if (!\is_dir($keyPath) && !@\mkdir($keyPath, 0755, true)) {
                 throw new \RuntimeException("Error create path {{$keyPath}}. Check folder permission");
             }
             $this->generatePrivateKey($keyPath.'/'.$privateName, $phrase);

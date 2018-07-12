@@ -29,7 +29,7 @@ class Configuration implements ConfigurationInterface
                 ->defaultValue('nkmWKwpRiwPDQig6JDU9mVfg0+I6JXsmbV0UKt6DNqw=')
                 ->validate()
                     ->ifTrue(function ($v) {
-                        return empty($v) && mb_strlen($v) < 32;
+                        return empty($v) && \mb_strlen($v) < 32;
                     })->thenInvalid('Encryption key invalid. generate using `base64_encode(random_bytes(32))`')
                 ->end()
             ->end()
@@ -38,7 +38,7 @@ class Configuration implements ConfigurationInterface
                 ->validate()
                     ->ifString()
                     ->ifTrue(function ($v) {
-                        if (\php_sapi_name() === 'cli') {
+                        if (\PHP_SAPI === 'cli') {
                             return false;
                         }
 
@@ -51,7 +51,9 @@ class Configuration implements ConfigurationInterface
                         }
 
                         return false;
-                    })->thenInvalid('Key pair directory does not exists. Generate keys with command sonrac:auth:generate:keys')
+                    })->thenInvalid(
+                        'Key pair directory does not exists. Generate keys with command sonrac:auth:generate:keys'
+                    )
                 ->end()
             ->end()
             ->arrayNode('swagger_constants')
@@ -89,13 +91,12 @@ class Configuration implements ConfigurationInterface
             ->scalarNode('header_token_name')
                 ->isRequired()
             ->end()
-            ->end()
-        ;
+            ->end();
 
         foreach ([
             'access_token_lifetime',
             'refresh_token_lifetime',
-            'auth_code_lifetime'
+            'auth_code_lifetime',
                  ] as $nodeName) {
             $rootNode->children()
                 ->integerNode($nodeName)

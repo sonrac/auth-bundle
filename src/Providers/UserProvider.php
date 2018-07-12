@@ -42,6 +42,6 @@ class UserProvider extends Users implements UserProviderInterface
      */
     public function supportsClass($class): bool
     {
-        return \in_array(UserProviderInterface::class, class_implements($class), true);
+        return \in_array(UserProviderInterface::class, \class_implements($class), true);
     }
 }

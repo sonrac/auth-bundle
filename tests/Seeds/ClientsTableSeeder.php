@@ -25,21 +25,21 @@ class ClientsTableSeeder extends RollBackSeedWithCheckExists
     {
         return [
             [
-                'name'        => 'Test Client',
-                'description' => 'First test client',
-                'secret'      => 'secret-key',
-                'created_at'  => \time(),
-                'allowed_grant_types' => json_encode([
+                'name'                => 'Test Client',
+                'description'         => 'First test client',
+                'secret'              => 'secret-key',
+                'created_at'          => \time(),
+                'allowed_grant_types' => \json_encode([
                     Client::GRANT_CLIENT_CREDENTIALS,
                     Client::GRANT_PASSWORD,
                     Client::GRANT_IMPLICIT,
                     Client::GRANT_AUTH_CODE,
                     Client::GRANT_REFRESH_TOKEN,
                 ]),
-                'redirect_uris' => json_encode([
+                'redirect_uris' => \json_encode([
                     'http://test.com',
                     'https://test.com',
-                ])
+                ]),
             ],
         ];
     }

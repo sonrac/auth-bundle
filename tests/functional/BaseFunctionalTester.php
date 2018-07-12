@@ -6,7 +6,7 @@ use sonrac\Auth\Tests\DatabaseTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 /**
- * Class BaseFunctionalTester
+ * Class BaseFunctionalTester.
  */
 class BaseFunctionalTester extends WebTestCase
 {

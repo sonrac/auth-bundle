@@ -25,7 +25,7 @@ class Client implements ClientEntityInterface
      *
      * @const
      *
-     * @type string
+     * @var string
      */
     public const RESPONSE_TYPE_TOKEN = 'token';
 
@@ -34,7 +34,7 @@ class Client implements ClientEntityInterface
      *
      * @const
      *
-     * @type string
+     * @var string
      */
     public const RESPONSE_TYPE_CODE = 'code';
 

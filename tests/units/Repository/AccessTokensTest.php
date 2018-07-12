@@ -66,11 +66,11 @@ class AccessTokensTest extends BaseUnitTester
      */
     public function testGetNewToken(): AccessToken
     {
-        $client = $this->clientRepository->find('Test Client');
-        $scopes = $this->scopeRepository->findAll();
-        $requestStack = new RequestStack();
+        $client              = $this->clientRepository->find('Test Client');
+        $scopes              = $this->scopeRepository->findAll();
+        $requestStack        = new RequestStack();
         $_POST['grant_type'] = 'client_credentials';
-        $request = Request::createFromGlobals();
+        $request             = Request::createFromGlobals();
         $requestStack->push($request);
         static::$container->set('request_stack', $requestStack);
         $token  = $this->repository->getNewToken($client, $scopes, 1);

@@ -7,16 +7,16 @@ namespace sonrac\Auth\Exception;
 use Throwable;
 
 /**
- * Class InvalidValidation
+ * Class InvalidValidation.
  */
 class InvalidValidation extends \Exception
 {
-    protected $code = '{object}.validate_error';
+    protected $code    = '{object}.validate_error';
     protected $message = 'invalid validate';
 
     protected $errors = [];
 
-    public function __construct(array $errors, string $message = "", int $code = 0, Throwable $previous = null)
+    public function __construct(array $errors, string $message = '', int $code = 0, Throwable $previous = null)
     {
         parent::__construct($message, $code, $previous);
     }

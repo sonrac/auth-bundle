@@ -29,7 +29,7 @@ class SonracAuthExtension extends Extension
     public function load(array $configs, ContainerBuilder $container): void
     {
         $fileLocator = new FileLocator(__DIR__.'/../Resources/config');
-        $loader = new YamlFileLoader(
+        $loader      = new YamlFileLoader(
             $container,
             $fileLocator
         );
@@ -54,6 +54,7 @@ class SonracAuthExtension extends Extension
      *
      * @param array                                                   $config
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     *
      * @throws \Exception
      */
     private function setParameters(array $config, ContainerBuilder $container): void

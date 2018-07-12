@@ -5,10 +5,9 @@ declare(strict_types=1);
 namespace sonrac\Auth\Providers;
 
 use League\OAuth2\Server\Entities\ClientEntityInterface;
-use Symfony\Component\Security\Core\Authentication\Provider\AuthenticationProviderInterface;
 
 /**
- * Interface ClientProviderInterface
+ * Interface ClientProviderInterface.
  */
 interface ClientProviderInterface
 {
@@ -62,5 +61,4 @@ interface ClientProviderInterface
      * @return \League\OAuth2\Server\Entities\ClientEntityInterface
      */
     public function refreshClient(ClientEntityInterface $client): ClientEntityInterface;
-
 }

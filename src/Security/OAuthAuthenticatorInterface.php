@@ -8,7 +8,7 @@ use sonrac\Auth\Providers\ClientProviderInterface;
 use Symfony\Component\Security\Guard\AuthenticatorInterface;
 
 /**
- * Interface OAuthAuthenticatorInterface
+ * Interface OAuthAuthenticatorInterface.
  */
 interface OAuthAuthenticatorInterface extends AuthenticatorInterface
 {

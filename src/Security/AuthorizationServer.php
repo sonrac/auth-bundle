@@ -26,7 +26,7 @@ use sonrac\Auth\Entity\Client;
 use Zend\Diactoros\Stream;
 
 /**
- * Class AuthorizationServer
+ * Class AuthorizationServer.
  */
 class AuthorizationServer implements AuthorizationServerInterface
 {
@@ -133,7 +133,7 @@ class AuthorizationServer implements AuthorizationServerInterface
     }
 
     /**
-     * Enable grant types for service/
+     * Enable grant types for service/.
      *
      * @throws \Exception
      * @throws \Psr\Container\ContainerExceptionInterface
@@ -145,7 +145,7 @@ class AuthorizationServer implements AuthorizationServerInterface
         foreach ($this->enableGrantTypes as $grantType => $isEnabled) {
             if ($isEnabled) {
                 $grantTypeObject = null;
-                $ttl = $this->getTokenTtl($this->accessTokenTtl);
+                $ttl             = $this->getTokenTtl($this->accessTokenTtl);
                 switch ($grantType) {
                     case Client::GRANT_CLIENT_CREDENTIALS:
                         /** @var AuthorizationServer $a */
@@ -172,7 +172,9 @@ class AuthorizationServer implements AuthorizationServerInterface
                         );
                         break;
                     case Client::GRANT_REFRESH_TOKEN:
-                        $grantTypeObject = new RefreshTokenGrant($this->container->get(RefreshTokenRepositoryInterface::class));
+                        $grantTypeObject = new RefreshTokenGrant(
+                            $this->container->get(RefreshTokenRepositoryInterface::class)
+                        );
                         break;
                 }
 
@@ -221,7 +223,7 @@ class AuthorizationServer implements AuthorizationServerInterface
             return $exception->generateHttpResponse($response);
         } catch (\Exception $exception) {
             $body = new Stream('php://temp', 'r+');
-            $body->write(json_encode([
+            $body->write(\json_encode([
                 'message'    => 'Internal server error',
                 'error_test' => $exception->getMessage(),
                 'error'      => 'internal_error',
@@ -247,7 +249,7 @@ class AuthorizationServer implements AuthorizationServerInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface

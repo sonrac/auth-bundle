@@ -240,7 +240,7 @@ class AuthCode implements AuthCodeEntityInterface
     public function addScope(ScopeEntityInterface $scope): void
     {
         $this->token_scopes[] = $scope->getIdentifier();
-        $this->scopes[] = $scope;
+        $this->scopes[]       = $scope;
     }
 
     /**

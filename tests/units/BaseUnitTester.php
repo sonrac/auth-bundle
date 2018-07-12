@@ -3,7 +3,6 @@
 namespace sonrac\Auth\Tests\Units;
 
 use sonrac\Auth\Tests\DatabaseTrait;
-use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**

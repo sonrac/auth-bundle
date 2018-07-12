@@ -7,11 +7,9 @@ namespace sonrac\Auth\Providers;
 use Doctrine\ORM\EntityManagerInterface;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
-use Psr\Cache\CacheItemPoolInterface;
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 /**
- * Class ClientProvider
+ * Class ClientProvider.
  */
 class ClientProvider implements ClientProviderInterface
 {
@@ -44,7 +42,7 @@ class ClientProvider implements ClientProviderInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function validateClientSecret(string $secret, ClientEntityInterface $client): bool
     {
@@ -53,7 +51,7 @@ class ClientProvider implements ClientProviderInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function findByToken(string $token)
     {
@@ -61,7 +59,7 @@ class ClientProvider implements ClientProviderInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function findByName(string $name)
     {
@@ -69,7 +67,7 @@ class ClientProvider implements ClientProviderInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function supportsClass($class): bool
     {
@@ -77,7 +75,7 @@ class ClientProvider implements ClientProviderInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function refreshClient(ClientEntityInterface $client): ClientEntityInterface
     {
@@ -85,6 +83,4 @@ class ClientProvider implements ClientProviderInterface
 
         return $client;
     }
-
-
 }

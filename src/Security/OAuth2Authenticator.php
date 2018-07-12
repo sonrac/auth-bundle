@@ -39,7 +39,6 @@ class OAuth2Authenticator implements AuthenticatorInterface
      */
     public function start(Request $request, AuthenticationException $authException = null)
     {
-
     }
 
     /**
@@ -56,7 +55,7 @@ class OAuth2Authenticator implements AuthenticatorInterface
     public function getCredentials(Request $request)
     {
         return [
-            'token' => $request->headers->get($this->tokenName)
+            'token' => $request->headers->get($this->tokenName),
         ];
     }
 

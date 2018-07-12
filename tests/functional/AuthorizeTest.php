@@ -4,7 +4,6 @@ namespace sonrac\Auth\Tests\Functional;
 
 use sonrac\Auth\Entity\Client;
 
-
 /**
  * Class AuthorizeTest.
  */
@@ -29,7 +28,7 @@ class AuthorizeTest extends BaseFunctionalTester
         $client->request('POST', '/api/token');
         $response = $client->getResponse();
 
-        $data = json_decode($response->getContent(), true);
+        $data = \json_decode($response->getContent(), true);
 
         $this->assertInternalType('array', $data);
         $this->assertArrayHasKey('error', $data);
@@ -50,7 +49,7 @@ class AuthorizeTest extends BaseFunctionalTester
         ]);
         $response = $client->getResponse();
 
-        $data = json_decode($response->getContent(), true);
+        $data = \json_decode($response->getContent(), true);
 
         $this->assertInternalType('array', $data);
         $this->assertArrayHasKey('error', $data);
@@ -73,13 +72,13 @@ class AuthorizeTest extends BaseFunctionalTester
         ]);
         $response = $client->getResponse();
 
-        $data = json_decode($response->getContent(), true);
+        $data = \json_decode($response->getContent(), true);
 
         $this->assertInternalType('array', $data);
         $this->assertArrayHasKey('token_type', $data);
         $this->assertArrayHasKey('expires_in', $data);
         $this->assertArrayHasKey('access_token', $data);
-        $this->assertEquals('bearer', strtolower($data['token_type']));
+        $this->assertEquals('bearer', \mb_strtolower($data['token_type']));
 
         $this->checkToken();
     }
@@ -98,21 +97,22 @@ class AuthorizeTest extends BaseFunctionalTester
             'client_secret' => 'secret-key',
             'scope'         => 'default',
             'username'      => 'username',
-            'password'      => 'password'
+            'password'      => 'password',
         ]);
         $response = $client->getResponse();
 
-        $data = json_decode($response->getContent(), true);
+        $data = \json_decode($response->getContent(), true);
 
         $this->assertInternalType('array', $data);
         $this->assertArrayHasKey('token_type', $data);
         $this->assertArrayHasKey('expires_in', $data);
         $this->assertArrayHasKey('access_token', $data);
         $this->assertArrayHasKey('refresh_token', $data);
-        $this->assertEquals('bearer', strtolower($data['token_type']));
+        $this->assertEquals('bearer', \mb_strtolower($data['token_type']));
 
-        $tokens = $this->checkToken(Client::GRANT_PASSWORD, true);
+        $tokens   = $this->checkToken(Client::GRANT_PASSWORD, true);
         $tokens[] = $data['refresh_token'];
+
         return $tokens;
     }
 
@@ -142,14 +142,14 @@ class AuthorizeTest extends BaseFunctionalTester
         ]);
         $response = $client->getResponse();
 
-        $data = json_decode($response->getContent(), true);
+        $data = \json_decode($response->getContent(), true);
 
         $this->assertInternalType('array', $data);
         $this->assertArrayHasKey('token_type', $data);
         $this->assertArrayHasKey('expires_in', $data);
         $this->assertArrayHasKey('access_token', $data);
         $this->assertArrayHasKey('refresh_token', $data);
-        $this->assertEquals('bearer', strtolower($data['token_type']));
+        $this->assertEquals('bearer', \mb_strtolower($data['token_type']));
 
         $this->assertCount(1, $this->getRevoked());
         $this->assertCount(1, $this->getRevoked('refresh_tokens'));
@@ -163,12 +163,14 @@ class AuthorizeTest extends BaseFunctionalTester
     public function testImplicitGrant(): void
     {
         $client = static::createClient();
-        $client->request('GET', '/api/authorize?'.http_build_query([
+        $client->request(
+            'GET',
+            '/api/authorize?'.\http_build_query([
                 'grant_type'    => Client::GRANT_IMPLICIT,
                 'client_id'     => 'Test Client',
                 'redirect_uri'  => 'http://test.com',
                 'scope'         => 'default',
-                'response_type' => Client::RESPONSE_TYPE_TOKEN
+                'response_type' => Client::RESPONSE_TYPE_TOKEN,
             ])
         );
         $response = $client->getResponse();
@@ -183,7 +185,7 @@ class AuthorizeTest extends BaseFunctionalTester
         $this->assertArrayHasKey('token_type', $parameters);
         $this->assertArrayHasKey('expires_in', $parameters);
         $this->assertArrayHasKey('access_token', $parameters);
-        $this->assertEquals('bearer', strtolower($parameters['token_type']));
+        $this->assertEquals('bearer', \mb_strtolower($parameters['token_type']));
 
         $this->checkToken(Client::GRANT_IMPLICIT);
     }
@@ -194,13 +196,15 @@ class AuthorizeTest extends BaseFunctionalTester
     public function testAuthCodeGrant(): void
     {
         $client = static::createClient();
-        $client->request('GET', '/api/authorize?'.http_build_query([
+        $client->request(
+            'GET',
+            '/api/authorize?'.\http_build_query([
                 'grant_type'    => Client::GRANT_AUTH_CODE,
                 'client_id'     => 'Test Client',
                 'redirect_uri'  => 'http://test.com',
                 'scope'         => 'default',
                 'response_type' => Client::RESPONSE_TYPE_CODE,
-                'state'         => 'sample-csrf'
+                'state'         => 'sample-csrf',
             ])
         );
         $response = $client->getResponse();
@@ -236,13 +240,13 @@ class AuthorizeTest extends BaseFunctionalTester
 
         $response = $client->getResponse();
 
-        $data = json_decode($response->getContent(), true);
+        $data = \json_decode($response->getContent(), true);
 
         $this->assertInternalType('array', $data);
         $this->assertArrayHasKey('token_type', $data);
         $this->assertArrayHasKey('expires_in', $data);
         $this->assertArrayHasKey('access_token', $data);
-        $this->assertEquals('bearer', strtolower($data['token_type']));
+        $this->assertEquals('bearer', \mb_strtolower($data['token_type']));
 
         $this->checkToken(Client::GRANT_AUTH_CODE);
     }

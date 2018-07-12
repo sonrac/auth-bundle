@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace sonrac\Auth\Storage;
 
 /**
- * Class UserResource
+ * Class UserResource.
  */
 class UserResource
 {
-
 }

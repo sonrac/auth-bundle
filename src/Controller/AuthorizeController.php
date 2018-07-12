@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace sonrac\Auth\Controller;
 
 use Psr\Http\Message\ServerRequestInterface;
+use Swagger\Annotations as OAS;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Zend\Diactoros\Response;
-use Swagger\Annotations as OAS;
 
 /**
  * Class AuthorizeController.
@@ -32,10 +32,10 @@ use Swagger\Annotations as OAS;
  *         flow="implicit",
  *         authorizationUrl="/api/authorize",
  *         scopes={
- *            "default": "Default scope",
- *            "client": "User access",
- *            "admin": "Admin access"
- *          }
+ *             "default" : "Default scope",
+ *             "client" : "User access",
+ *             "admin" : "Admin access"
+ *         }
  *     ),
  *     @OAS\Flow(
  *         flow="authorizationCode",
@@ -43,30 +43,30 @@ use Swagger\Annotations as OAS;
  *         tokenUrl="/api/authorize",
  *         refreshUrl="/api/authorize",
  *         scopes={
- *            "default": "Default scope",
- *            "client": "User access",
- *            "admin": "Admin access"
- *          }
+ *             "default" : "Default scope",
+ *             "client" : "User access",
+ *             "admin" : "Admin access"
+ *         }
  *     ),
  *     @OAS\Flow(
  *         flow="password",
  *         tokenUrl="/api/authorize",
  *         refreshUrl="/api/authorize",
  *         scopes={
- *            "default": "Default scope",
- *            "client": "User access",
- *            "admin": "Admin access"
- *          }
+ *             "default" : "Default scope",
+ *             "client" : "User access",
+ *             "admin" : "Admin access"
+ *         }
  *     ),
  *     @OAS\Flow(
  *         flow="clientCredentials",
  *         tokenUrl="/api/authorize",
  *         refreshUrl="/api/authorize",
  *         scopes={
- *            "default": "Default scope",
- *            "client": "User access",
- *            "admin": "Admin access"
- *          }
+ *             "default" : "Default scope",
+ *             "client" : "User access",
+ *             "admin" : "Admin access"
+ *         }
  *     ),
  * )
  */
@@ -88,6 +88,7 @@ class AuthorizeController extends AbstractController
     public function token(ServerRequestInterface $request)
     {
         $response = new Response();
+
         return $this->get('sonrac_auth.authorization_server')->token($request, $response);
     }
 
@@ -109,6 +110,7 @@ class AuthorizeController extends AbstractController
     public function authorize(ServerRequestInterface $request)
     {
         $response = new Response();
+
         return $this->get('sonrac_auth.authorization_server')->authorize($request, $response);
     }
 }

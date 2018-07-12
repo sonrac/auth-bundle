@@ -7,7 +7,7 @@ namespace sonrac\Auth\Providers;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 /**
- * Interface OAuthUserProviderInterface
+ * Interface OAuthUserProviderInterface.
  */
 interface OAuthUserProviderInterface extends UserProviderInterface
 {

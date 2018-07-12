@@ -215,7 +215,7 @@ class RefreshToken implements RefreshTokenEntityInterface
     {
         $this->token_scopes = $this->token_scopes ?? [];
         foreach ($scopes as $scope) {
-            if (is_object($scope) && \in_array(ScopeEntityInterface::class, class_implements($scope))) {
+            if (\is_object($scope) && \in_array(ScopeEntityInterface::class, \class_implements($scope))) {
                 $this->token_scopes[] = $scope->getIdentifier();
 
                 continue;
@@ -237,7 +237,7 @@ class RefreshToken implements RefreshTokenEntityInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function setExpiryDateTime(\DateTime $dateTime): void
     {
