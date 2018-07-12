@@ -2,6 +2,7 @@
 
 namespace sonrac\Auth\DependencyInjection;
 
+use sonrac\Auth\Entity\Client;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -26,8 +27,7 @@ class Configuration implements ConfigurationInterface
                 ->defaultValue('nkmWKwpRiwPDQig6JDU9mVfg0+I6JXsmbV0UKt6DNqw=')
                 ->validate()
                     ->ifTrue(function ($v) {
-                        var_dump($v);
-                        return !empty($v) && mb_strlen($v) < 32;
+                        return empty($v) && mb_strlen($v) < 32;
                     })->thenInvalid('Encryption key invalid. generate using `base64_encode(random_bytes(32))`')
                 ->end()
             ->end()
@@ -36,6 +36,10 @@ class Configuration implements ConfigurationInterface
                 ->validate()
                     ->ifString()
                     ->ifTrue(function ($v) {
+                        if (\php_sapi_name() === 'cli') {
+                            return false;
+                        }
+
                         if (empty($v)) {
                             return false;
                         }
@@ -47,6 +51,14 @@ class Configuration implements ConfigurationInterface
                         return false;
                     })->thenInvalid('Key pair directory does not exists. Generate keys with command sonrac:auth:generate:keys')
                 ->end()
+            ->end()
+            ->arrayNode('swagger_constants')
+                ->isRequired()
+                ->requiresAtLeastOneElement()
+                ->useAttributeAsKey('name')
+                ->scalarPrototype()->end()
+            ->end()
+            ->arrayNode('default_scopes')
             ->end()
             ->scalarNode('query_delimiter')
                 ->defaultValue('#')
@@ -65,11 +77,11 @@ class Configuration implements ConfigurationInterface
             ->end()
             ->arrayNode('enable_grant_types')
                 ->children()
-                    ->booleanNode('clientCredentials')->end()
-                    ->booleanNode('code')->end()
-                    ->booleanNode('password')->end()
-                    ->booleanNode('implicit')->end()
-                    ->booleanNode('refreshToken')->end()
+                    ->booleanNode(Client::GRANT_CLIENT_CREDENTIALS)->end()
+                    ->booleanNode(Client::GRANT_AUTH_CODE)->end()
+                    ->booleanNode(Client::GRANT_PASSWORD)->end()
+                    ->booleanNode(Client::GRANT_IMPLICIT)->end()
+                    ->booleanNode(Client::GRANT_REFRESH_TOKEN)->end()
                 ->end()
             ->end()
             ->end()

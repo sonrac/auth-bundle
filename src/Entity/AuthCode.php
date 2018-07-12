@@ -5,6 +5,7 @@ namespace sonrac\Auth\Entity;
 use League\OAuth2\Server\Entities\AuthCodeEntityInterface;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Entities\ScopeEntityInterface;
+use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
 use Psr\Container\ContainerInterface;
 use Swagger\Annotations as OAS;
 
@@ -15,7 +16,7 @@ use Swagger\Annotations as OAS;
  * @OAS\Schema(
  *     title="AuthCode",
  *     description="Auth code entity",
- *     required={"code", "redirect_uris", "client_id", "scopes"}
+ *     required={"code", "redirect_uri", "client_id", "scopes"}
  * )
  */
 class AuthCode implements AuthCodeEntityInterface
@@ -26,20 +27,11 @@ class AuthCode implements AuthCodeEntityInterface
     }
 
     /**
-     * Auth code identifier.
-     *
-     * @var int
-     *
-     * @OAS\Property(example=1)
-     */
-    protected $id;
-
-    /**
      * Auth code.
      *
      * @var string
      *
-     * @OAS\Property(example=1)
+     * @OAS\Property(example="auth_code", uniqueItems=true)
      */
     protected $code;
 
@@ -48,18 +40,23 @@ class AuthCode implements AuthCodeEntityInterface
      *
      * @var bool
      *
-     * @OAS\Property(example=false, default=false)
+     * @OAS\Property(
+     *     example=false,
+     *     default=false
+     * )
      */
-    protected $is_revoked;
+    protected $is_revoked = false;
 
     /**
      * Redirect url.
      *
      * @var string
      *
-     * @OAS\Property(example="http://example.com./redirect")
+     * @OAS\Property(
+     *     example="http://example.com./redirect",
+     * )
      */
-    protected $redirect_uris;
+    protected $redirect_uri;
 
     /**
      * User identifier.
@@ -118,7 +115,20 @@ class AuthCode implements AuthCodeEntityInterface
      *
      * @var array
      *
-     * @OAS\Property(example={"user_get", "clients_get"}, default={})
+     * @OAS\Property(
+     *     example={"user_get", "clients_get"},
+     *     default={},
+     *     @OAS\Items(
+     *         type="string"
+     *     )
+     * )
+     */
+    protected $token_scopes;
+
+    /**
+     * Token scopes object.
+     *
+     * @var \League\OAuth2\Server\Entities\ScopeEntityInterface[]
      */
     protected $scopes;
 
@@ -149,9 +159,9 @@ class AuthCode implements AuthCodeEntityInterface
     /**
      * {@inheritdoc}
      */
-    public function getRedirectUri(): string
+    public function getRedirectUri(): ?string
     {
-        return $this->redirect_uris ?? '';
+        return $this->redirect_uri;
     }
 
     /**
@@ -159,15 +169,15 @@ class AuthCode implements AuthCodeEntityInterface
      */
     public function setRedirectUri($uri): void
     {
-        $this->redirect_uris = $uri;
+        $this->redirect_uri = $uri;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getIdentifier(): int
+    public function getIdentifier(): ?string
     {
-        return $this->id ?? 0;
+        return $this->code;
     }
 
     /**
@@ -175,7 +185,7 @@ class AuthCode implements AuthCodeEntityInterface
      */
     public function setIdentifier($identifier): void
     {
-        $this->id = (int) $identifier;
+        $this->code = $identifier;
     }
 
     /**
@@ -209,7 +219,7 @@ class AuthCode implements AuthCodeEntityInterface
             return null;
         }
 
-        return $this->client = $this->container->get('oauth.repository.client')->find($this->client_id);
+        return $this->client = $this->container->get(ClientRepositoryInterface::class)->find($this->client_id);
     }
 
     /**
@@ -227,6 +237,7 @@ class AuthCode implements AuthCodeEntityInterface
      */
     public function addScope(ScopeEntityInterface $scope): void
     {
+        $this->token_scopes[] = $scope->getIdentifier();
         $this->scopes[] = $scope;
     }
 
@@ -235,9 +246,19 @@ class AuthCode implements AuthCodeEntityInterface
      *
      * {@inheritdoc}
      */
-    public function getScopes(): array
+    public function getScopes(): ?array
     {
-        return $this->scopes ?? [];
+        return $this->getTokenScopes();
+    }
+
+    /**
+     * Get token scopes list.
+     *
+     * @return array
+     */
+    public function getTokenScopes(): ?array
+    {
+        return $this->token_scopes;
     }
 
     /**

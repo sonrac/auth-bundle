@@ -2,20 +2,10 @@
 
 namespace sonrac\Auth\DependencyInjection;
 
-use League\OAuth2\Server\AuthorizationServer;
-use League\OAuth2\Server\CryptKey;
-use League\OAuth2\Server\Grant\ClientCredentialsGrant;
-use League\OAuth2\Server\Grant\PasswordGrant;
-use League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface;
-use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
-use League\OAuth2\Server\Repositories\ScopeRepositoryInterface;
-use sonrac\Auth\Entity\Client;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
-use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Routing\Loader\YamlFileLoader as RoutesYamlLoader;
 
 /**
@@ -76,6 +66,17 @@ class SonracAuthExtension extends Extension
         $container->setParameter('sonrac_auth.access_token_lifetime', $config['access_token_lifetime']);
         $container->setParameter('sonrac_auth.enable_grant_types', $config['enable_grant_types']);
         $container->setParameter('sonrac_auth.query_delimiter', $config['query_delimiter']);
+        $container->setParameter('sonrac_auth.default_scopes', $config['default_scopes'] ?? ['default']);
+
+        if (isset($config['swagger_constants']) && \is_array($config['swagger_constants'])) {
+            foreach ($config['swagger_constants'] as $swagger_constant => $value) {
+                $swagger_constant = 'SWAGGER_'.\mb_strtoupper($swagger_constant);
+                if ($value === '{url}') {
+                    $value = $container->get('router')->generate('home');
+                }
+                \defined($swagger_constant) or \define($swagger_constant, $value);
+            }
+        }
     }
 
     /**

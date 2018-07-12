@@ -19,13 +19,31 @@ class Client implements ClientEntityInterface
     use TimeEntityTrait;
 
     /**
+     * Token response type.
+     *
+     * @const
+     *
+     * @type string
+     */
+    public const RESPONSE_TYPE_TOKEN = 'token';
+
+    /**
+     * Authorization code response type.
+     *
+     * @const
+     *
+     * @type string
+     */
+    public const RESPONSE_TYPE_CODE = 'code';
+
+    /**
      * Client credentials grant type.
      *
      * @const
      *
      * @var string
      */
-    public const GRANT_CLIENT_CREDENTIALS = 'clientCredentials';
+    public const GRANT_CLIENT_CREDENTIALS = 'client_credentials';
 
     /**
      * Client credentials grant type.
@@ -52,7 +70,7 @@ class Client implements ClientEntityInterface
      *
      * @var string
      */
-    public const GRANT_AUTH_CODE = 'code';
+    public const GRANT_AUTH_CODE = 'authorization_code';
 
     /**
      * Auth code grant type.
@@ -61,7 +79,7 @@ class Client implements ClientEntityInterface
      *
      * @var string
      */
-    public const GRANT_REFRESH_TOKEN = 'refreshToken';
+    public const GRANT_REFRESH_TOKEN = 'refresh_token';
 
     /**
      * Client secret key.
@@ -86,7 +104,12 @@ class Client implements ClientEntityInterface
      *
      * @var array
      *
-     * @OAS\Property(example={"client_credentials", "password"})
+     * @OAS\Property(
+     *     example={"client_credentials", "password"},
+     *     @OAS\Items(
+     *         type="string"
+     *     )
+     * )
      */
     protected $allowed_grant_types;
 
@@ -113,7 +136,12 @@ class Client implements ClientEntityInterface
      *
      * @var array
      *
-     * @OAS\Property(example={"https://test.com", "https://test.com/redirect"})
+     * @OAS\Property(
+     *     example={"https://test.com", "https://test.com/redirect"},
+     *     @OAS\Items(
+     *         type="string"
+     *     )
+     * )
      */
     protected $redirect_uris;
 
@@ -184,9 +212,9 @@ class Client implements ClientEntityInterface
      *
      * @return array
      */
-    public function getRedirectUris(): array
+    public function getRedirectUris(): ?array
     {
-        return $this->redirect_uris ?? [];
+        return $this->redirect_uris;
     }
 
     /**
@@ -228,12 +256,8 @@ class Client implements ClientEntityInterface
      *
      * @return array
      */
-    public function getAllowedGrantTypes(): array
+    public function getAllowedGrantTypes(): ?array
     {
-        if (\is_string($this->allowed_grant_types)) {
-            $this->allowed_grant_types = \explode('|', $this->allowed_grant_types);
-        }
-
         return $this->allowed_grant_types;
     }
 
@@ -278,19 +302,5 @@ class Client implements ClientEntityInterface
     public function setDescription(string $description): void
     {
         $this->description = $description;
-    }
-
-    /**
-     * Prepare entity persist.
-     */
-    public function preparePersist(): void
-    {
-        if (\is_array($this->allowed_grant_types)) {
-            $this->allowed_grant_types = \implode('|', $this->allowed_grant_types);
-        }
-
-        if (\is_array($this->redirect_uris)) {
-            $this->redirect_uris = \implode('|', $this->redirect_uris);
-        }
     }
 }

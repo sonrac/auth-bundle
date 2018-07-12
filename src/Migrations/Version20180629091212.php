@@ -22,15 +22,15 @@ final class Version20180629091212 extends AbstractMigration
         $authCodes->addColumn('code', Type::STRING)
             ->setLength(2000)
             ->setNotnull(true);
-        $authCodes->addColumn('redirect_uris', Type::TEXT)
+        $authCodes->addColumn('redirect_uri', Type::TEXT)
             ->setNotnull(true);
         $authCodes->addColumn('is_revoked', Type::BOOLEAN)
             ->setNotnull(true)
             ->setDefault(false);
-        $authCodes->addColumn('scopes', Type::TEXT)
+        $authCodes->addColumn('token_scopes', Type::TEXT)
             ->setNotnull(true);
         $authCodes->addColumn('user_id', Type::INTEGER)
-            ->setNotnull(true);
+            ->setNotnull(false);
         $authCodes->addColumn('client_id', Type::INTEGER)
             ->setNotnull(true);
         foreach (['expire_at', 'created_at', 'updated_at'] as $columnName) {

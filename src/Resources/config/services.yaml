@@ -18,7 +18,7 @@ services:
   League\OAuth2\Server\Repositories\AuthCodeRepositoryInterface:
     class: sonrac\Auth\Repository\AuthCodes
     public: true
-    arguments: ['@doctrine']
+    arguments: ['@doctrine', '@service_container']
   League\OAuth2\Server\Repositories\UserRepositoryInterface:
     class: sonrac\Auth\Repository\Users
     public: true
@@ -39,9 +39,11 @@ services:
   League\OAuth2\Server\Entities\UserEntityInterface:
     class: sonrac\Auth\Entity\User
     public: true
+    arguments: ['@service_container']
   League\OAuth2\Server\Entities\AuthCodeEntityInterface:
     class: sonrac\Auth\Entity\AuthCode
     public: true
+    arguments: ['@service_container']
   sonrac_auth.authorization_server:
     class: sonrac\Auth\Security\AuthorizationServer
     public: true

@@ -8,6 +8,8 @@ use League\OAuth2\Server\Repositories\ScopeRepositoryInterface;
 use sonrac\Auth\Entity\AccessToken;
 use sonrac\Auth\Entity\Client;
 use sonrac\Auth\Tests\Units\BaseUnitTester;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Class AccessTokensTest.
@@ -66,6 +68,11 @@ class AccessTokensTest extends BaseUnitTester
     {
         $client = $this->clientRepository->find('Test Client');
         $scopes = $this->scopeRepository->findAll();
+        $requestStack = new RequestStack();
+        $_POST['grant_type'] = 'client_credentials';
+        $request = Request::createFromGlobals();
+        $requestStack->push($request);
+        static::$container->set('request_stack', $requestStack);
         $token  = $this->repository->getNewToken($client, $scopes, 1);
         $token->setIdentifier('token-token');
         $token->setGrantType(Client::GRANT_CLIENT_CREDENTIALS);

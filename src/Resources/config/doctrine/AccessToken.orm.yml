@@ -20,7 +20,7 @@ sonrac\Auth\Entity\AccessToken:
         referenceColumnName: id
   fields:
     token_scopes:
-      type: text
+      type: json_array
       nullable: false
     grant_type:
       type: string

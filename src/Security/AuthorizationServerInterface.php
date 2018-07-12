@@ -1,14 +1,32 @@
 <?php
 
-
 namespace sonrac\Auth\Security;
+
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * Interface AuthorizationServerInterface
  */
 interface AuthorizationServerInterface
 {
-    public function authenticate();
+    /**
+     * Authorize.
+     *
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     * @param \Psr\Http\Message\ResponseInterface      $response
+     *
+     * @return mixed
+     */
+    public function token(ServerRequestInterface $request, ResponseInterface $response);
 
-    public function authorize();
+    /**
+     * Authenticate third party.
+     *
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     * @param \Psr\Http\Message\ResponseInterface      $response
+     *
+     * @return mixed
+     */
+    public function authorize(ServerRequestInterface $request, ResponseInterface $response);
 }

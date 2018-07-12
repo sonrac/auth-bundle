@@ -24,13 +24,13 @@ class AuthCodesTableSeeder extends RollBackSeedWithCheckExists
     {
         return [
             [
-                'code'          => 'test_code',
-                'redirect_uris' => 'test',
-                'scopes'        => 'client|admin',
-                'client_id'     => 'Test Client',
-                'user_id'       => 1,
-                'expire_at'     => \time(),
-                'created_at'    => \time(),
+                'code'         => 'test_code',
+                'redirect_uri' => 'test',
+                'token_scopes' => json_encode(['client', 'admin']),
+                'client_id'    => 'Test Client',
+                'user_id'      => 1,
+                'expire_at'    => \time(),
+                'created_at'   => \time(),
             ],
         ];
     }

@@ -71,8 +71,8 @@ class Users extends ServiceEntityRepository implements UserRepositoryInterface
     public function loadByUsernameOrEmail(string $username): ?UserEntityInterface
     {
         $user = $this->createQueryBuilder('user')
-            ->orWhere('user.username = :username')
             ->orWhere('user.email = :username')
+            ->orWhere('user.username = :username')
             ->setParameter('username', $username)
             ->getQuery()
             ->getOneOrNullResult(Query::HYDRATE_OBJECT);

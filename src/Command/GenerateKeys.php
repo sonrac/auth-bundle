@@ -22,6 +22,7 @@ class GenerateKeys extends ContainerAwareCommand
      * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
      * @throws \Symfony\Component\DependencyInjection\Exception\InvalidArgumentException
      * @throws \LogicException
+     * @throws \RuntimeException
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
@@ -42,6 +43,9 @@ class GenerateKeys extends ContainerAwareCommand
         $pubName     = $this->getContainer()->getParameter('sonrac_auth.public_key_name');
 
         if ($force || !\file_exists($keyPath.'/'.$privateName)) {
+            if (!is_dir($keyPath) && !@mkdir($keyPath, 0755, true)) {
+                throw new \RuntimeException("Error create path {{$keyPath}}. Check folder permission");
+            }
             $this->generatePrivateKey($keyPath.'/'.$privateName, $phrase);
             $this->generatePublicKey($keyPath.'/'.$pubName, $keyPath.'/'.$privateName, $phrase);
 
@@ -104,8 +108,9 @@ class GenerateKeys extends ContainerAwareCommand
             ->addOption(
                 'force',
                 'f',
-                InputOption::VALUE_OPTIONAL | InputOption::VALUE_NONE,
-                'Force regenerate keys'
+                InputOption::VALUE_OPTIONAL,
+                'Force regenerate keys',
+                false
             )->addOption(
                 'disable-out',
                 'do',

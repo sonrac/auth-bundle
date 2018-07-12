@@ -41,7 +41,6 @@ class RefreshTokens extends ServiceEntityRepository implements RefreshTokenRepos
     public function persistNewRefreshToken(RefreshTokenEntityInterface $refreshTokenEntity)
     {
         /** @var \sonrac\Auth\Entity\RefreshToken $refreshTokenEntity */
-        $refreshTokenEntity->preparePersist();
         $this->_em->persist($refreshTokenEntity);
         $this->_em->flush();
     }
@@ -60,7 +59,6 @@ class RefreshTokens extends ServiceEntityRepository implements RefreshTokenRepos
         }
 
         $token->setIsRevoked(true);
-        $token->preparePersist();
 
         $this->_em->persist($token);
         $this->_em->flush();

@@ -2,7 +2,9 @@
 
 namespace sonrac\Auth\Entity;
 
+use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
 use League\OAuth2\Server\Entities\RefreshTokenEntityInterface;
+use League\OAuth2\Server\Entities\ScopeEntityInterface;
 use League\OAuth2\Server\Entities\Traits\RefreshTokenTrait;
 use Swagger\Annotations as OAS;
 
@@ -18,7 +20,10 @@ use Swagger\Annotations as OAS;
  */
 class RefreshToken implements RefreshTokenEntityInterface
 {
-    use TimeEntityTrait, RefreshTokenTrait;
+    use TimeEntityTrait, RefreshTokenTrait{
+        setAccessToken as setAccessTokenTrait;
+        setExpiryDateTime as setExpiryDateTimeTrait;
+    }
 
     /**
      * Refresh token.
@@ -52,7 +57,13 @@ class RefreshToken implements RefreshTokenEntityInterface
      *
      * @var array
      *
-     * @OAS\Property(example={"client", "admin"}, default={"default"})
+     * @OAS\Property(
+     *     example={"client", "admin"},
+     *     default={"default"},
+     *     @OAS\Items(
+     *         type="string"
+     *     )
+     * )
      */
     protected $token_scopes;
 
@@ -116,14 +127,18 @@ class RefreshToken implements RefreshTokenEntityInterface
     }
 
     /**
+     * Get token.
+     *
      * @return string
      */
-    public function getToken(): string
+    public function getToken(): ?string
     {
-        return $this->token ?? '';
+        return $this->token;
     }
 
     /**
+     * Set token.
+     *
      * @param string $token
      */
     public function setToken(string $token): void
@@ -184,12 +199,8 @@ class RefreshToken implements RefreshTokenEntityInterface
      *
      * @return array
      */
-    public function getScopes(): array
+    public function getScopes(): ?array
     {
-        if (!$this->token_scopes || \is_string($this->token_scopes)) {
-            $this->token_scopes = \explode('|', $this->token_scopes || '');
-        }
-
         return $this->token_scopes;
     }
 
@@ -200,16 +211,35 @@ class RefreshToken implements RefreshTokenEntityInterface
      */
     public function setScopes(array $scopes): void
     {
-        $this->token_scopes = $scopes;
+        $this->token_scopes = $this->token_scopes ?? [];
+        foreach ($scopes as $scope) {
+            if (is_object($scope) && \in_array(ScopeEntityInterface::class, class_implements($scope))) {
+                $this->token_scopes[] = $scope->getIdentifier();
+
+                continue;
+            }
+
+            $this->token_scopes[] = $scope;
+        }
     }
 
     /**
-     * Prepare data before persist.
+     * {@inheritdoc}
      */
-    public function preparePersist(): void
+    public function setAccessToken(AccessTokenEntityInterface $accessToken): void
     {
-        if (\is_array($this->token_scopes)) {
-            $this->token_scopes = \implode('|', $this->token_scopes);
-        }
+        $this->token = $accessToken->getIdentifier();
+
+        $this->setAccessTokenTrait($accessToken);
+        $this->setScopes($accessToken->getScopes());
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setExpiryDateTime(\DateTime $dateTime): void
+    {
+        $this->expire_at = $dateTime->getTimestamp();
+        $this->setExpiryDateTimeTrait($dateTime);
     }
 }

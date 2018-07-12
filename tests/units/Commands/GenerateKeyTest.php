@@ -98,7 +98,7 @@ class GenerateKeyTest extends BaseUnitTester
         $this->checkKeys();
 
         $output = $this->runCommand('sonrac_auth:generate:keys');
-        $this->assertContains('generated', $output);
+        $this->assertEmpty($output);
 
         $arguments = [
             '--force' => null,
@@ -132,7 +132,7 @@ class GenerateKeyTest extends BaseUnitTester
             @\unlink($this->keyPath.$file);
         }
 
-        $this->command       = $this->app->find('sonrac_auth:generate:keys');
+        $this->command       = $this->getConsoleApp()->find('sonrac_auth:generate:keys');
         $this->commandTester = new CommandTester($this->command);
     }
 }

@@ -23,11 +23,11 @@ sonrac\Auth\Entity\AuthCode:
       type: boolean
       nullable: false
       default: false
-    redirect_uris:
+    redirect_uri:
       type: string
       nullable: false
-    scopes:
-      type: text
+    token_scopes:
+      type: json_array
       nullable: false
       default: default
     user_id:

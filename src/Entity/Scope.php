@@ -32,7 +32,10 @@ class Scope implements ScopeEntityInterface
      *
      * @var string
      *
-     * @OAS\Schema(example="Client scope description", format="text")
+     * @OAS\Property(
+     *     example="Client scope description",
+     *     format="text"
+     * )
      */
     protected $description;
 
@@ -41,7 +44,9 @@ class Scope implements ScopeEntityInterface
      *
      * @var string
      *
-     * @OAS\Schema(example="Client scope title")
+     * @OAS\Property(
+     *     example="Client scope title"
+     * )
      */
     protected $title;
 
@@ -50,7 +55,12 @@ class Scope implements ScopeEntityInterface
      *
      * @var array
      *
-     * @OAS\Property(example={"permission1", "permission2"}, items="string")
+     * @OAS\Property(
+     *     example={"permission1", "permission2"},
+     *     @OAS\Items(
+     *         type="string"
+     *     )
+     * )
      */
     protected $permissions;
 

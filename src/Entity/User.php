@@ -18,6 +18,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class User implements UserEntityInterface, UserInterface
 {
+    use TimeEntityTrait;
+
     /**
      * User role name.
      *
@@ -98,8 +100,6 @@ class User implements UserEntityInterface, UserInterface
      * @var string
      */
     public const STATUS_DELETED = 'deleted';
-
-    use TimeEntityTrait;
 
     /**
      * User identifier.
@@ -255,7 +255,12 @@ class User implements UserEntityInterface, UserInterface
      *
      * @var array
      *
-     * @OAS\Schema(example={"permission1", "permission2"}, items="string"}
+     * @OAS\Property(
+     *     example={"permission1", "permission2"},
+     *     @OAS\Items(
+     *         type="string"
+     *     )
+     * )
      */
     protected $additional_permissions;
 

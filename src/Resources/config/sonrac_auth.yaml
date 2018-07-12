@@ -8,13 +8,17 @@ sonrac_auth:
   access_token_lifetime: 3600
   refresh_token_lifetime: 3600
   auth_code_lifetime: 3600
-  query_delimiter: "#"
+  query_delimiter: "?"
   enable_grant_types:
-    clientCredentials: true
+    client_credentials: true
     password: true
-    refreshToken: true
-    code: true
+    refresh_token: true
+    authorization_code: true
     implicit: true
+  swagger_constants:
+    url: ~
+  default_scopes:
+    - default
 
 services:
   sonrac.oauth.generate_client:

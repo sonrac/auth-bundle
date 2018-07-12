@@ -1,18 +1,21 @@
 parameters:
 
 sonrac_auth:
-  encryption_key:
+  encryption_key: asdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasd
   private_key_path: '%kernel.project_dir%/resources/keys'
   pass_phrase:
   password_salt:
   access_token_lifetime: 3600
   refresh_token_lifetime: 3600
   auth_code_lifetime: 3600
+  query_delimiter: "?"
+  swagger_constants:
+    url: ~
   enable_grant_types:
-    clientCredentials: true
-    refreshToken: true
+    client_credentials: true
+    refresh_token: true
     password: true
-    code: true
+    authorization_code: true
     implicit: true
 
 services:

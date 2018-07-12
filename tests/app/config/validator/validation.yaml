@@ -1,0 +1,85 @@
+sonrac\Auth\Entity\Client:
+  properties:
+    name:
+      - NotBlank: ~
+      - Length:
+          max: 255
+    secret:
+      - NotBlank: ~
+      - Length:
+          max: 2000
+    allowed_grant_types:
+      - NotBlank: ~
+    redirect_uris:
+      - NotBlank: ~
+    created_at:
+      - NotBlank: ~
+
+sonrac\Auth\Entity\AccessToken:
+  properties:
+    token:
+      - NotBlank: ~
+      - Length:
+          max: 2000
+    token_scopes:
+      - NotBlank: ~
+    client_id:
+      - NotBlank: ~
+    expire_at:
+      - NotBlank: ~
+    created_at:
+      - NotBlank: ~
+
+sonrac\Auth\Entity\User:
+  properties:
+    created_at:
+      - NotBlank: ~
+
+sonrac\Auth\Entity\Scope:
+  properties:
+    scope:
+      - NotBlank: ~
+    description:
+      - NotBlank: ~
+    title:
+      - NotBlank: ~
+      - Length:
+          max: 255
+    created_at:
+      - NotBlank: ~
+
+sonrac\Auth\Entity\AuthCode:
+  properties:
+    code:
+      - NotBlank: ~
+      - Length:
+          max: 2000
+    scopes:
+      - NotBlank: ~
+    redirect_uris:
+      - NotBlank: ~
+    user_id:
+      - NotBlank: ~
+    client_id:
+      - NotBlank: ~
+    expire_ar:
+      - NotBlank: ~
+    created_at:
+      - NotBlank: ~
+
+sonrac\Auth\Entity\RefreshToken:
+  properties:
+    refresh_token:
+      - NotBlank: ~
+      - Length:
+          max: 2000
+    token:
+      - NotBlank: ~
+      - Length:
+          max: 2000
+    token_scopes:
+      - NotBlank: ~
+    expire_at:
+      - NotBlank: ~
+    created_at:
+      - NotBlank: ~

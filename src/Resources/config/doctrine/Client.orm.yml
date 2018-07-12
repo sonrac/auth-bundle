@@ -25,10 +25,10 @@ sonrac\Auth\Entity\Client:
       nullable: false
       length: 2000
     allowed_grant_types:
-      type: text
+      type: json_array
       nullable: false
     redirect_uris:
-      type: text
+      type: json_array
       nullable: true
     user_id:
       type: integer

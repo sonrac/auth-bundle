@@ -44,14 +44,15 @@ class AccessTokens extends ServiceEntityRepository implements AccessTokenReposit
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
     public function getNewToken(ClientEntityInterface $clientEntity, array $scopes, $userIdentifier = null)
     {
         /** @var \sonrac\Auth\Entity\Client $clientEntity */
         $token = $this->container->get(AccessTokenEntityInterface::class);
-        foreach ($scopes as $scope) {
-            $token->addScope($scope);
-        }
+
+        $token->setGrantType($this->container->get('request_stack')->pop()->get('grant_type'));
 
         $token->setClient($clientEntity);
 

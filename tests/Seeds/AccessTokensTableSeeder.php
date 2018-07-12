@@ -26,14 +26,14 @@ class AccessTokensTableSeeder extends RollBackSeedWithCheckExists
         return [
             [
                 'token'      => 'test_token',
-                'grant_type' => Client::GRANT_CLIENT_CREDENTIALS,
+                'grant_type' => json_encode([Client::GRANT_CLIENT_CREDENTIALS]),
                 'client_id'  => 'Test Client',
                 'expire_at'  => \time() - 3600,
                 'created_at' => \time(),
             ],
             [
                 'token'      => 'test_token1',
-                'grant_type' => Client::GRANT_CLIENT_CREDENTIALS,
+                'grant_type' => json_encode([Client::GRANT_CLIENT_CREDENTIALS]),
                 'client_id'  => 'Test Client',
                 'expire_at'  => \time() + 3600,
                 'created_at' => \time(),

@@ -45,8 +45,8 @@ class Clients extends ServiceEntityRepository implements ClientRepositoryInterfa
             throw new \InvalidArgumentException('Client not found');
         }
 
-        if ($grantType && !\in_array(\mb_strtolower($grantType), $client->getAllowedGranttypes(), true)) {
-            throw new \LogicException('Grant type is not allowed for client application');
+        if ($grantType && !\in_array(\mb_strtolower($grantType), $client->getAllowedGrantTypes(), true)) {
+            throw new \LogicException('Grant type is not allowed for client application.'.json_encode($client->getAllowedGrantTypes()));
         }
 
         if ($mustValidateSecret && $clientSecret !== $client->getSecret()) {

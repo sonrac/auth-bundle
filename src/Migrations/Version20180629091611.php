@@ -68,6 +68,7 @@ final class Version20180629091611 extends AbstractMigration
                 ->setNotnull(!$notNull);
         }
 
+        $users->addIndex(['email', 'username']);
         $users->setPrimaryKey(['id']);
     }
 

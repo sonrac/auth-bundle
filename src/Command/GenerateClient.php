@@ -68,7 +68,6 @@ class GenerateClient extends DoctrineCommand
         $entity->setCreatedAt(\time());
         $entity->setDescription($description ?? '');
 
-        $entity->preparePersist();
         $em = $this->getEntityManager('default');
         $em->persist($entity);
         $em->flush($entity);

@@ -2,6 +2,11 @@
 
 namespace sonrac\Auth\Entity;
 
+use Lcobucci\JWT\Builder;
+use Lcobucci\JWT\Signer\Key;
+use Lcobucci\JWT\Signer\Rsa\Sha256;
+use Lcobucci\JWT\Token;
+use League\OAuth2\Server\CryptKey;
 use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Entities\ScopeEntityInterface;
@@ -39,11 +44,17 @@ class AccessToken implements AccessTokenEntityInterface
     /**
      * Token scopes with | as delimiter.
      *
-     * @var string
+     * @var array
      *
-     * @OAS\Property(example="client|admin", maxLength=5000)
+     * @OAS\Property(
+     *     example={"client", "admin"},
+     *     maxLength=5000,
+     *     @OAS\Items(
+     *         type="string"
+     *     )
+     * )
      */
-    protected $token_scopes;
+    protected $token_scopes = [];
 
     /**
      * User identifier.
@@ -121,9 +132,9 @@ class AccessToken implements AccessTokenEntityInterface
     /**
      * {@inheritdoc}
      */
-    public function getIdentifier(): string
+    public function getIdentifier(): ?string
     {
-        return $this->token ?? '';
+        return $this->token;
     }
 
     /**
@@ -229,28 +240,23 @@ class AccessToken implements AccessTokenEntityInterface
     }
 
     /**
-     * @return string|null
+     * Get token scopes.
+     *
+     * @return array|null
      */
-    public function getTokenScopes(): ?string
+    public function getTokenScopes(): ?array
     {
-        if (!$this->scopes && $scopes = $this->getScopes()) {
-            $this->scopes = '';
-            foreach ($scopes as $scope) {
-                $this->scopes .= ($this->scopes ? '|' : '').$scope->getIdentifier();
-            }
-        }
-
-        return $this->scopes;
+        return $this->token_scopes;
     }
 
     /**
      * Set token scopes.
      *
-     * @param string $scopes
+     * @param array $scopes
      */
-    public function setTokenScopes(string $scopes): void
+    public function setTokenScopes(array $scopes): void
     {
-        $this->scopes = $scopes;
+        $this->token_scopes = $scopes;
     }
 
     /**
@@ -268,9 +274,9 @@ class AccessToken implements AccessTokenEntityInterface
     /**
      * {@inheritdoc}
      */
-    public function addScope(ScopeEntityInterface $scope)
+    public function addScope(ScopeEntityInterface $scope): void
     {
-        $this->token_scopes .= ($this->token_scopes ? '|' : '').$scope->getIdentifier();
+        $this->token_scopes[] = $scope->getIdentifier();
         $this->addScopeTrait($scope);
     }
 
@@ -302,5 +308,13 @@ class AccessToken implements AccessTokenEntityInterface
     public function setGrantType(string $grantType): void
     {
         $this->grant_type = $grantType;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getScopes(): array
+    {
+        return $this->token_scopes ?? [];
     }
 }
