@@ -1,7 +1,7 @@
 {
     "name": "sonrac/auth-bundle",
     "description": "OAuth bundle with league oauth2-server",
-    "type": "library",
+    "type": "symfony-bundle",
     "require": {
         "php": ">=7.1",
         "symfony/config": "^4.0",
@@ -16,7 +16,9 @@
         "symfony/psr-http-message-bridge": "^1.0",
         "zendframework/zend-diactoros": "^1.8",
         "sensio/framework-extra-bundle": "^5.2",
-        "symfony/validator": "^4.0"
+        "symfony/validator": "^4.0",
+        "symfony/monolog-bridge": "^4.1",
+        "symfony/monolog-bundle": "^3.3"
     },
     "require-dev": {
         "refinery29/php-cs-fixer-config": "^0.6.7",

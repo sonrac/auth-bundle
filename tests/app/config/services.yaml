@@ -22,3 +22,9 @@ services:
     synthetic: true
   sonrac_seed_command:
     class: sonrac\SimpleSeed\SeedCommand
+
+  # authentication failure event listener
+#  admin.security.authentication_event_listener:
+#    class: sonrac\Auth\Security\OAuthAuthenticationListener
+#    tags:
+#      - { name: kernel.event_subscriber }

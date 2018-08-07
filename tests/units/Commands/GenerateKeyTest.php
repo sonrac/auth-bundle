@@ -42,7 +42,7 @@ class GenerateKeyTest extends BaseUnitTester
             static::assertFileNotExists($this->keyPath.$file);
         }
 
-        $output = $this->runCommand('sonrac_auth:generate:keys');
+        $output = $this->runCommand('sonrac_auth:generate:keys', ['--disable-out' => null]);
 
         $this->assertContains('generated', $output);
 
@@ -85,7 +85,7 @@ class GenerateKeyTest extends BaseUnitTester
             static::assertFileNotExists($this->keyPath.$file);
         }
 
-        $output = $this->runCommand('sonrac_auth:generate:keys');
+        $output = $this->runCommand('sonrac_auth:generate:keys', ['--disable-out' => null]);
 
         $this->assertContains('generated', $output);
 
@@ -99,11 +99,12 @@ class GenerateKeyTest extends BaseUnitTester
 
         $this->checkKeys();
 
-        $output = $this->runCommand('sonrac_auth:generate:keys');
+        $output = $this->runCommand('sonrac_auth:generate:keys', ['--disable-out' => null]);
         $this->assertEmpty($output);
 
         $arguments = [
             '--force' => null,
+            '--disable-out' => null
         ];
 
         if ($withPhrase) {
