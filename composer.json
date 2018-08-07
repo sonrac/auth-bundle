@@ -17,7 +17,6 @@
         "zendframework/zend-diactoros": "^1.8",
         "sensio/framework-extra-bundle": "^5.2",
         "symfony/validator": "^4.0",
-        "symfony/monolog-bridge": "^4.1",
         "symfony/monolog-bundle": "^3.3"
     },
     "require-dev": {
