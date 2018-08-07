@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace sonrac\Auth\Tests\Units\Commands;
 
 use sonrac\Auth\Tests\Units\BaseUnitTester;
@@ -60,7 +62,7 @@ class GenerateKeyTest extends BaseUnitTester
     {
         $key = @\openssl_pkey_get_public(\file_get_contents($this->keyPath.'pub.key'));
         $this->assertNotEmpty($key);
-        $key = @\openssl_pkey_get_private(\file_get_contents($this->keyPath.'priv.key'), $phrase);
+        $key = @\openssl_pkey_get_private(\file_get_contents($this->keyPath.'priv.key'), $phrase ?? '');
         $this->assertNotEmpty($key);
     }
 
@@ -116,7 +118,7 @@ class GenerateKeyTest extends BaseUnitTester
             static::assertNotEquals($contents[$dir.$file], \file_get_contents($dir.$file));
         }
 
-        $this->checkKeys($withPhrase ? 123 : null);
+        $this->checkKeys($withPhrase ? '123' : null);
     }
 
     /**

@@ -2,7 +2,7 @@ version: "3"
 
 services:
   fpm:
-    image: sonrac/infomir-php:php-fpm-7.2
+    image: sonrac/infomir-php:php-fpm-7.1
     volumes:
       - ./:/home/infomir
     deploy:

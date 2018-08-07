@@ -55,7 +55,6 @@ class ClientProvider implements ClientProviderInterface
      */
     public function findByToken(string $token)
     {
-        // TODO: Implement findByToken() method.
     }
 
     /**

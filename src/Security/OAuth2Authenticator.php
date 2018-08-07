@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace sonrac\Auth\Security;
 
 use sonrac\Auth\Providers\ClientProviderInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Guard\AuthenticatorInterface;
+use Symfony\Component\Security\Guard\Token\PostAuthenticationGuardToken;
 
 /**
  * Class OAuth2Authenticator.
@@ -76,7 +78,7 @@ class OAuth2Authenticator implements AuthenticatorInterface
     /**
      * {@inheritdoc}
      */
-    public function getClient($token, ClientProviderInterface $clientProvider)
+    public function getClient($credentials, ClientProviderInterface $clientProvider)
     {
         $token = $credentials['token'];
 
@@ -84,7 +86,7 @@ class OAuth2Authenticator implements AuthenticatorInterface
             return;
         }
 
-        return $clientProvider->loadUserByUsername($token);
+        return $clientProvider->findByName($token);
     }
 
     /**
@@ -100,7 +102,11 @@ class OAuth2Authenticator implements AuthenticatorInterface
      */
     public function createAuthenticatedToken(UserInterface $user, $providerKey)
     {
-        // TODO: Implement createAuthenticatedToken() method.
+        return new PostAuthenticationGuardToken(
+            $user,
+            $providerKey,
+            $user->getRoles()
+        );
     }
 
     /**
@@ -108,7 +114,10 @@ class OAuth2Authenticator implements AuthenticatorInterface
      */
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
     {
-        // TODO: Implement onAuthenticationFailure() method.
+        return (new JsonResponse())->setContent(json_encode([
+            'status' => false,
+            'message' => 'Authentication failure'
+        ]));
     }
 
     /**
@@ -116,7 +125,6 @@ class OAuth2Authenticator implements AuthenticatorInterface
      */
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
-        // TODO: Implement onAuthenticationSuccess() method.
     }
 
     /**

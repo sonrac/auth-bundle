@@ -154,7 +154,7 @@ class AccessToken implements AccessTokenEntityInterface
     /**
      * {@inheritdoc}
      */
-    public function getUserIdentifier(): ?int
+    public function getUserIdentifier()
     {
         return $this->user_id;
     }

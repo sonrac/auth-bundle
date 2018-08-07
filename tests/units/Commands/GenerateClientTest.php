@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace sonrac\Auth\Tests\Units\Commands;
 
 use sonrac\Auth\Tests\Units\BaseUnitTester;

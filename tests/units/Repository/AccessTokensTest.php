@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace sonrac\Auth\Tests\Units\Repository;
 
 use League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface;
@@ -88,6 +90,8 @@ class AccessTokensTest extends BaseUnitTester
      *
      * @param \sonrac\Auth\Entity\AccessToken $token
      *
+     * @throws \League\OAuth2\Server\Exception\UniqueTokenIdentifierConstraintViolationException
+     *
      * @depends testGetNewToken
      */
     public function testPersistNewToken(AccessToken $token): void
@@ -102,6 +106,8 @@ class AccessTokensTest extends BaseUnitTester
      * Test revoke token.
      *
      * @param \sonrac\Auth\Entity\AccessToken $token
+     *
+     * @throws \League\OAuth2\Server\Exception\UniqueTokenIdentifierConstraintViolationException
      *
      * @depends testGetNewToken
      */

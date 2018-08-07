@@ -22,16 +22,22 @@ class TokenValidator implements AuthorizationValidatorInterface
     use CryptTrait;
 
     /**
+     * Public key.
+     *
      * @var \League\OAuth2\Server\CryptKey
      */
     protected $publicKey;
+
     /**
      * Token header name.
      *
      * @var string
      */
     protected $tokenName;
+
     /**
+     * Access token repository.
+     *
      * @var \League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface
      */
     private $accessTokenRepository;

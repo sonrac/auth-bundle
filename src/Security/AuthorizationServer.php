@@ -108,7 +108,7 @@ class AuthorizationServer implements AuthorizationServerInterface
      * @throws \Symfony\Component\DependencyInjection\Exception\InvalidArgumentException
      * @throws \Exception
      */
-    public function configureAuthorizationServer(): void
+    protected function configureAuthorizationServer(): void
     {
         $keyPath = $this->container->get('service_container')->getParameter('sonrac_auth.private_key_path')
             .DIRECTORY_SEPARATOR.

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace sonrac\Auth\Tests\Units;
 
 use sonrac\Auth\Tests\DatabaseTrait;

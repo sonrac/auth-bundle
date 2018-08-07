@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace sonrac\Auth\Tests\Units\Repository;
 
 use League\OAuth2\Server\Repositories\AuthCodeRepositoryInterface;
@@ -44,6 +46,8 @@ class AuthCodesTest extends BaseUnitTester
 
     /**
      * Test get new auth code.
+     *
+     * @throws \League\OAuth2\Server\Exception\UniqueTokenIdentifierConstraintViolationException
      */
     public function testPersistAuthCode(): void
     {

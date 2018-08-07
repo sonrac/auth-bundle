@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace sonrac\Auth\Tests\Seeds;
 
 use sonrac\Auth\Entity\Client;

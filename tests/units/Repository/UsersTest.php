@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace sonrac\Auth\Tests\Units\Repository;
 
 use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
@@ -45,6 +47,8 @@ class UsersTest extends BaseUnitTester
 
     /**
      * Test get user by credentials not found.
+     *
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function testGetUserByCredentialsNotFound(): void
     {
@@ -61,6 +65,8 @@ class UsersTest extends BaseUnitTester
 
     /**
      * Test get user by credentials credentials are not equals.
+     *
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function testGetUserByCredentialsNotEquals(): void
     {
@@ -77,6 +83,8 @@ class UsersTest extends BaseUnitTester
 
     /**
      * Test get user by credentials grant type not allowed.
+     *
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function testGetUserByCredentialsGrantTypeNotAllowed(): void
     {
@@ -93,6 +101,8 @@ class UsersTest extends BaseUnitTester
 
     /**
      * Test get user by credentials grant type not allowed.
+     *
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function testGetUserByCredentials(): void
     {

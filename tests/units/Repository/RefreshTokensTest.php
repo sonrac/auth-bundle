@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace sonrac\Auth\Tests\Units\Repository;
 
 use League\OAuth2\Server\Repositories\RefreshTokenRepositoryInterface;
@@ -46,6 +48,8 @@ class RefreshTokensTest extends BaseUnitTester
      * Test persist token.
      *
      * @param \sonrac\Auth\Entity\RefreshToken $token
+     *
+     * @throws \League\OAuth2\Server\Exception\UniqueTokenIdentifierConstraintViolationException
      *
      * @depends testGetNew
      */
