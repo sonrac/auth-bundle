@@ -7,6 +7,10 @@ namespace sonrac\Auth\Providers;
 use Doctrine\ORM\EntityManagerInterface;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
+use sonrac\Auth\Providers\Exception\UnsupportedException;
+use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
+use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Class ClientProvider.
@@ -36,9 +40,10 @@ class ClientProvider implements ClientProviderInterface
 
     public function __construct(
         ClientRepositoryInterface $clientRepository,
-        EntityManagerInterface $entity
+        EntityManagerInterface $entityManager
     ) {
         $this->clientRepository = $clientRepository;
+        $this->em = $entityManager;
     }
 
     /**
@@ -81,5 +86,21 @@ class ClientProvider implements ClientProviderInterface
         $this->em->refresh($client);
 
         return $client;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function loadUserByUsername($username)
+    {
+        throw new UnsupportedException('Client provider does not support user loading');
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function refreshUser(UserInterface $user)
+    {
+        throw new UnsupportedException('Client provider does not support user refresh');
     }
 }

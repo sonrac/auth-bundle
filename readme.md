@@ -47,4 +47,3 @@ docker stack deploy -c docker-compose.yml auth-bundle
 ```
 
 * [Open local application with bundle for test](http://auth.devinf)
-

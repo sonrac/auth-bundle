@@ -110,6 +110,6 @@ class AccessTokens extends ServiceEntityRepository implements AccessTokenReposit
             throw new \InvalidArgumentException('Token not found');
         }
 
-        return (bool) $entity->isRevoked();
+        return (bool)$entity->isRevoked();
     }
 }

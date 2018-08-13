@@ -17,6 +17,6 @@ class OAuth2AuthenticationManager implements AuthenticationManagerInterface
      */
     public function authenticate(TokenInterface $token)
     {
-        // TODO: Implement authenticate() method.
+
     }
 }

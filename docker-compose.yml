@@ -31,7 +31,7 @@ services:
         - "traefik.enable=true"
         - "traefik.auth.api.enable=true"
         - "traefik.docker.network=traefik-net"
-        - "traefik.auth.api.docker.network=auth-net"
+        - "traefik.auth.api.docker.network=traefik-net"
         - "traefik.auth.api.frontend.rule=Host:auth.devinf"
         - "traefik.auth.api.backend=auth"
         - "traefik.auth.api.port=80"

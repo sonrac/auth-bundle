@@ -2,6 +2,8 @@
 
 require __DIR__.'/../../../vendor/autoload.php';
 
+putenv('PROJECT_NAME=prod');
+
 if (!isset($_SERVER['APP_ENV'])) {
     $_SERVER['APP_ENV'] = 'dev';
 }

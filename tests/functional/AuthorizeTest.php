@@ -27,7 +27,7 @@ class AuthorizeTest extends BaseFunctionalTester
     public function testErrorClientAuth(): void
     {
         $client = static::createClient();
-        $client->request('POST', '/api/token');
+        $client->request('POST', '/auth/token');
         $response = $client->getResponse();
 
         $data = \json_decode($response->getContent(), true);
@@ -46,7 +46,7 @@ class AuthorizeTest extends BaseFunctionalTester
     public function testErrorClient(): void
     {
         $client = static::createClient();
-        $client->request('POST', '/api/token', [
+        $client->request('POST', '/auth/token', [
             'grant_type' => Client::GRANT_CLIENT_CREDENTIALS,
         ]);
         $response = $client->getResponse();
@@ -66,7 +66,7 @@ class AuthorizeTest extends BaseFunctionalTester
     public function testClientAuthSuccess(): void
     {
         $client = static::createClient();
-        $client->request('POST', '/api/token', [
+        $client->request('POST', '/auth/token', [
             'grant_type'    => Client::GRANT_CLIENT_CREDENTIALS,
             'client_id'     => 'Test Client',
             'client_secret' => 'secret-key',
@@ -93,7 +93,7 @@ class AuthorizeTest extends BaseFunctionalTester
     public function testUserGrantSuccess(): array
     {
         $client = static::createClient();
-        $client->request('POST', '/api/token', [
+        $client->request('POST', '/auth/token', [
             'grant_type'    => Client::GRANT_PASSWORD,
             'client_id'     => 'Test Client',
             'client_secret' => 'secret-key',
@@ -135,7 +135,7 @@ class AuthorizeTest extends BaseFunctionalTester
             ->insert('refresh_tokens', $tokens[1][0]);
 
         $client = static::createClient();
-        $client->request('POST', '/api/token', [
+        $client->request('POST', '/auth/token', [
             'grant_type'    => Client::GRANT_REFRESH_TOKEN,
             'client_id'     => 'Test Client',
             'refresh_token' => $tokens[2],
@@ -167,7 +167,7 @@ class AuthorizeTest extends BaseFunctionalTester
         $client = static::createClient();
         $client->request(
             'GET',
-            '/api/authorize?'.\http_build_query([
+            '/auth/authorize?'.\http_build_query([
                 'grant_type'    => Client::GRANT_IMPLICIT,
                 'client_id'     => 'Test Client',
                 'redirect_uri'  => 'http://test.com',
@@ -200,7 +200,7 @@ class AuthorizeTest extends BaseFunctionalTester
         $client = static::createClient();
         $client->request(
             'GET',
-            '/api/authorize?'.\http_build_query([
+            '/auth/authorize?'.\http_build_query([
                 'grant_type'    => Client::GRANT_AUTH_CODE,
                 'client_id'     => 'Test Client',
                 'redirect_uri'  => 'http://test.com',
@@ -231,7 +231,7 @@ class AuthorizeTest extends BaseFunctionalTester
 
         $this->assertCount(1, $code);
 
-        $client->request('POST', '/api/token', [
+        $client->request('POST', '/auth/token', [
             'grant_type'    => Client::GRANT_AUTH_CODE,
             'client_id'     => 'Test Client',
             'client_secret' => 'secret-key',

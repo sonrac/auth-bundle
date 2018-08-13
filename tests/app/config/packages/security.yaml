@@ -1,5 +1,29 @@
 security:
+  providers:
+#    oauth_client:
+#      entity:
+#        class: sonrac\Auth\Providers\ClientProvider
+#        property: token
+    oauth_user:
+#      id: sonrac_auth.user_provider
+      entity:
+        class: sonrac\Auth\Entity\User
+        property: token
+
+  encoders:
+      sonrac\Auth\Providers\UserProvider:
+        algorithm: bcrypt
+        cost: 20
+
   firewalls:
+    oauth_user:
+      entry_point: sonrac_auth.oauth2_authenticator
+      pattern: ^/api/security
+      security: true
+      provider: oauth_user
+      guard:
+        authenticators:
+          - sonrac_auth.oauth2_authenticator
     admin:
       pattern: ^/
       security: false

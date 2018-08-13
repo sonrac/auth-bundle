@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace sonrac\Auth\Entity;
 
 use League\OAuth2\Server\Entities\ScopeEntityInterface;
-use Swagger\Annotations as OAS;
+use Openapi\Annotations as OA;
 
 /**
  * Class Scope.
  * Scope entity.
  *
- * @OAS\Schema(
+ * @OA\Schema(
  *     title="Scope",
  *     description="Scope entity"
  * )
@@ -25,7 +25,7 @@ class Scope implements ScopeEntityInterface
      *
      * @var string
      *
-     * @OAS\Property(example=1, uniqueItems=true)
+     * @OA\Property(example=1, uniqueItems=true)
      */
     protected $scope;
 
@@ -34,7 +34,7 @@ class Scope implements ScopeEntityInterface
      *
      * @var string
      *
-     * @OAS\Property(
+     * @OA\Property(
      *     example="Client scope description",
      *     format="text"
      * )
@@ -46,7 +46,7 @@ class Scope implements ScopeEntityInterface
      *
      * @var string
      *
-     * @OAS\Property(
+     * @OA\Property(
      *     example="Client scope title"
      * )
      */
@@ -57,9 +57,9 @@ class Scope implements ScopeEntityInterface
      *
      * @var array
      *
-     * @OAS\Property(
+     * @OA\Property(
      *     example={"permission1", "permission2"},
-     *     @OAS\Items(
+     *     @OA\Items(
      *         type="string"
      *     )
      * )
@@ -71,7 +71,7 @@ class Scope implements ScopeEntityInterface
      *
      * @var int
      *
-     * @OAS\Property(format="bigInt", example="1529397813")
+     * @OA\Property(format="bigInt", example="1529397813")
      */
     protected $created_at;
 
@@ -80,7 +80,7 @@ class Scope implements ScopeEntityInterface
      *
      * @var int
      *
-     * @OAS\Property(format="bigInt", example="1529397813")
+     * @OA\Property(format="bigInt", example="1529397813")
      */
     protected $updated_at;
 

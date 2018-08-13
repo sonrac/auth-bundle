@@ -1,4 +1,6 @@
 parameters:
+  sonrac_auth.client.provider.class: sonrac\Auth\Providers\ClientProvider
+  sonrac_auth.user.provider.class: sonrac\Auth\Providers\UserProvider
 
 sonrac_auth:
   encryption_key:
@@ -31,3 +33,16 @@ services:
   sonrac.oauth.clear_tokens:
     class: sonrac\Auth\Command\ClearTokens
     tags: ['sonrac.oauth.commands', 'console.command']
+  sonrac_auth.client_provider:
+    class: '%sonrac_auth.client.provider.class%'
+    arguments:
+      - '@League\OAuth2\Server\Repositories\ClientRepositoryInterface'
+      - '@doctrine.orm.default_entity_manager'
+  sonrac_auth.oauth2_authenticator:
+    class: sonrac\Auth\Security\OAuth2Authenticator
+    arguments:
+      - '%sonrac_auth.header_token_name%'
+  sonrac_auth.user_provider:
+    class: '%sonrac_auth.user.provider.class%'
+    arguments:
+      - '@League\OAuth2\Server\Repositories\UserRepositoryInterface'

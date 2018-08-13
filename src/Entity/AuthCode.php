@@ -9,13 +9,13 @@ use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Entities\ScopeEntityInterface;
 use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
 use Psr\Container\ContainerInterface;
-use Swagger\Annotations as OAS;
+use Openapi\Annotations as OA;
 
 /**
  * Class AuthCode.
  * Auth code entity.
  *
- * @OAS\Schema(
+ * @OA\Schema(
  *     title="AuthCode",
  *     description="Auth code entity",
  *     required={"code", "redirect_uri", "client_id", "scopes"}
@@ -33,7 +33,7 @@ class AuthCode implements AuthCodeEntityInterface
      *
      * @var string
      *
-     * @OAS\Property(example="auth_code", uniqueItems=true)
+     * @OA\Property(example="auth_code", uniqueItems=true)
      */
     protected $code;
 
@@ -42,7 +42,7 @@ class AuthCode implements AuthCodeEntityInterface
      *
      * @var bool
      *
-     * @OAS\Property(
+     * @OA\Property(
      *     example=false,
      *     default=false
      * )
@@ -54,7 +54,7 @@ class AuthCode implements AuthCodeEntityInterface
      *
      * @var string
      *
-     * @OAS\Property(
+     * @OA\Property(
      *     example="http://example.com./redirect",
      * )
      */
@@ -65,7 +65,7 @@ class AuthCode implements AuthCodeEntityInterface
      *
      * @var int
      *
-     * @OAS\Property(example=1)
+     * @OA\Property(example=1)
      */
     protected $user_id;
 
@@ -74,7 +74,7 @@ class AuthCode implements AuthCodeEntityInterface
      *
      * @var int
      *
-     * @OAS\Property(example=1, default="null")
+     * @OA\Property(example=1, default="null")
      */
     protected $client_id;
 
@@ -83,7 +83,7 @@ class AuthCode implements AuthCodeEntityInterface
      *
      * @var int
      *
-     * @OAS\Property(format="bigInt", example="1529397813")
+     * @OA\Property(format="bigInt", example="1529397813")
      */
     protected $expire_at;
 
@@ -92,7 +92,7 @@ class AuthCode implements AuthCodeEntityInterface
      *
      * @var int
      *
-     * @OAS\Property(format="bigInt", example="1529397813")
+     * @OA\Property(format="bigInt", example="1529397813")
      */
     protected $created_at;
 
@@ -101,7 +101,7 @@ class AuthCode implements AuthCodeEntityInterface
      *
      * @var int
      *
-     * @OAS\Property(format="bigInt", example="1529397813")
+     * @OA\Property(format="bigInt", example="1529397813")
      */
     protected $updated_at;
 
@@ -117,10 +117,10 @@ class AuthCode implements AuthCodeEntityInterface
      *
      * @var array
      *
-     * @OAS\Property(
+     * @OA\Property(
      *     example={"user_get", "clients_get"},
      *     default={},
-     *     @OAS\Items(
+     *     @OA\Items(
      *         type="string"
      *     )
      * )

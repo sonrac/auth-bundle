@@ -8,13 +8,13 @@ use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
 use League\OAuth2\Server\Entities\RefreshTokenEntityInterface;
 use League\OAuth2\Server\Entities\ScopeEntityInterface;
 use League\OAuth2\Server\Entities\Traits\RefreshTokenTrait;
-use Swagger\Annotations as OAS;
+use Openapi\Annotations as OA;
 
 /**
  * Class RefreshToken.
  * Refresh token entity.
  *
- * @OAS\Schema(
+ * @OA\Schema(
  *     title="RefreshToken",
  *     description="Refresh token entity",
  *     required={"refresh_token", "token", "expire_at"}
@@ -32,7 +32,7 @@ class RefreshToken implements RefreshTokenEntityInterface
      *
      * @var string
      *
-     * @OAS\Property(example="refresh_token", maxLength=2000)
+     * @OA\Property(example="refresh_token", maxLength=2000)
      */
     protected $refresh_token;
 
@@ -41,7 +41,7 @@ class RefreshToken implements RefreshTokenEntityInterface
      *
      * @var string
      *
-     * @OAS\Property(example="token", maxLength=2000, uniqueItems=true)
+     * @OA\Property(example="token", maxLength=2000, uniqueItems=true)
      */
     protected $token;
 
@@ -50,7 +50,7 @@ class RefreshToken implements RefreshTokenEntityInterface
      *
      * @var int
      *
-     * @OAS\Property(example=1529397813, format="bigInt")
+     * @OA\Property(example=1529397813, format="bigInt")
      */
     protected $expire_at;
 
@@ -59,10 +59,10 @@ class RefreshToken implements RefreshTokenEntityInterface
      *
      * @var array
      *
-     * @OAS\Property(
+     * @OA\Property(
      *     example={"client", "admin"},
      *     default={"default"},
-     *     @OAS\Items(
+     *     @OA\Items(
      *         type="string"
      *     )
      * )
@@ -74,7 +74,7 @@ class RefreshToken implements RefreshTokenEntityInterface
      *
      * @var bool
      *
-     * @OAS\Property(example=false, default=false)
+     * @OA\Property(example=false, default=false)
      */
     protected $is_revoked = false;
 
@@ -83,7 +83,7 @@ class RefreshToken implements RefreshTokenEntityInterface
      *
      * @var int
      *
-     * @OAS\Property(format="bigInt", example="1529397813")
+     * @OA\Property(format="bigInt", example="1529397813")
      */
     protected $created_at;
 
@@ -92,7 +92,7 @@ class RefreshToken implements RefreshTokenEntityInterface
      *
      * @var int
      *
-     * @OAS\Property(format="bigInt", example="1529397813")
+     * @OA\Property(format="bigInt", example="1529397813")
      */
     protected $updated_at;
 

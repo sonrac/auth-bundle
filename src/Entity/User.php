@@ -6,13 +6,13 @@ namespace sonrac\Auth\Entity;
 
 use League\OAuth2\Server\Entities\UserEntityInterface;
 use Psr\Container\ContainerInterface;
-use Swagger\Annotations as OAS;
+use Openapi\Annotations as OA;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Class User.
  *
- * @OAS\Schema(
+ * @OA\Schema(
  *     title="User",
  *     description="User entity",
  *     required={"email", "username", "first_name", "last_name", "password", "avatar"}
@@ -108,7 +108,7 @@ class User implements UserEntityInterface, UserInterface
      *
      * @var int
      *
-     * @OAS\Property(example=1)
+     * @OA\Property(example=1)
      */
     protected $id;
 
@@ -117,7 +117,7 @@ class User implements UserEntityInterface, UserInterface
      *
      * @var string
      *
-     * @OAS\Property(example="username")
+     * @OA\Property(example="username")
      */
     protected $username;
 
@@ -126,7 +126,7 @@ class User implements UserEntityInterface, UserInterface
      *
      * @var string
      *
-     * @OAS\Property(example="test@test.com", format="email")
+     * @OA\Property(example="test@test.com", format="email")
      */
     protected $email;
 
@@ -135,7 +135,7 @@ class User implements UserEntityInterface, UserInterface
      *
      * @var string
      *
-     * @OAS\Property(readOnly=true, example="password-hash")
+     * @OA\Property(readOnly=true, example="password-hash")
      */
     protected $password;
 
@@ -144,7 +144,7 @@ class User implements UserEntityInterface, UserInterface
      *
      * @var string
      *
-     * @OAS\Property(example="ROLE_ADMIN|ROLE_MANAGER")
+     * @OA\Property(example="ROLE_ADMIN|ROLE_MANAGER")
      */
     protected $roles;
 
@@ -153,7 +153,7 @@ class User implements UserEntityInterface, UserInterface
      *
      * @var string
      *
-     * @OAS\Property(example="John")
+     * @OA\Property(example="John")
      */
     protected $first_name;
 
@@ -162,7 +162,7 @@ class User implements UserEntityInterface, UserInterface
      *
      * @var string
      *
-     * @OAS\Property(example="Doe")
+     * @OA\Property(example="Doe")
      */
     protected $last_name;
 
@@ -171,7 +171,7 @@ class User implements UserEntityInterface, UserInterface
      *
      * @var string
      *
-     * @OAS\Property(example="Middle")
+     * @OA\Property(example="Middle")
      */
     protected $middle_name;
 
@@ -180,7 +180,7 @@ class User implements UserEntityInterface, UserInterface
      *
      * @var string
      *
-     * @OAS\Property(example="/path/to/avatar.jpg")
+     * @OA\Property(example="/path/to/avatar.jpg")
      */
     protected $avatar;
 
@@ -189,7 +189,7 @@ class User implements UserEntityInterface, UserInterface
      *
      * @var string
      *
-     * @OAS\Property(example="example-token")
+     * @OA\Property(example="example-token")
      */
     protected $api_token;
 
@@ -198,7 +198,7 @@ class User implements UserEntityInterface, UserInterface
      *
      * @var int
      *
-     * @OAS\Property(format="bigInt", example="1529397813")
+     * @OA\Property(format="bigInt", example="1529397813")
      */
     protected $created_at;
 
@@ -207,7 +207,7 @@ class User implements UserEntityInterface, UserInterface
      *
      * @var int
      *
-     * @OAS\Property(format="bigInt", example="1529397813")
+     * @OA\Property(format="bigInt", example="1529397813")
      */
     protected $last_login;
 
@@ -216,7 +216,7 @@ class User implements UserEntityInterface, UserInterface
      *
      * @var int
      *
-     * @OAS\Property(format="bigInt", example="1529397813")
+     * @OA\Property(format="bigInt", example="1529397813")
      */
     protected $api_token_expire_at;
 
@@ -225,7 +225,7 @@ class User implements UserEntityInterface, UserInterface
      *
      * @var int
      *
-     * @OAS\Property(format="bigInt", example="1529397813")
+     * @OA\Property(format="bigInt", example="1529397813")
      */
     protected $birthday;
 
@@ -234,7 +234,7 @@ class User implements UserEntityInterface, UserInterface
      *
      * @var int
      *
-     * @OAS\Property(format="bigInt", example="1529397813")
+     * @OA\Property(format="bigInt", example="1529397813")
      */
     protected $updated_at;
 
@@ -244,7 +244,7 @@ class User implements UserEntityInterface, UserInterface
      *
      * @var string
      *
-     * @OAS\Property(
+     * @OA\Property(
      *     example="pending",
      *     default="active",
      *     enum={"pending", "active", "disabled", "deleted"}
@@ -257,9 +257,9 @@ class User implements UserEntityInterface, UserInterface
      *
      * @var array
      *
-     * @OAS\Property(
+     * @OA\Property(
      *     example={"permission1", "permission2"},
-     *     @OAS\Items(
+     *     @OA\Items(
      *         type="string"
      *     )
      * )

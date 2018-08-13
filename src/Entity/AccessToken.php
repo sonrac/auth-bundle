@@ -11,12 +11,12 @@ use League\OAuth2\Server\Entities\ScopeEntityInterface;
 use League\OAuth2\Server\Entities\Traits\AccessTokenTrait;
 use League\OAuth2\Server\Entities\Traits\TokenEntityTrait;
 use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
-use Swagger\Annotations as OAS;
+use Openapi\Annotations as OA;
 
 /**
  * Class AccessToken.
  *
- * @OAS\Schema(
+ * @OA\Schema(
  *     title="AccessToken",
  *     description="Access token entity",
  *     required={"token", "user_id", "token_scopes"}
@@ -35,7 +35,7 @@ class AccessToken implements AccessTokenEntityInterface
      *
      * @var string
      *
-     * @OAS\Property(maxLength=2000, example="token", uniqueItems=true)
+     * @OA\Property(maxLength=2000, example="token", uniqueItems=true)
      */
     protected $token;
 
@@ -44,10 +44,10 @@ class AccessToken implements AccessTokenEntityInterface
      *
      * @var array
      *
-     * @OAS\Property(
+     * @OA\Property(
      *     example={"client", "admin"},
      *     maxLength=5000,
-     *     @OAS\Items(
+     *     @OA\Items(
      *         type="string"
      *     )
      * )
@@ -59,7 +59,7 @@ class AccessToken implements AccessTokenEntityInterface
      *
      * @var int
      *
-     * @OAS\Property(example=1)
+     * @OA\Property(example=1)
      */
     protected $user_id;
 
@@ -68,7 +68,7 @@ class AccessToken implements AccessTokenEntityInterface
      *
      * @var string
      *
-     * @OAS\Property(example=1)
+     * @OA\Property(example=1)
      */
     protected $client_id;
 
@@ -77,7 +77,7 @@ class AccessToken implements AccessTokenEntityInterface
      *
      * @var int
      *
-     * @OAS\Property(format="bigInt", example="1529397813")
+     * @OA\Property(format="bigInt", example="1529397813")
      */
     protected $expire_at;
 
@@ -86,7 +86,7 @@ class AccessToken implements AccessTokenEntityInterface
      *
      * @var int
      *
-     * @OAS\Property(format="bigInt", example="1529397813")
+     * @OA\Property(format="bigInt", example="1529397813")
      */
     protected $created_at;
 
@@ -95,7 +95,7 @@ class AccessToken implements AccessTokenEntityInterface
      *
      * @var int
      *
-     * @OAS\Property(format="bigInt", example="1529397813")
+     * @OA\Property(format="bigInt", example="1529397813")
      */
     protected $updated_at;
 
@@ -104,7 +104,7 @@ class AccessToken implements AccessTokenEntityInterface
      *
      * @var bool
      *
-     * @OAS\Property(example=false, default=false)
+     * @OA\Property(example=false, default=false)
      */
     protected $is_revoked = false;
 
@@ -113,7 +113,7 @@ class AccessToken implements AccessTokenEntityInterface
      *
      * @var string
      *
-     * @OAS\Property(example="client_credentials", enum={"password", "code", "client_credentials", "implicit"})
+     * @OA\Property(example="client_credentials", enum={"password", "code", "client_credentials", "implicit"})
      */
     protected $grant_type;
 

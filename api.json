@@ -1,0 +1,507 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "OAuth2 example API",
+        "description": "OAuth2 example API",
+        "version": "1.0"
+    },
+    "servers": [
+        {
+            "url": "SWAGGER_URL",
+            "description": "Auth server"
+        }
+    ],
+    "paths": {},
+    "components": {
+        "schemas": {
+            "AccessToken": {
+                "title": "AccessToken",
+                "description": "Access token entity",
+                "required": [
+                    "token",
+                    "user_id",
+                    "token_scopes"
+                ],
+                "properties": {
+                    "token": {
+                        "description": "Access token.",
+                        "type": "string",
+                        "maxLength": 2000,
+                        "uniqueItems": true,
+                        "example": "token"
+                    },
+                    "token_scopes": {
+                        "description": "Token scopes with | as delimiter.",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "maxLength": 5000,
+                        "example": [
+                            "client",
+                            "admin"
+                        ]
+                    },
+                    "user_id": {
+                        "description": "User identifier.",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "client_id": {
+                        "description": "Client identifier.",
+                        "type": "string",
+                        "example": 1
+                    },
+                    "expire_at": {
+                        "description": "Expired time.",
+                        "type": "integer",
+                        "format": "bigInt",
+                        "example": "1529397813"
+                    },
+                    "created_at": {
+                        "description": "Created time.",
+                        "type": "integer",
+                        "format": "bigInt",
+                        "example": "1529397813"
+                    },
+                    "updated_at": {
+                        "description": "Updated time.",
+                        "type": "integer",
+                        "format": "bigInt",
+                        "example": "1529397813"
+                    },
+                    "is_revoked": {
+                        "description": "Access token revoked.",
+                        "type": "boolean",
+                        "default": false,
+                        "example": false
+                    },
+                    "grant_type": {
+                        "description": "Access token grant_type.",
+                        "type": "string",
+                        "enum": [
+                            "password",
+                            "code",
+                            "client_credentials",
+                            "implicit"
+                        ],
+                        "example": "client_credentials"
+                    }
+                }
+            },
+            "AuthCode": {
+                "title": "AuthCode",
+                "description": "Auth code entity",
+                "required": [
+                    "code",
+                    "redirect_uri",
+                    "client_id",
+                    "scopes"
+                ],
+                "properties": {
+                    "code": {
+                        "description": "Auth code.",
+                        "type": "string",
+                        "uniqueItems": true,
+                        "example": "auth_code"
+                    },
+                    "is_revoked": {
+                        "description": "Is revoked.",
+                        "type": "boolean",
+                        "default": false,
+                        "example": false
+                    },
+                    "redirect_uri": {
+                        "description": "Redirect url.",
+                        "type": "string",
+                        "example": "http://example.com./redirect"
+                    },
+                    "user_id": {
+                        "description": "User identifier.",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "client_id": {
+                        "description": "Client identifier.",
+                        "type": "integer",
+                        "default": "null",
+                        "example": 1
+                    },
+                    "expire_at": {
+                        "description": "Expired time.",
+                        "type": "integer",
+                        "format": "bigInt",
+                        "example": "1529397813"
+                    },
+                    "created_at": {
+                        "description": "Created time.",
+                        "type": "integer",
+                        "format": "bigInt",
+                        "example": "1529397813"
+                    },
+                    "updated_at": {
+                        "description": "Updated time.",
+                        "type": "integer",
+                        "format": "bigInt",
+                        "example": "1529397813"
+                    },
+                    "token_scopes": {
+                        "description": "Scopes.",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "default": [],
+                        "example": [
+                            "user_get",
+                            "clients_get"
+                        ]
+                    }
+                }
+            },
+            "Client": {
+                "title": "OAuth clients",
+                "description": "Oauth clients list",
+                "required": [
+                    "redirect_uris",
+                    "allowed_grant_types",
+                    "name"
+                ],
+                "properties": {
+                    "secret": {
+                        "description": "Client secret key.",
+                        "type": "string",
+                        "maxLength": 2000,
+                        "enum": [
+                            "client_credentials",
+                            "password"
+                        ],
+                        "example": "secret"
+                    },
+                    "user_id": {
+                        "description": "User identifier.",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "allowed_grant_types": {
+                        "description": "Allowed grant types.",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "example": [
+                            "client_credentials",
+                            "password"
+                        ]
+                    },
+                    "name": {
+                        "description": "Random client identifier.",
+                        "type": "string",
+                        "uniqueItems": true,
+                        "example": "test_application"
+                    },
+                    "description": {
+                        "description": "Client app description,.",
+                        "type": "string",
+                        "format": "text",
+                        "example": "Test application"
+                    },
+                    "redirect_uris": {
+                        "description": "Redirect url list.",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "example": [
+                            "https://test.com",
+                            "https://test.com/redirect"
+                        ]
+                    },
+                    "created_at": {
+                        "description": "Created time.",
+                        "type": "integer",
+                        "format": "bigInt",
+                        "example": "1529397813"
+                    },
+                    "updated_at": {
+                        "description": "Updated time.",
+                        "type": "integer",
+                        "format": "bigInt",
+                        "example": "1529397813"
+                    }
+                }
+            },
+            "RefreshToken": {
+                "title": "RefreshToken",
+                "description": "Refresh token entity",
+                "required": [
+                    "refresh_token",
+                    "token",
+                    "expire_at"
+                ],
+                "properties": {
+                    "refresh_token": {
+                        "description": "Refresh token.",
+                        "type": "string",
+                        "maxLength": 2000,
+                        "example": "refresh_token"
+                    },
+                    "token": {
+                        "description": "Access token.",
+                        "type": "string",
+                        "maxLength": 2000,
+                        "uniqueItems": true,
+                        "example": "token"
+                    },
+                    "expire_at": {
+                        "description": "Expire date.",
+                        "type": "integer",
+                        "format": "bigInt",
+                        "example": 1529397813
+                    },
+                    "token_scopes": {
+                        "description": "Refresh token scopes.",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "default": [
+                            "default"
+                        ],
+                        "example": [
+                            "client",
+                            "admin"
+                        ]
+                    },
+                    "is_revoked": {
+                        "description": "Is revoked token.",
+                        "type": "boolean",
+                        "default": false,
+                        "example": false
+                    },
+                    "created_at": {
+                        "description": "Created time.",
+                        "type": "integer",
+                        "format": "bigInt",
+                        "example": "1529397813"
+                    },
+                    "updated_at": {
+                        "description": "Updated time.",
+                        "type": "integer",
+                        "format": "bigInt",
+                        "example": "1529397813"
+                    }
+                }
+            },
+            "Scope": {
+                "title": "Scope",
+                "description": "Scope entity",
+                "properties": {
+                    "scope": {
+                        "description": "Scope name.",
+                        "type": "string",
+                        "uniqueItems": true,
+                        "example": 1
+                    },
+                    "description": {
+                        "description": "Scope description.",
+                        "type": "string",
+                        "format": "text",
+                        "example": "Client scope description"
+                    },
+                    "title": {
+                        "description": "Scope description.",
+                        "type": "string",
+                        "example": "Client scope title"
+                    },
+                    "permissions": {
+                        "description": "Scope permissions.",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "example": [
+                            "permission1",
+                            "permission2"
+                        ]
+                    },
+                    "created_at": {
+                        "description": "Created time.",
+                        "type": "integer",
+                        "format": "bigInt",
+                        "example": "1529397813"
+                    },
+                    "updated_at": {
+                        "description": "Updated time.",
+                        "type": "integer",
+                        "format": "bigInt",
+                        "example": "1529397813"
+                    }
+                }
+            },
+            "User": {
+                "title": "User",
+                "description": "User entity",
+                "required": [
+                    "email",
+                    "username",
+                    "first_name",
+                    "last_name",
+                    "password",
+                    "avatar"
+                ],
+                "properties": {
+                    "id": {
+                        "description": "User identifier.",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "username": {
+                        "description": "Username.",
+                        "type": "string",
+                        "example": "username"
+                    },
+                    "email": {
+                        "description": "User email.",
+                        "type": "string",
+                        "format": "email",
+                        "example": "test@test.com"
+                    },
+                    "password": {
+                        "description": "Password as bcrypt hash.",
+                        "type": "string",
+                        "readOnly": true,
+                        "example": "password-hash"
+                    },
+                    "roles": {
+                        "description": "User roles with \" \" as delimiter.",
+                        "type": "string",
+                        "example": "ROLE_ADMIN|ROLE_MANAGER"
+                    },
+                    "first_name": {
+                        "description": "First name.",
+                        "type": "string",
+                        "example": "John"
+                    },
+                    "last_name": {
+                        "description": "Last name.",
+                        "type": "string",
+                        "example": "Doe"
+                    },
+                    "middle_name": {
+                        "description": "Middle name.",
+                        "type": "string",
+                        "example": "Middle"
+                    },
+                    "avatar": {
+                        "description": "User avatar.",
+                        "type": "string",
+                        "example": "/path/to/avatar.jpg"
+                    },
+                    "api_token": {
+                        "description": "User api token.",
+                        "type": "string",
+                        "example": "example-token"
+                    },
+                    "created_at": {
+                        "description": "Created time.",
+                        "type": "integer",
+                        "format": "bigInt",
+                        "example": "1529397813"
+                    },
+                    "last_login": {
+                        "description": "Lst login time.",
+                        "type": "integer",
+                        "format": "bigInt",
+                        "example": "1529397813"
+                    },
+                    "api_token_expire_at": {
+                        "description": "User api token expire date.",
+                        "type": "integer",
+                        "format": "bigInt",
+                        "example": "1529397813"
+                    },
+                    "birthday": {
+                        "description": "Birth date.",
+                        "type": "integer",
+                        "format": "bigInt",
+                        "example": "1529397813"
+                    },
+                    "updated_at": {
+                        "description": "Updated time.",
+                        "type": "integer",
+                        "format": "bigInt",
+                        "example": "1529397813"
+                    },
+                    "status": {
+                        "description": "User status.\nOne of \"pending\", \"active\", \"disabled\" or \"deleted\".",
+                        "type": "string",
+                        "default": "active",
+                        "enum": [
+                            "pending",
+                            "active",
+                            "disabled",
+                            "deleted"
+                        ],
+                        "example": "pending"
+                    },
+                    "additional_permissions": {
+                        "description": "Additional user permissions.",
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "example": [
+                            "permission1",
+                            "permission2"
+                        ]
+                    }
+                }
+            }
+        },
+        "securitySchemes": {
+            "oauth2": {
+                "type": "oauth2",
+                "description": "OAuth2",
+                "flows": {
+                    "implicit": {
+                        "authorizationUrl": "/api/authorize",
+                        "scopes": {
+                            "default": "Default scope",
+                            "client": "User access",
+                            "admin": "Admin access"
+                        }
+                    },
+                    "authorizationCode": {
+                        "authorizationUrl": "/api/authorize",
+                        "tokenUrl": "/api/authorize",
+                        "refreshUrl": "/api/authorize",
+                        "scopes": {
+                            "default": "Default scope",
+                            "client": "User access",
+                            "admin": "Admin access"
+                        }
+                    },
+                    "password": {
+                        "tokenUrl": "/api/authorize",
+                        "refreshUrl": "/api/authorize",
+                        "scopes": {
+                            "default": "Default scope",
+                            "client": "User access",
+                            "admin": "Admin access"
+                        }
+                    },
+                    "clientCredentials": {
+                        "tokenUrl": "/api/authorize",
+                        "refreshUrl": "/api/authorize",
+                        "scopes": {
+                            "default": "Default scope",
+                            "client": "User access",
+                            "admin": "Admin access"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -22,7 +22,10 @@ services:
   League\OAuth2\Server\Repositories\UserRepositoryInterface:
     class: sonrac\Auth\Repository\Users
     public: true
+    tags: ['doctrine.repository_service']
     arguments: ['@doctrine']
+  sonrac\Auth\Repository\Users:
+    alias: League\OAuth2\Server\Repositories\UserRepositoryInterface
   League\OAuth2\Server\Entities\ClientEntityInterface:
     class: sonrac\Auth\Entity\Client
     public: true

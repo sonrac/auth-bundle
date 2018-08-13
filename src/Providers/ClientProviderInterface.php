@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace sonrac\Auth\Providers;
 
 use League\OAuth2\Server\Entities\ClientEntityInterface;
+use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 /**
  * Interface ClientProviderInterface.
  */
-interface ClientProviderInterface
+interface ClientProviderInterface extends UserProviderInterface
 {
     /**
      * Validate client secret.
@@ -38,15 +39,6 @@ interface ClientProviderInterface
      * @return mixed
      */
     public function findByName(string $name);
-
-    /**
-     * Whether this provider supports the given user class.
-     *
-     * @param string $class
-     *
-     * @return bool
-     */
-    public function supportsClass($class): bool;
 
     /**
      * Refreshes the client.

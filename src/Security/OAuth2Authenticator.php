@@ -7,17 +7,18 @@ namespace sonrac\Auth\Security;
 use sonrac\Auth\Providers\ClientProviderInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
-use Symfony\Component\Security\Guard\AuthenticatorInterface;
+use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
 use Symfony\Component\Security\Guard\Token\PostAuthenticationGuardToken;
 
 /**
  * Class OAuth2Authenticator.
  */
-class OAuth2Authenticator implements AuthenticatorInterface
+class OAuth2Authenticator extends AbstractGuardAuthenticator
 {
     /**
      * Token header name.
@@ -41,6 +42,12 @@ class OAuth2Authenticator implements AuthenticatorInterface
      */
     public function start(Request $request, AuthenticationException $authException = null)
     {
+        $data = [
+            'status' => false,
+            'error'  => 'Authentication Required',
+        ];
+
+        return new JsonResponse($data, Response::HTTP_UNAUTHORIZED);
     }
 
     /**
@@ -48,7 +55,8 @@ class OAuth2Authenticator implements AuthenticatorInterface
      */
     public function supports(Request $request): bool
     {
-        return $request->headers->has($this->tokenName);
+        #return $request->headers->has($this->tokenName);
+        return true;
     }
 
     /**
@@ -57,7 +65,7 @@ class OAuth2Authenticator implements AuthenticatorInterface
     public function getCredentials(Request $request)
     {
         return [
-            'token' => $request->headers->get($this->tokenName),
+            'token' => $request->headers->all()
         ];
     }
 
@@ -114,10 +122,12 @@ class OAuth2Authenticator implements AuthenticatorInterface
      */
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
     {
-        return (new JsonResponse())->setContent(json_encode([
+        $data = [
             'status' => false,
-            'message' => 'Authentication failure'
-        ]));
+            'error'  => strtr($exception->getMessageKey(), $exception->getMessageData())
+        ];
+
+        return new JsonResponse($data, Response::HTTP_FORBIDDEN);
     }
 
     /**
@@ -125,6 +135,8 @@ class OAuth2Authenticator implements AuthenticatorInterface
      */
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
+        // on success, let the request continue
+        return null;
     }
 
     /**

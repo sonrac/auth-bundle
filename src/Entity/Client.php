@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace sonrac\Auth\Entity;
 
 use League\OAuth2\Server\Entities\ClientEntityInterface;
-use Swagger\Annotations as OAS;
+use Openapi\Annotations as OA;
 
 /**
  * Class Client.
  *
- * @OAS\Schema(
+ * @OA\Schema(
  *     title="OAuth clients",
  *     description="Oauth clients list",
  *     required={"redirect_uris", "allowed_grant_types", "name"}
@@ -88,7 +88,7 @@ class Client implements ClientEntityInterface
      *
      * @var string
      *
-     * @OAS\Property(example="secret", enum={"client_credentials", "password"}, maxLength=2000)
+     * @OA\Property(example="secret", enum={"client_credentials", "password"}, maxLength=2000)
      */
     protected $secret;
 
@@ -97,7 +97,7 @@ class Client implements ClientEntityInterface
      *
      * @var int
      *
-     * @OAS\Property(example=1)
+     * @OA\Property(example=1)
      */
     protected $user_id;
 
@@ -106,9 +106,9 @@ class Client implements ClientEntityInterface
      *
      * @var array
      *
-     * @OAS\Property(
+     * @OA\Property(
      *     example={"client_credentials", "password"},
-     *     @OAS\Items(
+     *     @OA\Items(
      *         type="string"
      *     )
      * )
@@ -120,7 +120,7 @@ class Client implements ClientEntityInterface
      *
      * @var string
      *
-     * @OAS\Property(example="test_application", uniqueItems=true)
+     * @OA\Property(example="test_application", uniqueItems=true)
      */
     protected $name;
 
@@ -129,7 +129,7 @@ class Client implements ClientEntityInterface
      *
      * @var string
      *
-     * @OAS\Property(example="Test application", format="text")
+     * @OA\Property(example="Test application", format="text")
      */
     protected $description;
 
@@ -138,9 +138,9 @@ class Client implements ClientEntityInterface
      *
      * @var array
      *
-     * @OAS\Property(
+     * @OA\Property(
      *     example={"https://test.com", "https://test.com/redirect"},
-     *     @OAS\Items(
+     *     @OA\Items(
      *         type="string"
      *     )
      * )
@@ -152,7 +152,7 @@ class Client implements ClientEntityInterface
      *
      * @var int
      *
-     * @OAS\Property(format="bigInt", example="1529397813")
+     * @OA\Property(format="bigInt", example="1529397813")
      */
     protected $created_at;
 
@@ -161,7 +161,7 @@ class Client implements ClientEntityInterface
      *
      * @var int
      *
-     * @OAS\Property(format="bigInt", example="1529397813")
+     * @OA\Property(format="bigInt", example="1529397813")
      */
     protected $updated_at;
 

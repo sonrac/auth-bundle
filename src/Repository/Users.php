@@ -11,6 +11,7 @@ use League\OAuth2\Server\Entities\UserEntityInterface;
 use League\OAuth2\Server\Repositories\UserRepositoryInterface;
 use sonrac\Auth\Entity\User;
 use Symfony\Bridge\Doctrine\RegistryInterface;
+use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 
 /**
  * Class AccessTokens.
@@ -80,9 +81,21 @@ class Users extends ServiceEntityRepository implements UserRepositoryInterface
             ->getOneOrNullResult(Query::HYDRATE_OBJECT);
 
         if (!$user) {
-            throw new \InvalidArgumentException('User not found');
+            throw new UsernameNotFoundException('User not found');
         }
 
         return $user;
+    }
+
+    /**
+     * Refresh user.
+     *
+     * @param object $user
+     *
+     * @throws \Doctrine\ORM\ORMException
+     */
+    public function refreshUser($user)
+    {
+        $this->getEntityManager()->refresh($user);
     }
 }

@@ -26,6 +26,10 @@ services:
   sonrac.oauth.generate_keys:
     class: sonrac\Auth\Command\GenerateKeys
     tags: ['sonrac.oauth.commands', 'console.command']
+  sonrac_auth.oauth2_authenticator:
+    class: sonrac\Auth\Security\OAuth2Authenticator
+    arguments:
+      - '%sonrac_auth.header_token_name%'
   sonrac.oauth.clear_tokens:
     class: sonrac\Auth\Command\ClearTokens
     tags: ['sonrac.oauth.commands', 'console.command']

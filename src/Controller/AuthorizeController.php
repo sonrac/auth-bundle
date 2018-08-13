@@ -5,30 +5,30 @@ declare(strict_types=1);
 namespace sonrac\Auth\Controller;
 
 use Psr\Http\Message\ServerRequestInterface;
-use Swagger\Annotations as OAS;
+use Openapi\Annotations as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Zend\Diactoros\Response;
 
 /**
  * Class AuthorizeController.
  *
- * @OAS\Info(
+ * @OA\Info(
  *     title="OAuth2 example API",
  *     description="OAuth2 example API",
  *     version="1.0"
  * )
  *
- * @OAS\Server(
+ * @OA\Server(
  *     description="Auth server",
  *     url="SWAGGER_URL"
  * )
  *
- * @OAS\SecurityScheme(
+ * @OA\SecurityScheme(
  *     securityScheme="oauth2",
  *     name="oauth2",
+ *     type="oauth2",
  *     description="OAuth2",
- *     @OAS\Flow(
+ *     @OA\Flow(
  *         flow="implicit",
  *         authorizationUrl="/api/authorize",
  *         scopes={
@@ -37,7 +37,7 @@ use Zend\Diactoros\Response;
  *             "admin" : "Admin access"
  *         }
  *     ),
- *     @OAS\Flow(
+ *     @OA\Flow(
  *         flow="authorizationCode",
  *         authorizationUrl="/api/authorize",
  *         tokenUrl="/api/authorize",
@@ -48,7 +48,7 @@ use Zend\Diactoros\Response;
  *             "admin" : "Admin access"
  *         }
  *     ),
- *     @OAS\Flow(
+ *     @OA\Flow(
  *         flow="password",
  *         tokenUrl="/api/authorize",
  *         refreshUrl="/api/authorize",
@@ -58,7 +58,7 @@ use Zend\Diactoros\Response;
  *             "admin" : "Admin access"
  *         }
  *     ),
- *     @OAS\Flow(
+ *     @OA\Flow(
  *         flow="clientCredentials",
  *         tokenUrl="/api/authorize",
  *         refreshUrl="/api/authorize",
