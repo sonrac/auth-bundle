@@ -7,7 +7,9 @@ namespace sonrac\Auth\DependencyInjection;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
+use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Routing\Loader\YamlFileLoader as RoutesYamlLoader;
 
 /**
@@ -28,13 +30,18 @@ class SonracAuthExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container): void
     {
-        $fileLocator = new FileLocator(__DIR__.'/../Resources/config');
-        $loader      = new YamlFileLoader(
+        $fileLocator = new FileLocator(__DIR__ . '/../Resources/config');
+        $loader = new YamlFileLoader(
             $container,
             $fileLocator
         );
+        $xmlLoader = new XmlFileLoader($container, $fileLocator);
 
         $loader->load('services.yaml');
+
+        $xmlLoader->load('services.xml');
+        $xmlLoader->load('services/security.xml');
+
         $routerLoader = new RoutesYamlLoader($fileLocator);
         $routerLoader->load('routes.yaml');
 
@@ -46,18 +53,20 @@ class SonracAuthExtension extends Extension
 
         $config = $this->processConfiguration($configuration, $configs);
 
-        $this->setParameters($config, $container);
+        $this->setParameters($container, $config);
+
+        $this->replaceServiceDefinitions($container, $config);
     }
 
     /**
      * Set bundle parameters.
      *
-     * @param array                                                   $config
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param array $config
      *
      * @throws \Exception
      */
-    private function setParameters(array $config, ContainerBuilder $container): void
+    private function setParameters(ContainerBuilder $container, array &$config): void
     {
         $container->setParameter('sonrac_auth.pass_phrase', $config['pass_phrase']);
         $container->setParameter('sonrac_auth.encryption_key', $config['encryption_key']);
@@ -75,13 +84,51 @@ class SonracAuthExtension extends Extension
 
         if (isset($config['swagger_constants']) && \is_array($config['swagger_constants'])) {
             foreach ($config['swagger_constants'] as $swagger_constant => $value) {
-                $swagger_constant = 'SWAGGER_'.\mb_strtoupper($swagger_constant);
+                $swagger_constant = 'SWAGGER_' . \mb_strtoupper($swagger_constant);
                 if ($value === '{url}') {
                     $value = $container->get('router')->generate('home');
                 }
                 \defined($swagger_constant) or \define($swagger_constant, $value);
             }
         }
+    }
+
+    /**
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param array $config
+     *
+     * @return void
+     */
+    private function replaceServiceDefinitions(ContainerBuilder $container, array &$config): void
+    {
+        $repositories = $config['repositories'];
+
+        $container->getDefinition('sonrac_oauth.security.token_factory')
+            ->replaceArgument('$clientRepository', new Reference($repositories['client']))
+            ->replaceArgument('$userRepository', new Reference($repositories['user']));
+
+        $container->getDefinition('sonrac_oauth.security.authorization_validator.bearer_token')
+            ->replaceArgument('$accessTokenRepository', new Reference($repositories['access_token']));
+
+        $container->getDefinition('sonrac_oauth.security.authentication_provider.abstract')
+            ->replaceArgument('$clientRepository', new Reference($repositories['client']))
+            ->replaceArgument('$userRepository', new Reference($repositories['user']));
+
+        $container->getDefinition('sonrac_oauth.security.authorization_server.abstract')
+            ->replaceArgument('$clientRepository', new Reference($repositories['client']))
+            ->replaceArgument('$accessTokenRepository', new Reference($repositories['access_token']))
+            ->replaceArgument('$scopeRepository', new Reference($repositories['scope']));
+
+        $container->getDefinition('sonrac_oauth.security.auth_code_grant.abstract')
+            ->replaceArgument('$authCodeRepository', new Reference($repositories['auth_code']))
+            ->replaceArgument('$refreshTokenRepository', new Reference($repositories['refresh_token']));
+
+        $container->getDefinition('sonrac_oauth.security.password_grant.abstract')
+            ->replaceArgument('$userRepository', new Reference($repositories['user']))
+            ->replaceArgument('$refreshTokenRepository', new Reference($repositories['refresh_token']));
+
+        $container->getDefinition('sonrac_oauth.security.refresh_token_grant.abstract')
+            ->replaceArgument('$refreshTokenRepository', new Reference($repositories['refresh_token']));
     }
 
     /**

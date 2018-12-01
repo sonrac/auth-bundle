@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services
+        http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+
+        <service id="sonrac_oauth.security.token_factory" class="sonrac\Auth\Security\Factory\OAuthTokenFactory">
+            <argument key="$clientRepository"/>
+            <argument key="$userRepository"/>
+        </service>
+
+        <service id="sonrac_oauth.security.authorization_validator.bearer_token"
+                 class="League\OAuth2\Server\AuthorizationValidators\BearerTokenValidator">
+            <argument key="$accessTokenRepository"/>
+            <!--<call method="setPublicKey">-->
+                <!--<argument key="$key">%sonrac_auth.private_key_path%</argument>-->
+            <!--</call>-->
+            <call method="setEncryptionKey">
+                <argument key="$key">%sonrac_auth.encryption_key%</argument>
+            </call>
+        </service>
+
+        <service id="sonrac_oauth.security.authentication_listener.abstract"
+                 class="sonrac\Auth\Security\OAuthAuthenticationListener" public="false" abstract="true">
+            <argument key="$authorizationServer"/>
+            <argument key="$authorizationValidator" type="service"
+                      id="sonrac_oauth.security.authorization_validator.bearer_token"/>
+            <argument key="$oauthTokenFactory" type="service" id="sonrac_oauth.security.token_factory"/>
+            <argument key="$authenticationManager"/>
+            <argument key="$tokenStorage" type="service" id="security.token_storage"/>
+            <argument key="$httpUtils" type="service" id="security.http_utils"/>
+            <argument key="$diactorosFactory" type="service" id="sensio_framework_extra.psr7.http_message_factory"/>
+            <argument key="$httpFoundationFactory" type="service"
+                      id="sensio_framework_extra.psr7.http_foundation_factory"/>
+            <argument key="$authorizationPath"/>
+            <argument key="$providerKey"/>
+        </service>
+
+        <service id="sonrac_oauth.security.authentication_provider.abstract"
+                 class="sonrac\Auth\Security\OAuthAuthenticationProvider" public="false" abstract="true">
+            <argument key="$clientRepository"/>
+            <argument key="$userRepository"/>
+            <argument key="$providerKey"/>
+        </service>
+
+        <service id="sonrac_oauth.security.authorization_server.abstract"
+                 class="League\OAuth2\Server\AuthorizationServer" public="false" abstract="true">
+            <argument key="$clientRepository"/>
+            <argument key="$accessTokenRepository"/>
+            <argument key="$scopeRepository"/>
+            <argument key="$privateKey">%sonrac_auth.private_key_path%</argument>
+            <argument key="$encryptionKey">%sonrac_auth.encryption_key%</argument>
+        </service>
+
+        <service id="sonrac_oauth.security.auth_code_grant.abstract"
+                 class="League\OAuth2\Server\Grant\AuthCodeGrant" public="false" abstract="true">
+            <argument key="$authCodeRepository"/>
+            <argument key="$refreshTokenRepository"/>
+            <argument key="$authCodeTTL"/>
+        </service>
+
+        <service id="sonrac_oauth.security.client_credentials_grant.abstract"
+                 class="League\OAuth2\Server\Grant\ClientCredentialsGrant" public="false" abstract="true">
+        </service>
+
+        <service id="sonrac_oauth.security.implicit_grant.abstract"
+                 class="League\OAuth2\Server\Grant\ImplicitGrant" public="false" abstract="true">
+            <argument key="$accessTokenTTL"/>
+        </service>
+
+        <service id="sonrac_oauth.security.password_grant.abstract"
+                 class="League\OAuth2\Server\Grant\PasswordGrant" public="false" abstract="true">
+            <argument key="$userRepository"/>
+            <argument key="$refreshTokenRepository"/>
+        </service>
+
+        <service id="sonrac_oauth.security.refresh_token_grant.abstract"
+                 class="League\OAuth2\Server\Grant\RefreshTokenGrant" public="false" abstract="true">
+            <argument key="$refreshTokenRepository"/>
+        </service>
+
+    </services>
+</container>

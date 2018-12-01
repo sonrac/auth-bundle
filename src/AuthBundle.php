@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace sonrac\Auth;
 
 use Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappingsPass;
+use sonrac\Auth\DependencyInjection\Security\OAuthFactory;
 use sonrac\Auth\DependencyInjection\SonracAuthExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
@@ -33,6 +34,10 @@ class AuthBundle extends Bundle
                 )
             );
         }
+
+        /** @var \Symfony\Bundle\SecurityBundle\DependencyInjection\SecurityExtension $security */
+        $security = $container->getExtension('security');
+        $security->addSecurityListenerFactory(new OAuthFactory());
     }
 
     /**

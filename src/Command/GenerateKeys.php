@@ -35,6 +35,7 @@ class GenerateKeys extends ContainerAwareCommand
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
+        //TODO: add fix permissions for generated keys to 0600 or 0660
         $force = false !== $input->getOption('force');
         $phrase = $input->getOption('passphrase');
         $this->disableOut = false !== $input->getOption('disable-out');

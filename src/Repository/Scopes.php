@@ -36,7 +36,7 @@ class Scopes extends ServiceEntityRepository implements ScopeRepositoryInterface
         $scope = $this->find($identifier);
 
         if (!$scope) {
-            throw new \InvalidArgumentException('Scope not find');
+            throw new \InvalidArgumentException('Scope not found');
         }
 
         return $scope;

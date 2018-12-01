@@ -8,8 +8,8 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Entities\UserEntityInterface;
-use League\OAuth2\Server\Repositories\UserRepositoryInterface;
 use sonrac\Auth\Entity\User;
+use sonrac\Auth\Entity\UserInterface;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 
@@ -31,6 +31,14 @@ class Users extends ServiceEntityRepository implements UserRepositoryInterface
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, User::class);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findByIdentifier($identifier): ?UserInterface
+    {
+        return $this->findOneBy(['id' => $identifier]);
     }
 
     /**

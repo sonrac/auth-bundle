@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace sonrac\Auth\Entity;
 
-use League\OAuth2\Server\Entities\UserEntityInterface;
 use Psr\Container\ContainerInterface;
 use Openapi\Annotations as OA;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Class User.
@@ -18,7 +16,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  *     required={"email", "username", "first_name", "last_name", "password", "avatar"}
  * )
  */
-class User implements UserEntityInterface, UserInterface
+class User implements UserInterface
 {
     use TimeEntityTrait;
 

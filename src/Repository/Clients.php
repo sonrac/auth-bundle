@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace sonrac\Auth\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
 use sonrac\Auth\Entity\Client;
+use sonrac\Auth\Entity\ClientInterface;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -31,6 +31,14 @@ class Clients extends ServiceEntityRepository implements ClientRepositoryInterfa
 
     /**
      * {@inheritdoc}
+     */
+    public function findByIdentifier($identifier): ?ClientInterface
+    {
+        return $this->findOneBy(['id' => $identifier]);
+    }
+
+    /**
+     * {@inheritdoc}
      *
      * @throws \InvalidArgumentException If client found
      * @throws \LogicException           If client secret does not match or grant type is not allowed
@@ -49,7 +57,7 @@ class Clients extends ServiceEntityRepository implements ClientRepositoryInterfa
 
         if ($grantType && !\in_array(\mb_strtolower($grantType), $client->getAllowedGrantTypes(), true)) {
             throw new \LogicException(
-                'Grant type is not allowed for client application.'.
+                'Grant type is not allowed for client application.' .
                 \json_encode($client->getAllowedGrantTypes())
             );
         }

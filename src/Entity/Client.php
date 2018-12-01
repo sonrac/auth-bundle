@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace sonrac\Auth\Entity;
 
-use League\OAuth2\Server\Entities\ClientEntityInterface;
 use Openapi\Annotations as OA;
 
 /**
@@ -16,7 +15,7 @@ use Openapi\Annotations as OA;
  *     required={"redirect_uris", "allowed_grant_types", "name"}
  * )
  */
-class Client implements ClientEntityInterface
+class Client implements ClientInterface
 {
     use TimeEntityTrait;
 

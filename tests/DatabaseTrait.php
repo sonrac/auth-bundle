@@ -45,6 +45,10 @@ trait DatabaseTrait
      */
     protected function setUpDatabase(): void
     {
+        $this->runCommand('doctrine:migrations:migrate', [
+            '--no-interaction',
+        ]);
+
         if (empty($this->seeds)) {
             return;
         }
