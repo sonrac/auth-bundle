@@ -11,15 +11,26 @@
             <argument key="$userRepository"/>
         </service>
 
+        <service id="sonrac_oauth.security.secure_key_factory" class="sonrac\Auth\Factory\SecureKeyFactory"
+                 public="false">
+            <argument type="service" id="service_container"/>
+        </service>
+
+        <service id="sonrac_oauth.security.authorization_validator.bearer_token_configurator"
+                 class="sonrac\Auth\Configurator\BearerTokenValidatorConfigurator" public="false">
+            <argument type="service" id="sonrac_oauth.security.secure_key_factory"/>
+        </service>
+
         <service id="sonrac_oauth.security.authorization_validator.bearer_token"
                  class="League\OAuth2\Server\AuthorizationValidators\BearerTokenValidator">
             <argument key="$accessTokenRepository"/>
-            <call method="setPublicKey">
-                <argument key="$key">%sonrac_auth.private_key_path%/%sonrac_auth.public_key_name%</argument>
-            </call>
-            <call method="setEncryptionKey">
-                <argument key="$key">%sonrac_auth.encryption_key%</argument>
-            </call>
+            <configurator service="sonrac_oauth.security.authorization_validator.bearer_token_configurator"
+                          method="configure"/>
+        </service>
+
+        <service id="sonrac_oauth.security.oauth_authentication_manager"
+                 class="sonrac\Auth\Security\OAuth2AuthenticationManager"
+                 public="false">
         </service>
 
         <service id="sonrac_oauth.security.authentication_listener.abstract"
@@ -34,8 +45,8 @@
                       id="sensio_framework_extra.psr7.http_foundation_factory"/>
         </service>
 
-        <service id="sonrac_oauth.security.authentication_provider.abstract"
-                 class="sonrac\Auth\Security\OAuthAuthenticationProvider" public="false" abstract="true">
+        <service id="sonrac_oauth.security.authentication_manager.abstract"
+                 class="sonrac\Auth\Security\OAuth2AuthenticationManager" public="false" abstract="true">
         </service>
 
         <service id="sonrac_oauth.security.authorization_server_configurator.abstract"

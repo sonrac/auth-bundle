@@ -21,7 +21,7 @@ class SecurityTest extends AbstractSecurityControllerTest
             '/api/security/test',
             array(),
             array(),
-            array('Authorization' => $this->getToken())
+            array('HTTP_Authorization' => $this->getToken())
         );
 
         $this->assertEquals('{"status":true}', $client->getResponse()->getContent());

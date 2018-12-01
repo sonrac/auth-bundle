@@ -13,10 +13,24 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 class OAuth2AuthenticationManager implements AuthenticationManagerInterface
 {
     /**
+     * @var string
+     */
+    private $providerKey;
+
+    /**
+     * OAuth2AuthenticationManager constructor.
+     * @param string $providerKey
+     */
+    public function __construct(string $providerKey)
+    {
+        $this->providerKey = $providerKey;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function authenticate(TokenInterface $token)
     {
-
+        return $token;
     }
 }

@@ -53,7 +53,7 @@ class OAuthTokenFactory
         $scopes = $request->getAttribute('oauth_scopes');
 
         $client = $this->clientRepository->findByIdentifier($clientId);
-        $user = null !== $userId ? $this->findUser($userId) : null;
+        $user = (null !== $userId && '' !== $userId) ? $this->findUser($userId) : null;
 
         if (null === $user) {
             $token = new OAuthClientToken($client, $client->getSecret(), $providerKey, $scopes);

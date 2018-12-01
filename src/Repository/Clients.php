@@ -34,7 +34,7 @@ class Clients extends ServiceEntityRepository implements ClientRepositoryInterfa
      */
     public function findByIdentifier($identifier): ?ClientInterface
     {
-        return $this->findOneBy(['id' => $identifier]);
+        return $this->findOneBy(['name' => $identifier]);
     }
 
     /**

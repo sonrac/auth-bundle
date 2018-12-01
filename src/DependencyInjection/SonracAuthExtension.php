@@ -110,9 +110,9 @@ class SonracAuthExtension extends Extension
         $container->getDefinition('sonrac_oauth.security.authorization_validator.bearer_token')
             ->setArgument('$accessTokenRepository', new Reference($repositories['access_token']));
 
-        $container->getDefinition('sonrac_oauth.security.authentication_provider.abstract')
-            ->setArgument('$clientRepository', new Reference($repositories['client']))
-            ->setArgument('$userRepository', new Reference($repositories['user']));
+//        $container->getDefinition('sonrac_oauth.security.authentication_manager.abstract')
+//            ->setArgument('$clientRepository', new Reference($repositories['client']))
+//            ->setArgument('$userRepository', new Reference($repositories['user']));
 
         $container->getDefinition('sonrac_oauth.security.authorization_server.abstract')
             ->setArgument('$clientRepository', new Reference($repositories['client']))

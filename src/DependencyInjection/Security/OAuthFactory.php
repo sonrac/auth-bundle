@@ -26,7 +26,7 @@ class OAuthFactory implements SecurityFactoryInterface
     {
         $authorizationServerId = 'sonrac_oauth.security.authorization_server.' . $id;
         $authorizationServerConfiguratorId = 'sonrac_oauth.security.authorization_server_configurator.' . $id;
-        $authenticationProviderId = 'sonrac_oauth.security.authentication_provider.' . $id;
+        $authenticationManagerId = 'sonrac_oauth.security.authentication_manager.' . $id;
         $authenticationListenerId = 'sonrac_oauth.security.authentication_listener.' . $id;
 
         $grantTypeIds = $this->registerGrantTypes($container, $config, $id);
@@ -52,16 +52,16 @@ class OAuthFactory implements SecurityFactoryInterface
 
         $container
             ->setDefinition(
-                $authenticationProviderId,
-                new ChildDefinition('sonrac_oauth.security.authentication_provider.abstract')
+                $authenticationManagerId,
+                new ChildDefinition('sonrac_oauth.security.authentication_manager.abstract')
             )
             ->setArgument('$providerKey', $id);
 
         $this->registerAuthenticationListener(
-            $container, $authenticationListenerId, $config, $id, $authorizationServerId, $authenticationProviderId
+            $container, $authenticationListenerId, $config, $id, $authorizationServerId, $authenticationManagerId
         );
 
-        return [$authenticationProviderId, $authenticationListenerId, $defaultEntryPoint];
+        return [$authenticationManagerId, $authenticationListenerId, $defaultEntryPoint];
     }
 
     /**
