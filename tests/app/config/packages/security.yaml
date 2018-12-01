@@ -25,10 +25,10 @@ security:
     #        authenticators:
     #          - sonrac_auth.oauth2_authenticator
     oauth_user:
-      pattern: ^/api/security
+      pattern: ^/api
       security: true
       sonrac_oauth:
-        authorization_path: /api/security/authorize
+        authorization_path: /api/auth/token
     admin:
       pattern: ^/
       security: false

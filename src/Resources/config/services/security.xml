@@ -14,9 +14,9 @@
         <service id="sonrac_oauth.security.authorization_validator.bearer_token"
                  class="League\OAuth2\Server\AuthorizationValidators\BearerTokenValidator">
             <argument key="$accessTokenRepository"/>
-            <!--<call method="setPublicKey">-->
-                <!--<argument key="$key">%sonrac_auth.private_key_path%</argument>-->
-            <!--</call>-->
+            <call method="setPublicKey">
+                <argument key="$key">%sonrac_auth.private_key_path%/%sonrac_auth.public_key_name%</argument>
+            </call>
             <call method="setEncryptionKey">
                 <argument key="$key">%sonrac_auth.encryption_key%</argument>
             </call>
@@ -24,61 +24,53 @@
 
         <service id="sonrac_oauth.security.authentication_listener.abstract"
                  class="sonrac\Auth\Security\OAuthAuthenticationListener" public="false" abstract="true">
-            <argument key="$authorizationServer"/>
             <argument key="$authorizationValidator" type="service"
                       id="sonrac_oauth.security.authorization_validator.bearer_token"/>
             <argument key="$oauthTokenFactory" type="service" id="sonrac_oauth.security.token_factory"/>
-            <argument key="$authenticationManager"/>
             <argument key="$tokenStorage" type="service" id="security.token_storage"/>
             <argument key="$httpUtils" type="service" id="security.http_utils"/>
             <argument key="$diactorosFactory" type="service" id="sensio_framework_extra.psr7.http_message_factory"/>
             <argument key="$httpFoundationFactory" type="service"
                       id="sensio_framework_extra.psr7.http_foundation_factory"/>
-            <argument key="$authorizationPath"/>
-            <argument key="$providerKey"/>
         </service>
 
         <service id="sonrac_oauth.security.authentication_provider.abstract"
                  class="sonrac\Auth\Security\OAuthAuthenticationProvider" public="false" abstract="true">
-            <argument key="$clientRepository"/>
-            <argument key="$userRepository"/>
-            <argument key="$providerKey"/>
+        </service>
+
+        <service id="sonrac_oauth.security.authorization_server_configurator.abstract"
+                 class="sonrac\Auth\Configurator\AuthorizationServerConfigurator" public="false" abstract="true">
         </service>
 
         <service id="sonrac_oauth.security.authorization_server.abstract"
                  class="League\OAuth2\Server\AuthorizationServer" public="false" abstract="true">
-            <argument key="$clientRepository"/>
-            <argument key="$accessTokenRepository"/>
-            <argument key="$scopeRepository"/>
-            <argument key="$privateKey">%sonrac_auth.private_key_path%</argument>
+            <argument key="$privateKey">%sonrac_auth.private_key_path%/%sonrac_auth.private_key_name%</argument>
             <argument key="$encryptionKey">%sonrac_auth.encryption_key%</argument>
         </service>
 
         <service id="sonrac_oauth.security.auth_code_grant.abstract"
                  class="League\OAuth2\Server\Grant\AuthCodeGrant" public="false" abstract="true">
-            <argument key="$authCodeRepository"/>
-            <argument key="$refreshTokenRepository"/>
-            <argument key="$authCodeTTL"/>
+            <factory class="sonrac\Auth\Factory\GrantTypeFactory" method="createAuthCodeGrant"/>
         </service>
 
         <service id="sonrac_oauth.security.client_credentials_grant.abstract"
                  class="League\OAuth2\Server\Grant\ClientCredentialsGrant" public="false" abstract="true">
+            <factory class="sonrac\Auth\Factory\GrantTypeFactory" method="createClientCredentialsGrant"/>
         </service>
 
         <service id="sonrac_oauth.security.implicit_grant.abstract"
                  class="League\OAuth2\Server\Grant\ImplicitGrant" public="false" abstract="true">
-            <argument key="$accessTokenTTL"/>
+            <factory class="sonrac\Auth\Factory\GrantTypeFactory" method="createImplicitGrant"/>
         </service>
 
         <service id="sonrac_oauth.security.password_grant.abstract"
                  class="League\OAuth2\Server\Grant\PasswordGrant" public="false" abstract="true">
-            <argument key="$userRepository"/>
-            <argument key="$refreshTokenRepository"/>
+            <factory class="sonrac\Auth\Factory\GrantTypeFactory" method="createPasswordGrant"/>
         </service>
 
         <service id="sonrac_oauth.security.refresh_token_grant.abstract"
                  class="League\OAuth2\Server\Grant\RefreshTokenGrant" public="false" abstract="true">
-            <argument key="$refreshTokenRepository"/>
+            <factory class="sonrac\Auth\Factory\GrantTypeFactory" method="createRefreshTokenGrant"/>
         </service>
 
     </services>

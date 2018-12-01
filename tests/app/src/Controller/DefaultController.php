@@ -5,6 +5,7 @@ namespace sonrac\Auth\Tests\App\Controller;
 use sonrac\Auth\Repository\Users;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Class DefaultController.
@@ -23,5 +24,10 @@ class DefaultController extends AbstractController
         return $this->json([
             'status' => true
         ]);
+    }
+
+    public function auth()
+    {
+        throw new NotFoundHttpException();
     }
 }

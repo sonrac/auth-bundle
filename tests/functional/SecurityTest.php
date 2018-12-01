@@ -12,22 +12,18 @@ class SecurityTest extends AbstractSecurityControllerTest
     /**
      *
      */
-    public function testSecurity() {
-       $client = static::createClient();
+    public function testSecurity()
+    {
+        $client = static::createClient();
 
-       $client->request(
-           'GET',
-           '/api/security/test',
-           array(),
-           array(),
-           array(
-               'HTTP_API-TOKEN' => $this->token
-           )
-       );
+        $client->request(
+            'GET',
+            '/api/security/test',
+            array(),
+            array(),
+            array('Authorization' => $this->getToken())
+        );
 
-       echo $client->getResponse()->getContent();
-       exit;
-
-       $this->assertEquals('{"status":true}', $client->getResponse()->getContent());
+        $this->assertEquals('{"status":true}', $client->getResponse()->getContent());
     }
 }

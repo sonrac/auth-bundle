@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 namespace sonrac\Auth\Tests\Functional;
+
 use sonrac\Auth\Entity\Client;
 
 /**
@@ -35,17 +36,18 @@ abstract class AbstractSecurityControllerTest extends BaseFunctionalTester
     /**
      * Get access token.
      */
-    protected function getToken(): string {
+    protected function getToken(): string
+    {
         if ($this->token) {
             return $this->token;
         }
 
         $client = static::createClient();
-        $client->request('POST', '/auth/token', [
-            'grant_type'    => Client::GRANT_CLIENT_CREDENTIALS,
-            'client_id'     => 'Test Client',
+        $client->request('POST', '/api/auth/token', [
+            'grant_type' => Client::GRANT_CLIENT_CREDENTIALS,
+            'client_id' => 'Test Client',
             'client_secret' => 'secret-key',
-            'scope'         => 'default',
+            'scope' => 'default',
         ]);
         $response = $client->getResponse();
 

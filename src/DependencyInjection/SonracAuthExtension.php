@@ -104,31 +104,31 @@ class SonracAuthExtension extends Extension
         $repositories = $config['repositories'];
 
         $container->getDefinition('sonrac_oauth.security.token_factory')
-            ->replaceArgument('$clientRepository', new Reference($repositories['client']))
-            ->replaceArgument('$userRepository', new Reference($repositories['user']));
+            ->setArgument('$clientRepository', new Reference($repositories['client']))
+            ->setArgument('$userRepository', new Reference($repositories['user']));
 
         $container->getDefinition('sonrac_oauth.security.authorization_validator.bearer_token')
-            ->replaceArgument('$accessTokenRepository', new Reference($repositories['access_token']));
+            ->setArgument('$accessTokenRepository', new Reference($repositories['access_token']));
 
         $container->getDefinition('sonrac_oauth.security.authentication_provider.abstract')
-            ->replaceArgument('$clientRepository', new Reference($repositories['client']))
-            ->replaceArgument('$userRepository', new Reference($repositories['user']));
+            ->setArgument('$clientRepository', new Reference($repositories['client']))
+            ->setArgument('$userRepository', new Reference($repositories['user']));
 
         $container->getDefinition('sonrac_oauth.security.authorization_server.abstract')
-            ->replaceArgument('$clientRepository', new Reference($repositories['client']))
-            ->replaceArgument('$accessTokenRepository', new Reference($repositories['access_token']))
-            ->replaceArgument('$scopeRepository', new Reference($repositories['scope']));
+            ->setArgument('$clientRepository', new Reference($repositories['client']))
+            ->setArgument('$accessTokenRepository', new Reference($repositories['access_token']))
+            ->setArgument('$scopeRepository', new Reference($repositories['scope']));
 
         $container->getDefinition('sonrac_oauth.security.auth_code_grant.abstract')
-            ->replaceArgument('$authCodeRepository', new Reference($repositories['auth_code']))
-            ->replaceArgument('$refreshTokenRepository', new Reference($repositories['refresh_token']));
+            ->setArgument('$authCodeRepository', new Reference($repositories['auth_code']))
+            ->setArgument('$refreshTokenRepository', new Reference($repositories['refresh_token']));
 
         $container->getDefinition('sonrac_oauth.security.password_grant.abstract')
-            ->replaceArgument('$userRepository', new Reference($repositories['user']))
-            ->replaceArgument('$refreshTokenRepository', new Reference($repositories['refresh_token']));
+            ->setArgument('$userRepository', new Reference($repositories['user']))
+            ->setArgument('$refreshTokenRepository', new Reference($repositories['refresh_token']));
 
         $container->getDefinition('sonrac_oauth.security.refresh_token_grant.abstract')
-            ->replaceArgument('$refreshTokenRepository', new Reference($repositories['refresh_token']));
+            ->setArgument('$refreshTokenRepository', new Reference($repositories['refresh_token']));
     }
 
     /**

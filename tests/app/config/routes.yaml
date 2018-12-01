@@ -13,3 +13,6 @@ authennticate:
 test_security:
   path: /api/security/test
   controller: sonrac\Auth\Tests\App\Controller\DefaultController::security
+token:
+  path: /api/auth/token
+  controller: sonrac\Auth\Tests\App\Controller\DefaultController::auth
