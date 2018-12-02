@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace sonrac\Auth\Tests\Seeds;
 
-use sonrac\Auth\Entity\Client;
+use Sonrac\OAuth2\Adapter\League\Grant\AuthCodeGrant;
+use Sonrac\OAuth2\Adapter\League\Grant\ClientCredentialsGrant;
+use Sonrac\OAuth2\Adapter\League\Grant\ImplicitGrant;
+use Sonrac\OAuth2\Adapter\League\Grant\PasswordGrant;
+use Sonrac\OAuth2\Adapter\League\Grant\RefreshTokenGrant;
 use sonrac\SimpleSeed\RollBackSeedWithCheckExists;
 
 /**
@@ -27,16 +31,16 @@ class ClientsTableSeeder extends RollBackSeedWithCheckExists
     {
         return [
             [
-                'name'                => 'Test Client',
-                'description'         => 'First test client',
-                'secret'              => 'secret-key',
-                'created_at'          => \time(),
+                'name' => 'Test Client',
+                'description' => 'First test client',
+                'secret' => 'secret-key',
+                'created_at' => \time(),
                 'allowed_grant_types' => \json_encode([
-                    Client::GRANT_CLIENT_CREDENTIALS,
-                    Client::GRANT_PASSWORD,
-                    Client::GRANT_IMPLICIT,
-                    Client::GRANT_AUTH_CODE,
-                    Client::GRANT_REFRESH_TOKEN,
+                    ClientCredentialsGrant::TYPE,
+                    AuthCodeGrant::TYPE,
+                    ImplicitGrant::TYPE,
+                    PasswordGrant::TYPE,
+                    RefreshTokenGrant::TYPE,
                 ]),
                 'redirect_uris' => \json_encode([
                     'http://test.com',

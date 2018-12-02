@@ -6,9 +6,9 @@ namespace sonrac\Auth\Tests\Units\Repository;
 
 use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
 use League\OAuth2\Server\Repositories\ScopeRepositoryInterface;
-use sonrac\Auth\Entity\Client;
 use sonrac\Auth\Entity\Scope;
 use sonrac\Auth\Tests\Units\BaseUnitTester;
+use Sonrac\OAuth2\Adapter\League\Grant\ClientCredentialsGrant;
 
 /**
  * Class ScopesTest.
@@ -30,7 +30,7 @@ class ScopesTest extends BaseUnitTester
     /**
      * Clients repository.
      *
-     * @var \sonrac\Auth\Repository\Clients
+     * @var \sonrac\Auth\Repository\ClientRepository
      */
     protected $clientRepository;
 
@@ -41,7 +41,7 @@ class ScopesTest extends BaseUnitTester
     {
         parent::setUp();
 
-        $this->repository       = static::$container->get(ScopeRepositoryInterface::class);
+        $this->repository = static::$container->get(ScopeRepositoryInterface::class);
         $this->clientRepository = static::$container->get(ClientRepositoryInterface::class);
     }
 
@@ -73,7 +73,7 @@ class ScopesTest extends BaseUnitTester
         $client = $this->clientRepository->find('Test Client');
 
         $scopesOrigin = $this->repository->findAll();
-        $scopes       = $this->repository->finalizeScopes($scopesOrigin, Client::GRANT_CLIENT_CREDENTIALS, $client);
+        $scopes = $this->repository->finalizeScopes($scopesOrigin, ClientCredentialsGrant::TYPE, $client);
 
         $this->assertEquals($scopes, $scopesOrigin);
     }

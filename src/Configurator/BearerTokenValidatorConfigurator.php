@@ -6,10 +6,12 @@
  * Time: 11:57 PM
  */
 
+declare(strict_types=1);
+
 namespace sonrac\Auth\Configurator;
 
 use League\OAuth2\Server\AuthorizationValidators\BearerTokenValidator;
-use sonrac\Auth\Factory\SecureKeyFactory;
+use Sonrac\OAuth2\Factory\SecureKeyFactory;
 
 /**
  * Class BearerTokenValidatorConfigurator
@@ -18,13 +20,13 @@ use sonrac\Auth\Factory\SecureKeyFactory;
 class BearerTokenValidatorConfigurator
 {
     /**
-     * @var \sonrac\Auth\Factory\SecureKeyFactory
+     * @var \Sonrac\OAuth2\Factory\SecureKeyFactory
      */
     private $keyFactory;
 
     /**
      * BearerTokenValidatorConfigurator constructor.
-     * @param \sonrac\Auth\Factory\SecureKeyFactory $keyFactory
+     * @param \Sonrac\OAuth2\Factory\SecureKeyFactory $keyFactory
      */
     public function __construct(SecureKeyFactory $keyFactory)
     {

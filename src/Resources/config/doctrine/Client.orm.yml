@@ -1,6 +1,6 @@
 sonrac\Auth\Entity\Client:
   table: clients
-  repositoryClass: sonrac\Repository\Clients
+  repositoryClass: sonrac\Auth\Repository\ClientRepository
   type: entity
   id:
     name:

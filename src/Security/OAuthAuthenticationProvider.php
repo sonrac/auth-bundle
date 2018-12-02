@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace sonrac\Auth\Security;
 
-use sonrac\Auth\Repository\ClientRepositoryInterface;
-use sonrac\Auth\Repository\UserRepositoryInterface;
-use sonrac\Auth\Security\Token\OAuthUserToken;
+use sonrac\Auth\Security\Token\AbstractOAuthToken;
+use Sonrac\OAuth2\Adapter\League\Repository\ClientRepositoryInterface;
 use Symfony\Component\Security\Core\Authentication\Provider\AuthenticationProviderInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 /**
  * Class OAuthAuthenticationProvider
@@ -18,29 +17,34 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 class OAuthAuthenticationProvider implements AuthenticationProviderInterface
 {
     /**
-     * @var \sonrac\Auth\Repository\UserRepositoryInterface
-     */
-    private $userRepository;
-
-    /**
-     * @var \sonrac\Auth\Repository\ClientRepositoryInterface
+     * @var \Sonrac\OAuth2\Adapter\League\Repository\ClientRepositoryInterface
      */
     private $clientRepository;
+
+    /**
+     * @var \Symfony\Component\Security\Core\User\UserProviderInterface
+     */
+    private $userProvider;
 
     /**
      * @var string
      */
     private $providerKey;
 
-    //TODO: replace with user provider, and maybe create client provider
+    /**
+     * OAuthAuthenticationProvider constructor.
+     * @param \Sonrac\OAuth2\Adapter\League\Repository\ClientRepositoryInterface $clientRepository
+     * @param \Symfony\Component\Security\Core\User\UserProviderInterface $userProvider
+     * @param string $providerKey
+     */
     public function __construct(
         ClientRepositoryInterface $clientRepository,
-        UserRepositoryInterface $userRepository,
+        UserProviderInterface $userProvider,
         string $providerKey
     ) {
         $this->clientRepository = $clientRepository;
-        $this->userRepository = $userRepository;
         $this->providerKey = $providerKey;
+        $this->userProvider = $userProvider;
     }
 
     /**
@@ -48,11 +52,7 @@ class OAuthAuthenticationProvider implements AuthenticationProviderInterface
      */
     public function authenticate(TokenInterface $token)
     {
-        if (false === $this->supports($token)) {
-            throw new AuthenticationException('The token is not supported by this authentication provider.');
-        }
-
-
+        return $token;
     }
 
     /**
@@ -60,6 +60,6 @@ class OAuthAuthenticationProvider implements AuthenticationProviderInterface
      */
     public function supports(TokenInterface $token)
     {
-        return $token instanceof OAuthUserToken && $token->getProviderKey() === $this->providerKey;
+        return $token instanceof AbstractOAuthToken && $token->getProviderKey() === $this->providerKey;
     }
 }

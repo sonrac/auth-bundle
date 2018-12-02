@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace sonrac\Auth\Entity;
 
 use Openapi\Annotations as OA;
+use Sonrac\OAuth2\Adapter\League\Entity\ClientEntityInterface;
 
 /**
  * Class Client.
@@ -15,7 +16,7 @@ use Openapi\Annotations as OA;
  *     required={"redirect_uris", "allowed_grant_types", "name"}
  * )
  */
-class Client implements ClientInterface
+class Client implements ClientEntityInterface
 {
     use TimeEntityTrait;
 
@@ -36,51 +37,6 @@ class Client implements ClientInterface
      * @var string
      */
     public const RESPONSE_TYPE_CODE = 'code';
-
-    /**
-     * Client credentials grant type.
-     *
-     * @const
-     *
-     * @var string
-     */
-    public const GRANT_CLIENT_CREDENTIALS = 'client_credentials';
-
-    /**
-     * Client credentials grant type.
-     *
-     * @const
-     *
-     * @var string
-     */
-    public const GRANT_PASSWORD = 'password';
-
-    /**
-     * Implicit grant type.
-     *
-     * @const
-     *
-     * @var string
-     */
-    public const GRANT_IMPLICIT = 'implicit';
-
-    /**
-     * Auth code grant type.
-     *
-     * @const
-     *
-     * @var string
-     */
-    public const GRANT_AUTH_CODE = 'authorization_code';
-
-    /**
-     * Auth code grant type.
-     *
-     * @const
-     *
-     * @var string
-     */
-    public const GRANT_REFRESH_TOKEN = 'refresh_token';
 
     /**
      * Client secret key.

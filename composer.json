@@ -4,6 +4,7 @@
   "type": "symfony-bundle",
   "require": {
     "php": ">=7.1",
+    "ext-json": "*",
     "symfony/config": "^4.0",
     "symfony/console": "^4.0",
     "symfony/dependency-injection": "^4.0",
@@ -47,6 +48,11 @@
   },
   "autoload": {
     "psr-4": {
+      "Sonrac\\OAuth2\\Adapter\\": "src/Adapter",
+      "Sonrac\\OAuth2\\Command\\": "src/Command",
+      "Sonrac\\OAuth2\\DependencyInjection\\": "src/DependencyInjection",
+      "Sonrac\\OAuth2\\Factory\\": "src/Factory",
+      "Sonrac\\OAuth2\\Security\\Factory\\": "src/Security/Factory",
       "sonrac\\Auth\\": "src"
     }
   },

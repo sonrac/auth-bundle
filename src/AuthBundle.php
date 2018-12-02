@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace sonrac\Auth;
 
 use Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappingsPass;
-use sonrac\Auth\DependencyInjection\Security\OAuthFactory;
-use sonrac\Auth\DependencyInjection\SonracAuthExtension;
+use Sonrac\OAuth2\DependencyInjection\Security\OAuthFactory;
+use Sonrac\OAuth2\DependencyInjection\SonracOAuthExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
@@ -45,6 +45,6 @@ class AuthBundle extends Bundle
      */
     public function getContainerExtension()
     {
-        return new SonracAuthExtension();
+        return new SonracOAuthExtension();
     }
 }

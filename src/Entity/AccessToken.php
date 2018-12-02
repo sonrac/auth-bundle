@@ -118,7 +118,7 @@ class AccessToken implements AccessTokenEntityInterface
     protected $grant_type;
 
     /**
-     * @var \sonrac\Auth\Repository\Clients
+     * @var \League\OAuth2\Server\Repositories\ClientRepositoryInterface
      */
     private $repository;
 

@@ -1,11 +1,6 @@
 security:
   providers:
-    #    oauth_client:
-    #      entity:
-    #        class: sonrac\Auth\Providers\ClientProvider
-    #        property: token
     oauth_user:
-      #id: sonrac_auth.user_provider
       entity:
         class: sonrac\Auth\Entity\User
         property: token
@@ -16,19 +11,14 @@ security:
   #        cost: 20
 
   firewalls:
-    #    oauth_user:
-    #      entry_point: sonrac_auth.oauth2_authenticator
-    #      pattern: ^/api/security
-    #      security: true
-    #      provider: oauth_user
-    #      guard:
-    #        authenticators:
-    #          - sonrac_auth.oauth2_authenticator
     oauth_user:
       pattern: ^/api
       security: true
+      stateless: true
       sonrac_oauth:
-        authorization_path: /api/auth/token
+        paths:
+          authorization: /api/auth/authorize
+          token: /api/auth/token
     admin:
       pattern: ^/
       security: false

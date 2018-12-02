@@ -6,18 +6,19 @@ namespace sonrac\Auth\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use sonrac\Auth\Entity\Client;
-use sonrac\Auth\Entity\ClientInterface;
+use Sonrac\OAuth2\Adapter\League\Entity\ClientEntityInterface;
+use Sonrac\OAuth2\Adapter\League\Repository\ClientRepositoryInterface;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * Class Clients.
+ * Class ClientRepository.
  *
  * @method Client|null find($id, $lockMode = null, $lockVersion = null)
  * @method Client|null findOneBy(array $criteria, array $orderBy = null)
  * @method Client[]    findAll()
  * @method Client[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class Clients extends ServiceEntityRepository implements ClientRepositoryInterface
+class ClientRepository extends ServiceEntityRepository implements ClientRepositoryInterface
 {
     /**
      * Clients constructor.
@@ -31,8 +32,10 @@ class Clients extends ServiceEntityRepository implements ClientRepositoryInterfa
 
     /**
      * {@inheritdoc}
+     *
+     * @return \sonrac\Auth\Entity\Client|null
      */
-    public function findByIdentifier($identifier): ?ClientInterface
+    public function getClientEntityByIdentifier($identifier): ?ClientEntityInterface
     {
         return $this->findOneBy(['name' => $identifier]);
     }
@@ -49,9 +52,9 @@ class Clients extends ServiceEntityRepository implements ClientRepositoryInterfa
         $clientSecret = null,
         $mustValidateSecret = true
     ) {
-        $client = $this->find($clientIdentifier);
+        $client = $this->getClientEntityByIdentifier($clientIdentifier);
 
-        if (!$client) {
+        if (null === $client) {
             throw new \InvalidArgumentException('Client not found');
         }
 

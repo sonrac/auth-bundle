@@ -8,20 +8,19 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Entities\UserEntityInterface;
+use League\OAuth2\Server\Repositories\UserRepositoryInterface;
 use sonrac\Auth\Entity\User;
-use sonrac\Auth\Entity\UserInterface;
 use Symfony\Bridge\Doctrine\RegistryInterface;
-use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 
 /**
- * Class AccessTokens.
+ * Class UserRepository.
  *
  * @method User|null find($id, $lockMode = null, $lockVersion = null)
  * @method User|null findOneBy(array $criteria, array $orderBy = null)
  * @method User[]    findAll()
  * @method User[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class Users extends ServiceEntityRepository implements UserRepositoryInterface
+class UserRepository extends ServiceEntityRepository implements UserRepositoryInterface
 {
     /**
      * AccessTokens constructor.
@@ -31,14 +30,6 @@ class Users extends ServiceEntityRepository implements UserRepositoryInterface
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, User::class);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function findByIdentifier($identifier): ?UserInterface
-    {
-        return $this->findOneBy(['id' => $identifier]);
     }
 
     /**
@@ -58,11 +49,11 @@ class Users extends ServiceEntityRepository implements UserRepositoryInterface
     ) {
         $user = $this->loadByUsernameOrEmail($username);
 
-        if (!\password_verify($password, $user->getPassword())) {
+        if (null === $user || false === \password_verify($password, $user->getPassword())) {
             throw new \InvalidArgumentException('User not found');
         }
 
-        if (!\in_array($grantType, $clientEntity->getAllowedGrantTypes(), true)) {
+        if (false === \in_array($grantType, $clientEntity->getAllowedGrantTypes(), true)) {
             throw new \LogicException('Grant type does not allowed for client');
         }
 
@@ -77,22 +68,16 @@ class Users extends ServiceEntityRepository implements UserRepositoryInterface
      * @throws \Doctrine\ORM\NonUniqueResultException
      * @throws \InvalidArgumentException
      *
-     * @return \sonrac\Auth\Entity\User|\League\OAuth2\Server\Entities\UserEntityInterface
+     * @return \sonrac\Auth\Entity\User|null
      */
     public function loadByUsernameOrEmail(string $username): ?UserEntityInterface
     {
-        $user = $this->createQueryBuilder('user')
+        return $this->createQueryBuilder('user')
             ->orWhere('user.email = :username')
             ->orWhere('user.username = :username')
             ->setParameter('username', $username)
             ->getQuery()
             ->getOneOrNullResult(Query::HYDRATE_OBJECT);
-
-        if (!$user) {
-            throw new UsernameNotFoundException('User not found');
-        }
-
-        return $user;
     }
 
     /**

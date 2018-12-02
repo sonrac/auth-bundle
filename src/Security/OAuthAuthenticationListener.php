@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace sonrac\Auth\Security;
 
+use League\OAuth2\Server\AuthorizationServer;
 use League\OAuth2\Server\AuthorizationValidators\AuthorizationValidatorInterface;
 use League\OAuth2\Server\Exception\OAuthServerException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use sonrac\Auth\Exceptions\InvalidUserProvidedException;
-use sonrac\Auth\Security\Factory\OAuthTokenFactory;
+use Sonrac\OAuth2\Security\Factory\OAuthTokenFactory;
 use Symfony\Bridge\PsrHttpMessage\Factory\DiactorosFactory;
 use Symfony\Bridge\PsrHttpMessage\Factory\HttpFoundationFactory;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,7 +20,6 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Http\Firewall\ListenerInterface;
 use Symfony\Component\Security\Http\HttpUtils;
-use League\OAuth2\Server\AuthorizationServer;
 
 /**
  * Class OAuthAuthenticationListener
@@ -39,7 +38,7 @@ class OAuthAuthenticationListener implements ListenerInterface
     private $authorizationValidator;
 
     /**
-     * @var \sonrac\Auth\Security\Factory\OAuthTokenFactory
+     * @var \Sonrac\OAuth2\Security\Factory\OAuthTokenFactory
      */
     private $oauthTokenFactory;
 
@@ -76,19 +75,25 @@ class OAuthAuthenticationListener implements ListenerInterface
     /**
      * @var string
      */
+    private $tokenPath;
+
+    /**
+     * @var string
+     */
     private $providerKey;
 
     /**
      * OAuthAuthenticationListener constructor.
      * @param \League\OAuth2\Server\AuthorizationServer $authorizationServer
      * @param \League\OAuth2\Server\AuthorizationValidators\AuthorizationValidatorInterface $authorizationValidator
-     * @param \sonrac\Auth\Security\Factory\OAuthTokenFactory $oauthTokenFactory
+     * @param \Sonrac\OAuth2\Security\Factory\OAuthTokenFactory $oauthTokenFactory
      * @param \Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface $authenticationManager
      * @param \Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface $tokenStorage
      * @param \Symfony\Component\Security\Http\HttpUtils $httpUtils
      * @param \Symfony\Bridge\PsrHttpMessage\Factory\DiactorosFactory $diactorosFactory
      * @param \Symfony\Bridge\PsrHttpMessage\Factory\HttpFoundationFactory $httpFoundationFactory
      * @param string $authorizationPath
+     * @param string $tokenPath
      * @param string $providerKey
      */
     public function __construct(
@@ -101,6 +106,7 @@ class OAuthAuthenticationListener implements ListenerInterface
         DiactorosFactory $diactorosFactory,
         HttpFoundationFactory $httpFoundationFactory,
         string $authorizationPath,
+        string $tokenPath,
         string $providerKey
     ) {
         $this->authorizationServer = $authorizationServer;
@@ -112,6 +118,7 @@ class OAuthAuthenticationListener implements ListenerInterface
         $this->diactorosFactory = $diactorosFactory;
         $this->httpFoundationFactory = $httpFoundationFactory;
         $this->authorizationPath = $authorizationPath;
+        $this->tokenPath = $tokenPath;
         $this->providerKey = $providerKey;
     }
 
@@ -120,19 +127,26 @@ class OAuthAuthenticationListener implements ListenerInterface
      */
     public function handle(GetResponseEvent $event)
     {
-        $psrRequest = $this->diactorosFactory->createRequest($event->getRequest());
-        $psrResponse = null;
+        $psrResponse = $this->respondToAuthorizationRequest($event->getRequest());
 
-        if ($this->isAuthorizationRequested($event->getRequest())) {
-            $psrResponse = $this->handleAuthorizationRequest($psrRequest);
+        if (null !== $psrResponse) {
+            $event->setResponse($this->httpFoundationFactory->createResponse($psrResponse));
 
+            return;
+        }
+
+        $psrResponse = $this->respondToTokenRequest($event->getRequest());
+
+        if (null !== $psrResponse) {
             $event->setResponse($this->httpFoundationFactory->createResponse($psrResponse));
 
             return;
         }
 
         try {
-            $psrRequest = $this->authorizationValidator->validateAuthorization($psrRequest);
+            $psrRequest = $this->authorizationValidator->validateAuthorization(
+                $this->diactorosFactory->createRequest($event->getRequest())
+            );
         } catch (OAuthServerException $exception) {
             $psrResponse = $exception->generateHttpResponse($this->createPsrResponse());
         } catch (\Exception $exception) {
@@ -147,12 +161,7 @@ class OAuthAuthenticationListener implements ListenerInterface
             return;
         }
 
-        try {
-            $token = $this->oauthTokenFactory->createFromRequest($psrRequest, $this->providerKey);
-        } catch (InvalidUserProvidedException $exception) {
-            //TODO: add exception handling.
-            return;
-        }
+        $token = $this->oauthTokenFactory->createFromRequest($psrRequest, $this->providerKey);
 
         try {
             $authenticatedToken = $this->authenticationManager->authenticate($token);
@@ -179,12 +188,57 @@ class OAuthAuthenticationListener implements ListenerInterface
     }
 
     /**
-     * @param \Psr\Http\Message\ServerRequestInterface $request
+     * @param \Symfony\Component\HttpFoundation\Request $sfRequest
      *
-     * @return \Psr\Http\Message\ResponseInterface
+     * @return \Psr\Http\Message\ResponseInterface|null
      */
-    protected function handleAuthorizationRequest(ServerRequestInterface $request): ResponseInterface
+    private function respondToAuthorizationRequest(Request $sfRequest): ?ResponseInterface
     {
+        if (false || false === $this->isAuthorizationRequested($sfRequest)) {
+            return null;
+        }
+
+        $request = $this->diactorosFactory->createRequest($sfRequest);
+        $response = $this->createPsrResponse();
+
+        try {
+            $authRequest = $this->authorizationServer->validateAuthorizationRequest($request);
+
+            //TODO: implement save auth request state
+
+            $response = $this->authorizationServer->completeAuthorizationRequest($authRequest, $response);
+        } catch (OAuthServerException $exception) {
+            $response = $exception->generateHttpResponse($response);
+        } catch (\Exception $exception) {
+            $response = $this->createOAuthServerException($exception)->generateHttpResponse($response);
+        }
+
+        return $response;
+    }
+
+    /**
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     *
+     * @return bool
+     */
+    protected function isTokenRequested(Request $request): bool
+    {
+        return $this->httpUtils->checkRequestPath($request, $this->tokenPath)
+            && $request->isMethod('POST');
+    }
+
+    /**
+     * @param \Symfony\Component\HttpFoundation\Request $sfRequest
+     *
+     * @return \Psr\Http\Message\ResponseInterface|null
+     */
+    private function respondToTokenRequest(Request $sfRequest): ?ResponseInterface
+    {
+        if (false === $this->isTokenRequested($sfRequest)) {
+            return null;
+        }
+
+        $request = $this->diactorosFactory->createRequest($sfRequest);
         $response = $this->createPsrResponse();
 
         try {

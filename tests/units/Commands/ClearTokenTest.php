@@ -12,9 +12,14 @@ use sonrac\Auth\Tests\Units\BaseUnitTester;
 class ClearTokenTest extends BaseUnitTester
 {
     /**
-     * {@inheritdoc}
+     * @var array
      */
     protected $seeds = ['clients', 'accessTokens', 'refreshTokens'];
+
+    /**
+     * @var array
+     */
+    protected $clearTablesList = ['access_tokens', 'refresh_tokens'];
 
     /**
      * Test delete access tokens.

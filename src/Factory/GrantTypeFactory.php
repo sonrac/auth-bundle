@@ -6,7 +6,9 @@
  * Time: 8:09 PM
  */
 
-namespace sonrac\Auth\Factory;
+declare(strict_types=1);
+
+namespace Sonrac\OAuth2\Factory;
 
 use League\OAuth2\Server\Grant\AuthCodeGrant;
 use League\OAuth2\Server\Grant\ClientCredentialsGrant;
@@ -16,107 +18,103 @@ use League\OAuth2\Server\Grant\RefreshTokenGrant;
 use League\OAuth2\Server\Repositories\AuthCodeRepositoryInterface;
 use League\OAuth2\Server\Repositories\RefreshTokenRepositoryInterface;
 use League\OAuth2\Server\Repositories\UserRepositoryInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Class GrantTypeFactory
- * @package sonrac\Auth\Factory
+ * @package Sonrac\OAuth2\Factory
  */
 class GrantTypeFactory
 {
     /**
-     * @param \League\OAuth2\Server\Repositories\AuthCodeRepositoryInterface $authCodeRepository
-     * @param \League\OAuth2\Server\Repositories\RefreshTokenRepositoryInterface $refreshTokenRepository
-     * @param string $authCodeTTL
-     * @param string $refreshTokenTTL
+     * @var \Symfony\Component\DependencyInjection\ContainerInterface
+     */
+    private $container;
+
+    /**
+     * GrantTypeFactory constructor.
+     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
+     */
+    public function __construct(ContainerInterface $container)
+    {
+        $this->container = $container;
+    }
+
+    /**
+     * @param \DateInterval $authCodeTTL
+     * @param \DateInterval $refreshTokenTTL
      *
      * @return \League\OAuth2\Server\Grant\AuthCodeGrant
-     *
-     * @throws \Exception
      */
-    public static function createAuthCodeGrant(
-        AuthCodeRepositoryInterface $authCodeRepository,
-        RefreshTokenRepositoryInterface $refreshTokenRepository,
-        string $authCodeTTL,
-        string $refreshTokenTTL
-    ): AuthCodeGrant {
+    public function createAuthCodeGrant(\DateInterval $authCodeTTL, \DateInterval $refreshTokenTTL): AuthCodeGrant
+    {
+        throw new \LogicException('Not supported');
         $authCodeGrant = new AuthCodeGrant(
-            $authCodeRepository, $refreshTokenRepository, new \DateInterval($authCodeTTL)
+            $this->container->get(AuthCodeRepositoryInterface::class),
+            $this->container->get(RefreshTokenRepositoryInterface::class),
+            $authCodeTTL
         );
 
-        $authCodeGrant->setRefreshTokenTTL(new \DateInterval($refreshTokenTTL));
+        $authCodeGrant->setRefreshTokenTTL($refreshTokenTTL);
 
         return $authCodeGrant;
     }
 
     /**
-     * @param string $refreshTokenTTL
+     * @param \DateInterval $refreshTokenTTL
      *
      * @return \League\OAuth2\Server\Grant\ClientCredentialsGrant
-     *
-     * @throws \Exception
      */
-    public static function createClientCredentialsGrant(string $refreshTokenTTL): ClientCredentialsGrant
+    public function createClientCredentialsGrant(\DateInterval $refreshTokenTTL): ClientCredentialsGrant
     {
         $clientCredentialsGrant = new ClientCredentialsGrant();
 
-        $clientCredentialsGrant->setRefreshTokenTTL(new \DateInterval($refreshTokenTTL));
+        $clientCredentialsGrant->setRefreshTokenTTL($refreshTokenTTL);
 
         return $clientCredentialsGrant;
     }
 
     /**
-     * @param string $accessTokenTTL
+     * @param \DateInterval $accessTokenTTL
      * @param string $queryDelimiter
      *
      * @return \League\OAuth2\Server\Grant\ImplicitGrant
-     *
-     * @throws \Exception
      */
-    public static function createImplicitGrant(string $accessTokenTTL, string $queryDelimiter = '#'): ImplicitGrant
+    public function createImplicitGrant(\DateInterval $accessTokenTTL, string $queryDelimiter = '#'): ImplicitGrant
     {
-        $implicitGrant = new ImplicitGrant(new \DateInterval($accessTokenTTL), $queryDelimiter);
+        throw new \LogicException('Not supported');
+        $implicitGrant = new ImplicitGrant($accessTokenTTL, $queryDelimiter);
 
         return $implicitGrant;
     }
 
     /**
-     * @param \League\OAuth2\Server\Repositories\UserRepositoryInterface $userRepository
-     * @param \League\OAuth2\Server\Repositories\RefreshTokenRepositoryInterface $refreshTokenRepository
-     * @param string $refreshTokenTTL
+     * @param \DateInterval $refreshTokenTTL
      *
      * @return \League\OAuth2\Server\Grant\PasswordGrant
-     *
-     * @throws \Exception
      */
-    public static function createPasswordGrant(
-        UserRepositoryInterface $userRepository,
-        RefreshTokenRepositoryInterface $refreshTokenRepository,
-        string $refreshTokenTTL
-    ): PasswordGrant {
+    public function createPasswordGrant(\DateInterval $refreshTokenTTL): PasswordGrant
+    {
         $passwordGrant = new PasswordGrant(
-            $userRepository, $refreshTokenRepository
+            $this->container->get(UserRepositoryInterface::class),
+            $this->container->get(RefreshTokenRepositoryInterface::class)
         );
 
-        $passwordGrant->setRefreshTokenTTL(new \DateInterval($refreshTokenTTL));
+        $passwordGrant->setRefreshTokenTTL($refreshTokenTTL);
 
         return $passwordGrant;
     }
 
     /**
-     * @param \League\OAuth2\Server\Repositories\RefreshTokenRepositoryInterface $refreshTokenRepository
-     * @param string $refreshTokenTTL
+     * @param \DateInterval $refreshTokenTTL
      *
      * @return \League\OAuth2\Server\Grant\RefreshTokenGrant
-     *
-     * @throws \Exception
      */
-    public static function createRefreshTokenGrant(
-        RefreshTokenRepositoryInterface $refreshTokenRepository,
-        string $refreshTokenTTL
-    ): RefreshTokenGrant {
-        $refreshTokenGrant = new RefreshTokenGrant($refreshTokenRepository);
+    public function createRefreshTokenGrant(\DateInterval $refreshTokenTTL): RefreshTokenGrant
+    {
+        $refreshTokenGrant = new RefreshTokenGrant($this->container->get(RefreshTokenRepositoryInterface::class));
 
-        $refreshTokenGrant->setRefreshTokenTTL(new \DateInterval($refreshTokenTTL));
+        $refreshTokenGrant->setRefreshTokenTTL($refreshTokenTTL);
 
         return $refreshTokenGrant;
     }

@@ -7,7 +7,11 @@ namespace sonrac\Auth\Migrations;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\Migrations\AbstractMigration;
-use sonrac\Auth\Entity\Client;
+use Sonrac\OAuth2\Adapter\League\Grant\AuthCodeGrant;
+use Sonrac\OAuth2\Adapter\League\Grant\ClientCredentialsGrant;
+use Sonrac\OAuth2\Adapter\League\Grant\ImplicitGrant;
+use Sonrac\OAuth2\Adapter\League\Grant\PasswordGrant;
+use Sonrac\OAuth2\Adapter\League\Grant\RefreshTokenGrant;
 
 /**
  * Auto-generated Migration: Please modify to your needs!
@@ -36,10 +40,11 @@ final class Version20180628141730 extends AbstractMigration
         $clients->addColumn('allowed_grant_types', Type::TEXT)
             ->setNotnull(true)
             ->setDefault(\implode('|', [
-                Client::GRANT_IMPLICIT,
-                Client::GRANT_AUTH_CODE,
-                Client::GRANT_PASSWORD,
-                Client::GRANT_CLIENT_CREDENTIALS,
+                AuthCodeGrant::TYPE,
+                ClientCredentialsGrant::TYPE,
+                ImplicitGrant::TYPE,
+                PasswordGrant::TYPE,
+                RefreshTokenGrant::TYPE,
             ]));
 
         $clients->addColumn('user_id', Type::INTEGER)

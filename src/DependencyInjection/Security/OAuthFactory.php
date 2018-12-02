@@ -2,9 +2,13 @@
 
 declare(strict_types=1);
 
-namespace sonrac\Auth\DependencyInjection\Security;
+namespace Sonrac\OAuth2\DependencyInjection\Security;
 
-use sonrac\Auth\Entity\Client;
+use Sonrac\OAuth2\Adapter\League\Grant\AuthCodeGrant;
+use Sonrac\OAuth2\Adapter\League\Grant\ClientCredentialsGrant;
+use Sonrac\OAuth2\Adapter\League\Grant\ImplicitGrant;
+use Sonrac\OAuth2\Adapter\League\Grant\PasswordGrant;
+use Sonrac\OAuth2\Adapter\League\Grant\RefreshTokenGrant;
 use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\Factory\SecurityFactoryInterface;
 use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\DependencyInjection\ChildDefinition;
@@ -13,7 +17,7 @@ use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * Class OAuthFactory
- * @package sonrac\Auth\DependencyInjection\Security
+ * @package Sonrac\OAuth2\DependencyInjection\Security
  */
 class OAuthFactory implements SecurityFactoryInterface
 {
@@ -24,25 +28,32 @@ class OAuthFactory implements SecurityFactoryInterface
      */
     public function create(ContainerBuilder $container, $id, $config, $userProvider, $defaultEntryPoint)
     {
+        $oauthTokenFactoryId = 'sonrac_oauth.security.token_factory.' . $id;
         $authorizationServerId = 'sonrac_oauth.security.authorization_server.' . $id;
         $authorizationServerConfiguratorId = 'sonrac_oauth.security.authorization_server_configurator.' . $id;
-        $authenticationManagerId = 'sonrac_oauth.security.authentication_manager.' . $id;
+        $authenticationProviderId = 'sonrac_oauth.security.oauth_authentication_provider.' . $id;
         $authenticationListenerId = 'sonrac_oauth.security.authentication_listener.' . $id;
-
-        $grantTypeIds = $this->registerGrantTypes($container, $config, $id);
 
         $authorizationServerConfiguratorDefinition = $container
             ->setDefinition(
                 $authorizationServerConfiguratorId,
                 new ChildDefinition('sonrac_oauth.security.authorization_server_configurator.abstract')
             )
-            ->setArgument('$accessTokenTTL', $config['access_token_ttl']);
+            ->setArgument('$authCodeTTL', $config['ttl']['auth_code'])
+            ->setArgument('$accessTokenTTL', $config['ttl']['access_token'])
+            ->setArgument('$refreshTokenTTL', $config['ttl']['refresh_token']);
 
-        foreach ($grantTypeIds as $grantTypeId) {
-            $authorizationServerConfiguratorDefinition->addMethodCall(
-                'registerGrantType', [new Reference($grantTypeId)]
-            );
+        foreach ($config['grant_types'] as $grantType => $enable) {
+            if ($enable) {
+                $authorizationServerConfiguratorDefinition->addMethodCall('enableGrantType', [$grantType]);
+            }
         }
+
+        $container
+            ->setDefinition(
+                $oauthTokenFactoryId, new ChildDefinition('sonrac_oauth.security.token_factory.abstract')
+            )
+            ->setArgument('$userProvider', new Reference($userProvider));
 
         $container
             ->setDefinition(
@@ -52,16 +63,24 @@ class OAuthFactory implements SecurityFactoryInterface
 
         $container
             ->setDefinition(
-                $authenticationManagerId,
-                new ChildDefinition('sonrac_oauth.security.authentication_manager.abstract')
+                $authenticationProviderId,
+                new ChildDefinition('sonrac_oauth.security.authentication_provider.abstract')
             )
+            ->setArgument('$userProvider', new Reference($userProvider))
             ->setArgument('$providerKey', $id);
 
-        $this->registerAuthenticationListener(
-            $container, $authenticationListenerId, $config, $id, $authorizationServerId, $authenticationManagerId
-        );
+        $container
+            ->setDefinition(
+                $authenticationListenerId,
+                new ChildDefinition('sonrac_oauth.security.authentication_listener.abstract')
+            )
+            ->setArgument('$authorizationServer', new Reference($authorizationServerId))
+            ->setArgument('$oauthTokenFactory', new Reference($oauthTokenFactoryId))
+            ->setArgument('$authorizationPath', $config['paths']['authorization'])
+            ->setArgument('$tokenPath', $config['paths']['token'])
+            ->setArgument('$providerKey', $id);
 
-        return [$authenticationManagerId, $authenticationListenerId, $defaultEntryPoint];
+        return [$authenticationProviderId, $authenticationListenerId, $defaultEntryPoint];
     }
 
     /**
@@ -89,122 +108,33 @@ class OAuthFactory implements SecurityFactoryInterface
         $node = $builder->children();
 
         $node
-            ->scalarNode('authorization_path')->isRequired()->end()
-            ->scalarNode('auth_code_ttl')->defaultValue('PT1M')->end()
-            ->scalarNode('access_token_ttl')->defaultValue('PT1M')->end()
-            ->scalarNode('refresh_token_ttl')->defaultValue('PT1M')->end()
-            ->arrayNode('enabled_grant_types')
-                ->addDefaultsIfNotSet()
+            ->scalarNode('authorization_header')->defaultValue('X-Access-Token')->end()
+            ->arrayNode('paths')
+                ->isRequired()
                 ->children()
-                    ->booleanNode(Client::GRANT_AUTH_CODE)->defaultValue(true)->end()
-                    ->booleanNode(Client::GRANT_CLIENT_CREDENTIALS)->defaultValue(true)->end()
-                    ->booleanNode(Client::GRANT_IMPLICIT)->defaultValue(true)->end()
-                    ->booleanNode(Client::GRANT_PASSWORD)->defaultValue(true)->end()
-                    ->booleanNode(Client::GRANT_REFRESH_TOKEN)->defaultValue(true)->end()
+                    ->scalarNode('authorization')->isRequired()->end()
+                    ->scalarNode('token')->isRequired()->end()
                 ->end()
             ->end()
-            ->scalarNode('auth_header_name')->defaultValue('X-Access-Token')->end();
+            ->arrayNode('ttl')
+                ->addDefaultsIfNotSet()
+                ->children()
+                    ->scalarNode('auth_code')->defaultValue('PT1H')->end()
+                    ->scalarNode('access_token')->defaultValue('PT1H')->end()
+                    ->scalarNode('refresh_token')->defaultValue('PT1H')->end()
+                ->end()
+            ->end()
+            ->arrayNode('grant_types')
+                ->addDefaultsIfNotSet()
+                ->children()
+                    ->booleanNode(AuthCodeGrant::TYPE)->defaultValue(false)->end()
+                    ->booleanNode(ClientCredentialsGrant::TYPE)->defaultValue(true)->end()
+                    ->booleanNode(ImplicitGrant::TYPE)->defaultValue(false)->end()
+                    ->booleanNode(PasswordGrant::TYPE)->defaultValue(true)->end()
+                    ->booleanNode(RefreshTokenGrant::TYPE)->defaultValue(true)->end()
+                ->end()
+            ->end();
 
         $node->end();
-    }
-
-    /**
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-     * @param string $id
-     * @param array $config
-     * @param string $providerKey
-     *
-     * @param string $authorizationServerId
-     * @param string $authenticationManagerId
-     * @return void
-     */
-    private function registerAuthenticationListener(
-        ContainerBuilder $container,
-        string $id,
-        array &$config,
-        string $providerKey,
-        string $authorizationServerId,
-        string $authenticationManagerId
-    ): void {
-        $definition = $container->setDefinition(
-            $id, new ChildDefinition('sonrac_oauth.security.authentication_listener.abstract')
-        );
-
-        $definition
-            ->setArgument('$authorizationServer', new Reference($authorizationServerId))
-            ->setArgument('$authenticationManager', new Reference($authenticationManagerId))
-            ->setArgument('$authorizationPath', $config['authorization_path'])
-            ->setArgument('$providerKey', $providerKey);
-    }
-
-    /**
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-     * @param array $config
-     * @param string $providerKey
-     *
-     * @return array
-     */
-    private function registerGrantTypes(
-        ContainerBuilder $container,
-        array &$config,
-        string $providerKey
-    ): array {
-        $grants = $config['enabled_grant_types'];
-        $granTypeIds = [];
-
-        if (isset($grants[Client::GRANT_AUTH_CODE]) && $grants[Client::GRANT_AUTH_CODE]) {
-            $id = 'sonrac_oauth.security.auth_code_grant.' . $providerKey;
-
-            $container
-                ->setDefinition($id, new ChildDefinition('sonrac_oauth.security.auth_code_grant.abstract'))
-                ->setArgument('$authCodeTTL', $config['auth_code_ttl'])
-                ->setArgument('$refreshTokenTTL', $config['refresh_token_ttl']);
-
-            $granTypeIds[] = $id;
-        }
-
-        if (isset($grants[Client::GRANT_CLIENT_CREDENTIALS]) && $grants[Client::GRANT_CLIENT_CREDENTIALS]) {
-            $id = 'sonrac_oauth.security.client_credentials_grant.' . $providerKey;
-
-            $container
-                ->setDefinition(
-                    $id, new ChildDefinition('sonrac_oauth.security.client_credentials_grant.abstract')
-                )
-                ->setArgument('$refreshTokenTTL', $config['refresh_token_ttl']);
-
-            $granTypeIds[] = $id;
-        }
-
-        if (isset($grants[Client::GRANT_IMPLICIT]) && $grants[Client::GRANT_IMPLICIT]) {
-            $id = 'sonrac_oauth.security.implicit_grant.' . $providerKey;
-
-            $container
-                ->setDefinition($id, new ChildDefinition('sonrac_oauth.security.implicit_grant.abstract'))
-                ->setArgument('$accessTokenTTL', $config['access_token_ttl']);
-
-            $granTypeIds[] = $id;
-        }
-
-        if (isset($grants[Client::GRANT_PASSWORD]) && $grants[Client::GRANT_PASSWORD]) {
-            $id = 'sonrac_oauth.security.password_grant.' . $providerKey;
-
-            $container
-                ->setDefinition($id, new ChildDefinition('sonrac_oauth.security.password_grant.abstract'))
-                ->setArgument('$refreshTokenTTL', $config['refresh_token_ttl']);
-
-            $granTypeIds[] = $id;
-        }
-
-        if (isset($grants[Client::GRANT_REFRESH_TOKEN]) && $grants[Client::GRANT_REFRESH_TOKEN]) {
-            $id = 'sonrac_oauth.security.refresh_token_grant.' . $providerKey;
-
-            $container
-                ->setDefinition($id, new ChildDefinition('sonrac_oauth.security.refresh_token_grant.abstract'))
-                ->setArgument('$refreshTokenTTL', $config['refresh_token_ttl']);
-
-            $granTypeIds[] = $id;
-        }
-
-        return $granTypeIds;
     }
 }

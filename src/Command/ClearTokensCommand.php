@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace sonrac\Auth\Command;
+namespace Sonrac\OAuth2\Command;
 
 use Doctrine\Bundle\DoctrineBundle\Command\DoctrineCommand;
 use Doctrine\ORM\EntityManager;
@@ -14,9 +14,10 @@ use Symfony\Component\Console\Output\Output;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Class ClearAccessTokens.
+ * Class ClearTokensCommand
+ * @package Sonrac\OAuth2\Command
  */
-class ClearTokens extends DoctrineCommand
+class ClearTokensCommand extends DoctrineCommand
 {
     /**
      * {@inheritdoc}

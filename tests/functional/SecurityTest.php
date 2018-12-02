@@ -10,6 +10,11 @@ namespace sonrac\Auth\Tests\Functional;
 class SecurityTest extends AbstractSecurityControllerTest
 {
     /**
+     * {@inheritdoc}
+     */
+    protected $clearTablesList = ['access_tokens', 'clients', 'refresh_tokens', 'auth_codes'];
+
+    /**
      *
      */
     public function testSecurity()

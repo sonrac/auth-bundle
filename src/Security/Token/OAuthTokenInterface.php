@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace sonrac\Auth\Security\Token;
 
-use sonrac\Auth\Entity\ClientInterface;
+use Sonrac\OAuth2\Adapter\League\Entity\ClientEntityInterface;
 
 /**
  * Interface OAuthTokenInterface
@@ -13,9 +13,9 @@ use sonrac\Auth\Entity\ClientInterface;
 interface OAuthTokenInterface extends \Symfony\Component\Security\Core\Authentication\Token\TokenInterface
 {
     /**
-     * @return \sonrac\Auth\Entity\ClientInterface
+     * @return \Sonrac\OAuth2\Adapter\League\Entity\ClientEntityInterface
      */
-    public function getClient(): ClientInterface;
+    public function getClient(): ClientEntityInterface;
 
     /**
      * @return string

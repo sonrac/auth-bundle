@@ -8,11 +8,6 @@ use League\OAuth2\Server\AuthorizationServer as LeagueAuthorizationServer;
 use League\OAuth2\Server\CryptKey;
 use League\OAuth2\Server\Entities\UserEntityInterface;
 use League\OAuth2\Server\Exception\OAuthServerException;
-use League\OAuth2\Server\Grant\AuthCodeGrant;
-use League\OAuth2\Server\Grant\ClientCredentialsGrant;
-use League\OAuth2\Server\Grant\ImplicitGrant;
-use League\OAuth2\Server\Grant\PasswordGrant;
-use League\OAuth2\Server\Grant\RefreshTokenGrant;
 use League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface;
 use League\OAuth2\Server\Repositories\AuthCodeRepositoryInterface;
 use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
@@ -22,7 +17,11 @@ use League\OAuth2\Server\Repositories\UserRepositoryInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use sonrac\Auth\Entity\Client;
+use Sonrac\OAuth2\Adapter\League\Grant\AuthCodeGrant;
+use Sonrac\OAuth2\Adapter\League\Grant\ClientCredentialsGrant;
+use Sonrac\OAuth2\Adapter\League\Grant\ImplicitGrant;
+use Sonrac\OAuth2\Adapter\League\Grant\PasswordGrant;
+use Sonrac\OAuth2\Adapter\League\Grant\RefreshTokenGrant;
 use Zend\Diactoros\Stream;
 
 /**
@@ -111,7 +110,7 @@ class AuthorizationServer implements AuthorizationServerInterface
     protected function configureAuthorizationServer(): void
     {
         $keyPath = $this->container->get('service_container')->getParameter('sonrac_auth.private_key_path')
-            .DIRECTORY_SEPARATOR.
+            . DIRECTORY_SEPARATOR .
             $this->container->get('service_container')->getParameter('sonrac_auth.private_key_name');
 
         $privateKey = $this->container->get('service_container')->getParameter('sonrac_auth.pass_phrase') ?
@@ -145,19 +144,9 @@ class AuthorizationServer implements AuthorizationServerInterface
         foreach ($this->enableGrantTypes as $grantType => $isEnabled) {
             if ($isEnabled) {
                 $grantTypeObject = null;
-                $ttl             = $this->getTokenTtl($this->accessTokenTtl);
+                $ttl = $this->getTokenTtl($this->accessTokenTtl);
                 switch ($grantType) {
-                    case Client::GRANT_CLIENT_CREDENTIALS:
-                        /** @var AuthorizationServer $a */
-                        $grantTypeObject = new ClientCredentialsGrant();
-                        break;
-                    case Client::GRANT_PASSWORD:
-                        $grantTypeObject = new PasswordGrant(
-                            $this->container->get(UserRepositoryInterface::class),
-                            $this->container->get(RefreshTokenRepositoryInterface::class)
-                        );
-                        break;
-                    case Client::GRANT_AUTH_CODE:
+                    case AuthCodeGrant::TYPE:
                         $grantTypeObject = new AuthCodeGrant(
                             $this->container->get(AuthCodeRepositoryInterface::class),
                             $this->container->get(RefreshTokenRepositoryInterface::class),
@@ -165,13 +154,23 @@ class AuthorizationServer implements AuthorizationServerInterface
                         );
                         $grantTypeObject->setRefreshTokenTTL($this->getTokenTtl($this->refreshTokenTtl));
                         break;
-                    case Client::GRANT_IMPLICIT:
+                    case ClientCredentialsGrant::TYPE:
+                        /** @var AuthorizationServer $a */
+                        $grantTypeObject = new ClientCredentialsGrant();
+                        break;
+                    case ImplicitGrant::TYPE:
                         $grantTypeObject = new ImplicitGrant(
                             $ttl,
                             $this->container->get('service_container')->getParameter('sonrac_auth.query_delimiter')
                         );
                         break;
-                    case Client::GRANT_REFRESH_TOKEN:
+                    case PasswordGrant::TYPE:
+                        $grantTypeObject = new PasswordGrant(
+                            $this->container->get(UserRepositoryInterface::class),
+                            $this->container->get(RefreshTokenRepositoryInterface::class)
+                        );
+                        break;
+                    case RefreshTokenGrant::TYPE:
                         $grantTypeObject = new RefreshTokenGrant(
                             $this->container->get(RefreshTokenRepositoryInterface::class)
                         );
@@ -196,14 +195,14 @@ class AuthorizationServer implements AuthorizationServerInterface
      */
     private function getTokenTtl($ttl): ?\DateInterval
     {
-        return $ttl ? new \DateInterval('PT'.$ttl.'S') : null;
+        return $ttl ? new \DateInterval('PT' . $ttl . 'S') : null;
     }
 
     /**
      * Authorize action.
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @param \Psr\Http\Message\ResponseInterface      $response
+     * @param \Psr\Http\Message\ResponseInterface $response
      *
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
@@ -224,9 +223,9 @@ class AuthorizationServer implements AuthorizationServerInterface
         } catch (\Exception $exception) {
             $body = new Stream('php://temp', 'r+');
             $body->write(\json_encode([
-                'message'    => 'Internal server error',
+                'message' => 'Internal server error',
                 'error_test' => $exception->getMessage(),
-                'error'      => 'internal_error',
+                'error' => 'internal_error',
             ]));
 
             return $response->withBody($body)

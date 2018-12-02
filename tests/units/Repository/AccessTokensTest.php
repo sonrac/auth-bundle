@@ -8,8 +8,8 @@ use League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface;
 use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
 use League\OAuth2\Server\Repositories\ScopeRepositoryInterface;
 use sonrac\Auth\Entity\AccessToken;
-use sonrac\Auth\Entity\Client;
 use sonrac\Auth\Tests\Units\BaseUnitTester;
+use Sonrac\OAuth2\Adapter\League\Grant\ClientCredentialsGrant;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -38,14 +38,14 @@ class AccessTokensTest extends BaseUnitTester
     /**
      * Clients repository.
      *
-     * @var \sonrac\Auth\Repository\Clients
+     * @var \sonrac\Auth\Repository\ClientRepository
      */
     protected $clientRepository;
 
     /**
      * Scopes repository.
      *
-     * @var \sonrac\Auth\Repository\Clients
+     * @var \sonrac\Auth\Repository\Scopes
      */
     protected $scopeRepository;
 
@@ -56,28 +56,30 @@ class AccessTokensTest extends BaseUnitTester
     {
         parent::setUp();
 
-        $this->repository       = static::$container->get(AccessTokenRepositoryInterface::class);
+        $this->repository = static::$container->get(AccessTokenRepositoryInterface::class);
         $this->clientRepository = static::$container->get(ClientRepositoryInterface::class);
-        $this->scopeRepository  = static::$container->get(ScopeRepositoryInterface::class);
+        $this->scopeRepository = static::$container->get(ScopeRepositoryInterface::class);
     }
 
     /**
      * Test get new token.
      *
      * @return \sonrac\Auth\Entity\AccessToken $token
+     *
+     * @throws \Exception
      */
     public function testGetNewToken(): AccessToken
     {
-        $client              = $this->clientRepository->find('Test Client');
-        $scopes              = $this->scopeRepository->findAll();
-        $requestStack        = new RequestStack();
+        $client = $this->clientRepository->find('Test Client');
+        $scopes = $this->scopeRepository->findAll();
+        $requestStack = new RequestStack();
         $_POST['grant_type'] = 'client_credentials';
-        $request             = Request::createFromGlobals();
+        $request = Request::createFromGlobals();
         $requestStack->push($request);
         static::$container->set('request_stack', $requestStack);
-        $token  = $this->repository->getNewToken($client, $scopes, 1);
+        $token = $this->repository->getNewToken($client, $scopes, 1);
         $token->setIdentifier('token-token');
-        $token->setGrantType(Client::GRANT_CLIENT_CREDENTIALS);
+        $token->setGrantType(ClientCredentialsGrant::TYPE);
         $token->setExpiryDateTime((new \DateTime())->modify('+3600 seconds'));
 
         $this->assertInstanceOf(AccessToken::class, $token);

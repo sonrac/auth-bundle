@@ -16,7 +16,7 @@
             <argument key="$container" type="service" id="service_container"/>
         </service>
 
-        <service id="sonrac_oauth.repository.client" class="sonrac\Auth\Repository\Clients" public="false">
+        <service id="sonrac_oauth.repository.client" class="sonrac\Auth\Repository\ClientRepository" public="false">
             <argument key="$registry" type="service" id="doctrine"/>
         </service>
 
@@ -28,8 +28,29 @@
             <argument key="$registry" type="service" id="doctrine"/>
         </service>
 
-        <service id="sonrac_oauth.repository.user" class="sonrac\Auth\Repository\Users" public="false">
+        <service id="sonrac_oauth.repository.user" class="sonrac\Auth\Repository\UserRepository" public="false">
             <argument key="$registry" type="service" id="doctrine"/>
+        </service>
+
+        <service id="sonrac_oauth.command.generate_client" class="Sonrac\OAuth2\Command\GenerateClientCommand"
+                 public="false">
+            <tag name="console.command"/>
+            <tag name="sonrac.oauth.commands"/>
+        </service>
+
+        <service id="sonrac_oauth.command.generate_keys" class="Sonrac\OAuth2\Command\GenerateKeysCommand"
+                 public="false">
+            <argument>%sonrac_oauth.keys.pair.path%</argument>
+            <argument>%sonrac_oauth.keys.pair.private_key_name%</argument>
+            <argument>%sonrac_oauth.keys.pair.public_key_name%</argument>
+            <argument>%sonrac_oauth.keys.pair.pass_phrase%</argument>
+            <tag name="console.command"/>
+            <tag name="sonrac.oauth.commands"/>
+        </service>
+
+        <service id="sonrac_oauth.command.clear_tokens" class="Sonrac\OAuth2\Command\ClearTokensCommand" public="false">
+            <tag name="console.command"/>
+            <tag name="sonrac.oauth.commands"/>
         </service>
 
     </services>

@@ -2,42 +2,41 @@
 
 declare(strict_types=1);
 
-namespace sonrac\Auth\Security\Factory;
+namespace Sonrac\OAuth2\Security\Factory;
 
 use Psr\Http\Message\ServerRequestInterface;
-use sonrac\Auth\Exceptions\InvalidUserProvidedException;
-use sonrac\Auth\Repository\ClientRepositoryInterface;
-use sonrac\Auth\Repository\UserRepositoryInterface;
+use sonrac\Auth\Exception\ClientIdentifierNotFoundException;
 use sonrac\Auth\Security\Token\OAuthClientToken;
 use sonrac\Auth\Security\Token\OAuthTokenInterface;
 use sonrac\Auth\Security\Token\OAuthUserToken;
-use Symfony\Component\Security\Core\User\UserInterface;
+use Sonrac\OAuth2\Adapter\League\Repository\ClientRepositoryInterface;
+use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 /**
  * Class OAuthTokenFactory
- * @package sonrac\Auth\Security\Factory
+ * @package Sonrac\OAuth2\Security\Factory
  */
 class OAuthTokenFactory
 {
     /**
-     * @var \sonrac\Auth\Repository\ClientRepositoryInterface
+     * @var \Sonrac\OAuth2\Adapter\League\Repository\ClientRepositoryInterface
      */
     private $clientRepository;
 
     /**
-     * @var \sonrac\Auth\Repository\UserRepositoryInterface
+     * @var \Symfony\Component\Security\Core\User\UserProviderInterface
      */
-    private $userRepository;
+    private $userProvider;
 
     /**
      * OAuthTokenFactory constructor.
-     * @param \sonrac\Auth\Repository\ClientRepositoryInterface $clientRepository
-     * @param \sonrac\Auth\Repository\UserRepositoryInterface $userRepository
+     * @param \Sonrac\OAuth2\Adapter\League\Repository\ClientRepositoryInterface $clientRepository
+     * @param \Symfony\Component\Security\Core\User\UserProviderInterface $userProvider
      */
-    public function __construct(ClientRepositoryInterface $clientRepository, UserRepositoryInterface $userRepository)
+    public function __construct(ClientRepositoryInterface $clientRepository, UserProviderInterface $userProvider)
     {
         $this->clientRepository = $clientRepository;
-        $this->userRepository = $userRepository;
+        $this->userProvider = $userProvider;
     }
 
     /**
@@ -52,8 +51,13 @@ class OAuthTokenFactory
         $userId = $request->getAttribute('oauth_user_id');
         $scopes = $request->getAttribute('oauth_scopes');
 
-        $client = $this->clientRepository->findByIdentifier($clientId);
-        $user = (null !== $userId && '' !== $userId) ? $this->findUser($userId) : null;
+        $client = $this->clientRepository->getClientEntityByIdentifier($clientId);
+
+        if (null === $client) {
+            throw new ClientIdentifierNotFoundException($clientId);
+        }
+
+        $user = (null !== $userId && '' !== $userId) ? $this->userProvider->loadUserByUsername($userId) : null;
 
         if (null === $user) {
             $token = new OAuthClientToken($client, $client->getSecret(), $providerKey, $scopes);
@@ -64,21 +68,5 @@ class OAuthTokenFactory
         $token->setAttribute('access_token_id', $request->getAttribute('oauth_access_token_id'));
 
         return $token;
-    }
-
-    /**
-     * @param string|int $userId
-     *
-     * @return \Symfony\Component\Security\Core\User\UserInterface
-     */
-    private function findUser($userId): UserInterface
-    {
-        $user = $this->userRepository->findByIdentifier($userId);
-
-        if (null === $user) {
-            throw new InvalidUserProvidedException();
-        }
-
-        return $user;
     }
 }

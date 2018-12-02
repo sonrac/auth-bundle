@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace sonrac\Auth\Security\Token;
 
-use sonrac\Auth\Entity\ClientInterface;
+use Sonrac\OAuth2\Adapter\League\Entity\ClientEntityInterface;
 
 /**
  * Class OAuthClientToken
@@ -13,20 +13,20 @@ use sonrac\Auth\Entity\ClientInterface;
 class OAuthClientToken extends AbstractOAuthToken
 {
     /**
-     * @var \sonrac\Auth\Entity\ClientInterface
+     * @var \Sonrac\OAuth2\Adapter\League\Entity\ClientEntityInterface
      */
     private $client;
 
     /**
      * OAuthClientToken constructor.
-     * @param \sonrac\Auth\Entity\ClientInterface $client
+     * @param \Sonrac\OAuth2\Adapter\League\Entity\ClientEntityInterface $client
      * @param string $credentials
      * @param string $providerKey
      * @param array $scopes
      * @param array $roles
      */
     public function __construct(
-        ClientInterface $client,
+        ClientEntityInterface $client,
         string $credentials,
         string $providerKey,
         array $scopes = [],
@@ -40,7 +40,7 @@ class OAuthClientToken extends AbstractOAuthToken
     /**
      * {@inheritdoc}
      */
-    public function getClient(): ClientInterface
+    public function getClient(): ClientEntityInterface
     {
         return $this->client;
     }

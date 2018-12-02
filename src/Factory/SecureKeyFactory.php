@@ -6,14 +6,16 @@
  * Time: 11:46 PM
  */
 
-namespace sonrac\Auth\Factory;
+declare(strict_types=1);
+
+namespace Sonrac\OAuth2\Factory;
 
 use League\OAuth2\Server\CryptKey;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Class SecureKeyFactory
- * @package sonrac\Auth\Factory
+ * @package Sonrac\OAuth2\Factory
  */
 class SecureKeyFactory
 {
@@ -51,12 +53,12 @@ class SecureKeyFactory
         }
 
 
-        $path = $this->container->getParameter('sonrac_auth.private_key_path')
+        $path = $this->container->getParameter('sonrac_oauth.keys.pair.path')
             . DIRECTORY_SEPARATOR
-            . $this->container->getParameter('sonrac_auth.private_key_name');
+            . $this->container->getParameter('sonrac_oauth.keys.pair.private_key_name');
 
         $this->privateKey = new CryptKey(
-            $path, $this->container->getParameter('sonrac_auth.pass_phrase')
+            $path, $this->container->getParameter('sonrac_oauth.keys.pair.pass_phrase')
         );
 
         return $this->privateKey;
@@ -72,12 +74,12 @@ class SecureKeyFactory
         }
 
 
-        $path = $this->container->getParameter('sonrac_auth.private_key_path')
+        $path = $this->container->getParameter('sonrac_oauth.keys.pair.path')
             . DIRECTORY_SEPARATOR
-            . $this->container->getParameter('sonrac_auth.public_key_name');
+            . $this->container->getParameter('sonrac_oauth.keys.pair.public_key_name');
 
         $this->publicKey = new CryptKey(
-            $path, $this->container->getParameter('sonrac_auth.pass_phrase')
+            $path, $this->container->getParameter('sonrac_oauth.keys.pair.pass_phrase')
         );
 
         return $this->publicKey;
@@ -88,6 +90,6 @@ class SecureKeyFactory
      */
     public function getEncryptionKey(): string
     {
-        return $this->container->getParameter('sonrac_auth.encryption_key');
+        return $this->container->getParameter('sonrac_oauth.keys.encryption');
     }
 }

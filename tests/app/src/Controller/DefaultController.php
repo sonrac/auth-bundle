@@ -19,14 +19,19 @@ class DefaultController extends AbstractController
         return $this->json([]);
     }
 
-    public function security(Request $request) {
-
+    public function security(Request $request)
+    {
         return $this->json([
             'status' => true
         ]);
     }
 
     public function auth()
+    {
+        throw new NotFoundHttpException();
+    }
+
+    public function token()
     {
         throw new NotFoundHttpException();
     }

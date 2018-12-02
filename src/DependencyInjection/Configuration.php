@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace sonrac\Auth\DependencyInjection;
+namespace Sonrac\OAuth2\DependencyInjection;
 
-use sonrac\Auth\Entity\Client;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 /**
- * Class Configuration.
+ * Class Configuration
+ * @package Sonrac\OAuth2\DependencyInjection
  */
 class Configuration implements ConfigurationInterface
 {
@@ -22,18 +22,55 @@ class Configuration implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder();
 
-        $rootNode = $treeBuilder->root('sonrac_auth');
+        $rootNode = $treeBuilder->root('sonrac_oauth');
 
         $rootNode->children()
-            ->scalarNode('encryption_key')
-                ->defaultValue('nkmWKwpRiwPDQig6JDU9mVfg0+I6JXsmbV0UKt6DNqw=')
-                ->validate()
-                    ->ifTrue(function ($v) {
-                        return empty($v) && \mb_strlen($v) < 32;
-                    })->thenInvalid('Encryption key invalid. generate using `base64_encode(random_bytes(32))`')
+            ->arrayNode('keys')
+                ->isRequired()
+                ->children()
+                    ->scalarNode('encryption')
+                        ->defaultValue('nkmWKwpRiwPDQig6JDU9mVfg0+I6JXsmbV0UKt6DNqw=')
+                        ->validate()
+                            ->ifString()
+                            ->ifTrue(function ($v) {
+                                return empty($v) && \mb_strlen($v) < 32;
+                            })->thenInvalid('Encryption key invalid. generate using `base64_encode(random_bytes(32))`')
+                        ->end()
+                    ->end()
+                    ->arrayNode('pair')
+                        ->isRequired()
+                        ->children()
+                            ->scalarNode('path')
+                                ->defaultValue('%kernel.root_dir%/resources/keys')
+                                ->validate()
+                                ->ifString()
+                                ->ifTrue(function ($v) {
+                                    if (\PHP_SAPI === 'cli') {
+                                        return false;
+                                    }
+
+                                    if (empty($v)) {
+                                        return false;
+                                    }
+
+                                    if (!\is_dir($v) || !\is_readable($v)) {
+                                        return true;
+                                    }
+
+                                    return false;
+                                })->thenInvalid(
+                                    'Key pair directory does not exists. Generate keys with command sonrac:auth:generate:keys'
+                                )
+                                ->end()
+                            ->end()
+                            ->scalarNode('private_key_name')->defaultValue('priv.key')->end()
+                            ->scalarNode('public_key_name')->defaultValue('pub.key')->end()
+                            ->scalarNode('pass_phrase')->defaultValue(null)->end()
+                        ->end()
+                    ->end()
                 ->end()
             ->end()
-            ->arrayNode('repositories')
+            ->arrayNode('repository')
                 ->addDefaultsIfNotSet()
                 ->children()
                     ->scalarNode('access_token')
@@ -56,81 +93,14 @@ class Configuration implements ConfigurationInterface
                     ->end()
                 ->end()
             ->end()
-            ->scalarNode('private_key_path')
-                ->defaultValue('%kernel.root_dir%/resources/keys')
-                ->validate()
-                    ->ifString()
-                    ->ifTrue(function ($v) {
-                        if (\PHP_SAPI === 'cli') {
-                            return false;
-                        }
-
-                        if (empty($v)) {
-                            return false;
-                        }
-
-                        if (!\is_dir($v) || !\is_readable($v)) {
-                            return true;
-                        }
-
-                        return false;
-                    })->thenInvalid(
-                        'Key pair directory does not exists. Generate keys with command sonrac:auth:generate:keys'
-                    )
-                ->end()
-            ->end()
             ->arrayNode('swagger_constants')
                 ->isRequired()
                 ->requiresAtLeastOneElement()
                 ->useAttributeAsKey('name')
-                ->scalarPrototype()->end()
+                ->scalarPrototype()
             ->end()
-            ->arrayNode('default_scopes')
-            ->end()
-            ->scalarNode('query_delimiter')
-                ->defaultValue('#')
-            ->end()
-            ->scalarNode('password_salt')
-                ->defaultValue(null)
-            ->end()
-            ->scalarNode('pass_phrase')
-                ->defaultValue(null)
-            ->end()
-            ->scalarNode('public_key_name')
-                ->defaultValue('pub.key')
-            ->end()
-            ->scalarNode('private_key_name')
-                ->defaultValue('priv.key')
-            ->end()
-            ->arrayNode('enable_grant_types')
-                ->children()
-                    ->booleanNode(Client::GRANT_CLIENT_CREDENTIALS)->end()
-                    ->booleanNode(Client::GRANT_AUTH_CODE)->end()
-                    ->booleanNode(Client::GRANT_PASSWORD)->end()
-                    ->booleanNode(Client::GRANT_IMPLICIT)->end()
-                    ->booleanNode(Client::GRANT_REFRESH_TOKEN)->end()
-                ->end()
-            ->end()
-            ->scalarNode('header_token_name')
-                ->isRequired()
             ->end()
             ->end();
-
-        foreach ([
-            'access_token_lifetime',
-            'refresh_token_lifetime',
-            'auth_code_lifetime',
-                 ] as $nodeName) {
-            $rootNode->children()
-                ->integerNode($nodeName)
-                    ->defaultValue(3600)
-                    ->validate()
-                        ->ifTrue(function ($v) {
-                            return (int) $v <= 0;
-                        })->thenInvalid('Access token lifetime invalid value. Must be > 0')
-                    ->end()
-                ->end();
-        }
 
         return $treeBuilder;
     }

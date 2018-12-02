@@ -6,14 +6,20 @@
 
     <services>
 
-        <service id="sonrac_oauth.security.token_factory" class="sonrac\Auth\Security\Factory\OAuthTokenFactory">
-            <argument key="$clientRepository"/>
-            <argument key="$userRepository"/>
-        </service>
-
-        <service id="sonrac_oauth.security.secure_key_factory" class="sonrac\Auth\Factory\SecureKeyFactory"
+        <service id="sonrac_oauth.security.secure_key_factory" class="Sonrac\OAuth2\Factory\SecureKeyFactory"
                  public="false">
             <argument type="service" id="service_container"/>
+        </service>
+
+        <service id="sonrac_oauth.security.grant_type_factory" class="Sonrac\OAuth2\Factory\GrantTypeFactory"
+                 public="false">
+            <argument type="service" id="service_container"/>
+        </service>
+
+        <service id="sonrac_oauth.security.token_factory.abstract"
+                 class="Sonrac\OAuth2\Security\Factory\OAuthTokenFactory"
+                 public="false"
+                 abstract="true">
         </service>
 
         <service id="sonrac_oauth.security.authorization_validator.bearer_token_configurator"
@@ -28,16 +34,17 @@
                           method="configure"/>
         </service>
 
-        <service id="sonrac_oauth.security.oauth_authentication_manager"
-                 class="sonrac\Auth\Security\OAuth2AuthenticationManager"
-                 public="false">
+        <service id="sonrac_oauth.security.authentication_provider.abstract"
+                 class="sonrac\Auth\Security\OAuthAuthenticationProvider"
+                 public="false"
+                 abstract="true">
         </service>
 
         <service id="sonrac_oauth.security.authentication_listener.abstract"
                  class="sonrac\Auth\Security\OAuthAuthenticationListener" public="false" abstract="true">
             <argument key="$authorizationValidator" type="service"
                       id="sonrac_oauth.security.authorization_validator.bearer_token"/>
-            <argument key="$oauthTokenFactory" type="service" id="sonrac_oauth.security.token_factory"/>
+            <argument key="$authenticationManager" type="service" id="security.authentication.manager"/>
             <argument key="$tokenStorage" type="service" id="security.token_storage"/>
             <argument key="$httpUtils" type="service" id="security.http_utils"/>
             <argument key="$diactorosFactory" type="service" id="sensio_framework_extra.psr7.http_message_factory"/>
@@ -45,43 +52,15 @@
                       id="sensio_framework_extra.psr7.http_foundation_factory"/>
         </service>
 
-        <service id="sonrac_oauth.security.authentication_manager.abstract"
-                 class="sonrac\Auth\Security\OAuth2AuthenticationManager" public="false" abstract="true">
-        </service>
-
         <service id="sonrac_oauth.security.authorization_server_configurator.abstract"
                  class="sonrac\Auth\Configurator\AuthorizationServerConfigurator" public="false" abstract="true">
+            <argument type="service" id="sonrac_oauth.security.grant_type_factory"/>
         </service>
 
         <service id="sonrac_oauth.security.authorization_server.abstract"
                  class="League\OAuth2\Server\AuthorizationServer" public="false" abstract="true">
-            <argument key="$privateKey">%sonrac_auth.private_key_path%/%sonrac_auth.private_key_name%</argument>
-            <argument key="$encryptionKey">%sonrac_auth.encryption_key%</argument>
-        </service>
-
-        <service id="sonrac_oauth.security.auth_code_grant.abstract"
-                 class="League\OAuth2\Server\Grant\AuthCodeGrant" public="false" abstract="true">
-            <factory class="sonrac\Auth\Factory\GrantTypeFactory" method="createAuthCodeGrant"/>
-        </service>
-
-        <service id="sonrac_oauth.security.client_credentials_grant.abstract"
-                 class="League\OAuth2\Server\Grant\ClientCredentialsGrant" public="false" abstract="true">
-            <factory class="sonrac\Auth\Factory\GrantTypeFactory" method="createClientCredentialsGrant"/>
-        </service>
-
-        <service id="sonrac_oauth.security.implicit_grant.abstract"
-                 class="League\OAuth2\Server\Grant\ImplicitGrant" public="false" abstract="true">
-            <factory class="sonrac\Auth\Factory\GrantTypeFactory" method="createImplicitGrant"/>
-        </service>
-
-        <service id="sonrac_oauth.security.password_grant.abstract"
-                 class="League\OAuth2\Server\Grant\PasswordGrant" public="false" abstract="true">
-            <factory class="sonrac\Auth\Factory\GrantTypeFactory" method="createPasswordGrant"/>
-        </service>
-
-        <service id="sonrac_oauth.security.refresh_token_grant.abstract"
-                 class="League\OAuth2\Server\Grant\RefreshTokenGrant" public="false" abstract="true">
-            <factory class="sonrac\Auth\Factory\GrantTypeFactory" method="createRefreshTokenGrant"/>
+            <argument key="$privateKey">%sonrac_oauth.keys.pair.path%/%sonrac_oauth.keys.pair.private_key_name%</argument>
+            <argument key="$encryptionKey">%sonrac_oauth.keys.encryption%%</argument>
         </service>
 
     </services>

@@ -2,19 +2,24 @@
 
 declare(strict_types=1);
 
-namespace sonrac\Auth\Command;
+namespace Sonrac\OAuth2\Command;
 
 use Doctrine\Bundle\DoctrineBundle\Command\DoctrineCommand;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
-use sonrac\Auth\Entity\Client as ClientEntity;
+use Sonrac\OAuth2\Adapter\League\Grant\AuthCodeGrant;
+use Sonrac\OAuth2\Adapter\League\Grant\ClientCredentialsGrant;
+use Sonrac\OAuth2\Adapter\League\Grant\ImplicitGrant;
+use Sonrac\OAuth2\Adapter\League\Grant\PasswordGrant;
+use Sonrac\OAuth2\Adapter\League\Grant\RefreshTokenGrant;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Class Client.
+ * Class GenerateClientCommand
+ * @package Sonrac\OAuth2\Command
  */
-class GenerateClient extends DoctrineCommand
+class GenerateClientCommand extends DoctrineCommand
 {
     /**
      * {@inheritdoc}
@@ -42,10 +47,11 @@ class GenerateClient extends DoctrineCommand
             InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
             'Allowed grant types. By default include all implement grant types',
             [
-                ClientEntity::GRANT_CLIENT_CREDENTIALS,
-                ClientEntity::GRANT_PASSWORD,
-                ClientEntity::GRANT_AUTH_CODE,
-                ClientEntity::GRANT_IMPLICIT,
+                AuthCodeGrant::TYPE,
+                ClientCredentialsGrant::TYPE,
+                ImplicitGrant::TYPE,
+                PasswordGrant::TYPE,
+                RefreshTokenGrant::TYPE,
             ]
         );
     }
@@ -58,10 +64,10 @@ class GenerateClient extends DoctrineCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $name        = $input->getOption('name');
-        $grantTypes  = $input->getOption('grant-types');
+        $name = $input->getOption('name');
+        $grantTypes = $input->getOption('grant-types');
         $description = $input->getOption('description');
-        $secret      = $this->generateRandomString();
+        $secret = $this->generateRandomString();
         /** @var \sonrac\Auth\Entity\Client $entity */
         $entity = $this->getContainer()->get(ClientEntityInterface::class);
         $entity->setName($name);
@@ -75,8 +81,8 @@ class GenerateClient extends DoctrineCommand
         $em->flush($entity);
 
         $output->writeln('Client successfully generated');
-        $output->writeln('Client ID: '.$entity->getIdentifier());
-        $output->writeln('Client secret: '.$entity->getSecret());
+        $output->writeln('Client ID: ' . $entity->getIdentifier());
+        $output->writeln('Client secret: ' . $entity->getSecret());
     }
 
     /**
@@ -88,9 +94,9 @@ class GenerateClient extends DoctrineCommand
      */
     private function generateRandomString($length = 255): string
     {
-        $characters       = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()<>?.,+=-_';
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()<>?.,+=-_';
         $charactersLength = \mb_strlen($characters);
-        $randomString     = '';
+        $randomString = '';
         for ($i = 0; $i < $length; ++$i) {
             $randomString .= $characters[\rand(0, $charactersLength - 1)];
         }

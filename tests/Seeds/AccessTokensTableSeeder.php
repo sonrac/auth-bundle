@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace sonrac\Auth\Tests\Seeds;
 
-use sonrac\Auth\Entity\Client;
+use Sonrac\OAuth2\Adapter\League\Grant\ClientCredentialsGrant;
 use sonrac\SimpleSeed\RollBackSeedWithCheckExists;
 
 /**
@@ -27,17 +27,17 @@ class AccessTokensTableSeeder extends RollBackSeedWithCheckExists
     {
         return [
             [
-                'token'      => 'test_token',
-                'grant_type' => \json_encode([Client::GRANT_CLIENT_CREDENTIALS]),
-                'client_id'  => 'Test Client',
-                'expire_at'  => \time() - 3600,
+                'token' => 'test_token',
+                'grant_type' => \json_encode([ClientCredentialsGrant::TYPE]),
+                'client_id' => 'Test Client',
+                'expire_at' => \time() - 3600,
                 'created_at' => \time(),
             ],
             [
-                'token'      => 'test_token1',
-                'grant_type' => \json_encode([Client::GRANT_CLIENT_CREDENTIALS]),
-                'client_id'  => 'Test Client',
-                'expire_at'  => \time() + 3600,
+                'token' => 'test_token1',
+                'grant_type' => \json_encode([ClientCredentialsGrant::TYPE]),
+                'client_id' => 'Test Client',
+                'expire_at' => \time() + 3600,
                 'created_at' => \time(),
             ],
         ];

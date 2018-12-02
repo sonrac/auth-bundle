@@ -89,7 +89,8 @@ class AuthorizeController extends AbstractController
     {
         $response = new Response();
 
-        return $this->get('sonrac_auth.authorization_server')->token($request, $response);
+        return $response;
+//        return $this->get('sonrac_auth.authorization_server')->token($request, $response);
     }
 
     /**
@@ -111,6 +112,7 @@ class AuthorizeController extends AbstractController
     {
         $response = new Response();
 
-        return $this->get('sonrac_auth.authorization_server')->authorize($request, $response);
+        return $response;
+//        return $this->get('sonrac_auth.authorization_server')->authorize($request, $response);
     }
 }

@@ -6,13 +6,14 @@ namespace sonrac\Auth\Tests\Units\Repository;
 
 use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
 use sonrac\Auth\Entity\Client;
-use sonrac\Auth\Repository\Clients;
+use sonrac\Auth\Repository\ClientRepository;
 use sonrac\Auth\Tests\Units\BaseUnitTester;
 
 /**
- * Class ClientsTest.
+ * Class ClientRepositoryTest
+ * @package sonrac\Auth\Tests\Units\Repository
  */
-class ClientsTest extends BaseUnitTester
+class ClientRepositoryTest extends BaseUnitTester
 {
     /**
      * {@inheritdoc}
@@ -22,7 +23,7 @@ class ClientsTest extends BaseUnitTester
     /**
      * Clients repository.
      *
-     * @var \sonrac\Auth\Repository\Clients
+     * @var \sonrac\Auth\Repository\ClientRepository
      */
     protected $repository;
 
@@ -41,7 +42,7 @@ class ClientsTest extends BaseUnitTester
      */
     public function testGetClientEntity(): void
     {
-        $this->assertInstanceOf(Clients::class, $this->repository);
+        $this->assertInstanceOf(ClientRepository::class, $this->repository);
 
         $data = $this->repository->find(['name' => 'Test Client']);
         $this->assertInstanceOf(Client::class, $data);

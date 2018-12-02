@@ -1,6 +1,6 @@
 services:
   League\OAuth2\Server\Repositories\ClientRepositoryInterface:
-    class: sonrac\Auth\Repository\Clients
+    class: sonrac\Auth\Repository\ClientRepository
     public: true
     arguments: ['@doctrine', '@service_container']
   League\OAuth2\Server\Repositories\ScopeRepositoryInterface:
@@ -20,11 +20,11 @@ services:
     public: true
     arguments: ['@doctrine', '@service_container']
   League\OAuth2\Server\Repositories\UserRepositoryInterface:
-    class: sonrac\Auth\Repository\Users
+    class: sonrac\Auth\Repository\UserRepository
     public: true
     tags: ['doctrine.repository_service']
     arguments: ['@doctrine']
-  sonrac\Auth\Repository\Users:
+  sonrac\Auth\Repository\UserRepository:
     alias: League\OAuth2\Server\Repositories\UserRepositoryInterface
   League\OAuth2\Server\Entities\ClientEntityInterface:
     class: sonrac\Auth\Entity\Client
@@ -47,20 +47,3 @@ services:
     class: sonrac\Auth\Entity\AuthCode
     public: true
     arguments: ['@service_container']
-  sonrac_auth.custom_token_validator:
-    class: sonrac\Auth\Security\TokenValidator
-    arguments: ['@League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface','%sonrac_auth.header_token_name%']
-  sonrac_auth.resource_server:
-    class: League\OAuth2\Server\ResourceServer
-    public: true
-    arguments:
-      [
-        '@League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface',
-        '%sonrac_auth.private_key_path%/%sonrac_auth.public_key_name%',
-        '@sonrac_auth.custom_token_validator'
-      ]
-  sonrac_auth.authorization_server:
-    class: sonrac\Auth\Security\AuthorizationServer
-    public: true
-    arguments:
-      ['@service_container']

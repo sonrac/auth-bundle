@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace sonrac\Auth\Security\Token;
 
-use sonrac\Auth\Entity\ClientInterface;
+use Sonrac\OAuth2\Adapter\League\Entity\ClientEntityInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -14,13 +14,13 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class OAuthUserToken extends AbstractOAuthToken
 {
     /**
-     * @var \sonrac\Auth\Entity\ClientInterface
+     * @var \Sonrac\OAuth2\Adapter\League\Entity\ClientEntityInterface
      */
     private $client;
 
     /**
      * OAuthUserToken constructor.
-     * @param \sonrac\Auth\Entity\ClientInterface $client
+     * @param \Sonrac\OAuth2\Adapter\League\Entity\ClientEntityInterface $client
      * @param \Symfony\Component\Security\Core\User\UserInterface $user
      * @param string $credentials
      * @param string $providerKey
@@ -28,7 +28,7 @@ class OAuthUserToken extends AbstractOAuthToken
      * @param array $roles
      */
     public function __construct(
-        ClientInterface $client,
+        ClientEntityInterface $client,
         UserInterface $user,
         string $credentials,
         string $providerKey,
@@ -45,7 +45,7 @@ class OAuthUserToken extends AbstractOAuthToken
     /**
      * {@inheritdoc}
      */
-    public function getClient(): ClientInterface
+    public function getClient(): ClientEntityInterface
     {
         return $this->client;
     }

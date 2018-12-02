@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace sonrac\Auth\Entity;
 
+use OpenApi\Annotations as OA;
 use Psr\Container\ContainerInterface;
-use Openapi\Annotations as OA;
+use Sonrac\OAuth2\Adapter\League\Entity\UserEntityInterface;
 
 /**
  * Class User.
@@ -16,7 +17,7 @@ use Openapi\Annotations as OA;
  *     required={"email", "username", "first_name", "last_name", "password", "avatar"}
  * )
  */
-class User implements UserInterface
+class User implements UserEntityInterface
 {
     use TimeEntityTrait;
 

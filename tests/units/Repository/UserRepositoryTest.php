@@ -6,14 +6,15 @@ namespace sonrac\Auth\Tests\Units\Repository;
 
 use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
 use League\OAuth2\Server\Repositories\UserRepositoryInterface;
-use sonrac\Auth\Entity\Client;
 use sonrac\Auth\Entity\User;
 use sonrac\Auth\Tests\Units\BaseUnitTester;
+use Sonrac\OAuth2\Adapter\League\Grant\ClientCredentialsGrant;
 
 /**
- * Class UsersTest.
+ * Class UserRepositoryTest
+ * @package sonrac\Auth\Tests\Units\Repository
  */
-class UsersTest extends BaseUnitTester
+class UserRepositoryTest extends BaseUnitTester
 {
     /**
      * {@inheritdoc}
@@ -23,14 +24,14 @@ class UsersTest extends BaseUnitTester
     /**
      * Users repository.
      *
-     * @var \sonrac\Auth\Repository\Users
+     * @var \sonrac\Auth\Repository\UserRepository
      */
     protected $repository;
 
     /**
      * Clients repository.
      *
-     * @var \sonrac\Auth\Repository\Clients
+     * @var \sonrac\Auth\Repository\ClientRepository
      */
     protected $clientsRepository;
 
@@ -58,7 +59,7 @@ class UsersTest extends BaseUnitTester
         $this->repository->getUserEntityByUserCredentials(
             'user',
             'password',
-            Client::GRANT_CLIENT_CREDENTIALS,
+            ClientCredentialsGrant::TYPE,
             $client
         );
     }
@@ -76,7 +77,7 @@ class UsersTest extends BaseUnitTester
         $this->repository->getUserEntityByUserCredentials(
             'username',
             'password1',
-            Client::GRANT_CLIENT_CREDENTIALS,
+            ClientCredentialsGrant::TYPE,
             $client
         );
     }
@@ -94,7 +95,7 @@ class UsersTest extends BaseUnitTester
         $this->repository->getUserEntityByUserCredentials(
             'username',
             'password',
-            Client::GRANT_CLIENT_CREDENTIALS.'1',
+            ClientCredentialsGrant::TYPE.'1',
             $client
         );
     }
@@ -110,7 +111,7 @@ class UsersTest extends BaseUnitTester
         $user   = $this->repository->getUserEntityByUserCredentials(
             'username',
             'password',
-            Client::GRANT_CLIENT_CREDENTIALS,
+            ClientCredentialsGrant::TYPE,
             $client
         );
 

@@ -6,7 +6,11 @@ namespace sonrac\Auth\Types;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
-use sonrac\Auth\Entity\Client;
+use Sonrac\OAuth2\Adapter\League\Grant\AuthCodeGrant;
+use Sonrac\OAuth2\Adapter\League\Grant\ClientCredentialsGrant;
+use Sonrac\OAuth2\Adapter\League\Grant\ImplicitGrant;
+use Sonrac\OAuth2\Adapter\League\Grant\PasswordGrant;
+use Sonrac\OAuth2\Adapter\League\Grant\RefreshTokenGrant;
 
 /**
  * Class GrantTypesEnum.
@@ -30,7 +34,7 @@ class GrantTypesEnum extends Type
         $statuses = '';
 
         foreach (self::getStatuses() as $status) {
-            $statuses .= (\mb_strlen($statuses) ? ', ' : '')."'{$status}'";
+            $statuses .= (\mb_strlen($statuses) ? ', ' : '') . "'{$status}'";
         }
 
         return "ENUM({$statuses})";
@@ -44,10 +48,11 @@ class GrantTypesEnum extends Type
     public static function getStatuses(): array
     {
         return [
-            Client::GRANT_AUTH_CODE,
-            Client::GRANT_CLIENT_CREDENTIALS,
-            Client::GRANT_IMPLICIT,
-            Client::GRANT_PASSWORD,
+            AuthCodeGrant::TYPE,
+            ClientCredentialsGrant::TYPE,
+            ImplicitGrant::TYPE,
+            PasswordGrant::TYPE,
+            RefreshTokenGrant::TYPE,
         ];
     }
 
