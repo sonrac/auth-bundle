@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Sonrac\OAuth2\Security\Factory;
 
 use Psr\Http\Message\ServerRequestInterface;
-use sonrac\Auth\Exception\ClientIdentifierNotFoundException;
-use sonrac\Auth\Security\Token\OAuthClientToken;
-use sonrac\Auth\Security\Token\OAuthTokenInterface;
-use sonrac\Auth\Security\Token\OAuthUserToken;
+use Sonrac\OAuth2\Exception\ClientIdentifierNotFoundException;
+use Sonrac\OAuth2\Security\Token\OAuthClientToken;
+use Sonrac\OAuth2\Security\Token\OAuthTokenInterface;
+use Sonrac\OAuth2\Security\Token\OAuthUserToken;
 use Sonrac\OAuth2\Adapter\League\Repository\ClientRepositoryInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
@@ -43,7 +43,7 @@ class OAuthTokenFactory
      * @param \Psr\Http\Message\ServerRequestInterface $request
      * @param string $providerKey
      *
-     * @return \sonrac\Auth\Security\Token\OAuthTokenInterface
+     * @return \Sonrac\OAuth2\Security\Token\OAuthTokenInterface
      */
     public function createFromRequest(ServerRequestInterface $request, string $providerKey): OAuthTokenInterface
     {

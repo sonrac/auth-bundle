@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace sonrac\Auth\Security\Token;
+namespace Sonrac\OAuth2\Security\Token;
 
-use sonrac\Auth\Security\Scope\Scope;
+use Sonrac\OAuth2\Security\Scope\Scope;
 use Symfony\Component\Security\Core\Authentication\Token\AbstractToken;
 
 /**
  * Class AbstractOAuthToken
- * @package sonrac\Auth\Security\Token
+ * @package Sonrac\OAuth2\Security\Token
  */
 abstract class AbstractOAuthToken extends AbstractToken implements OAuthTokenInterface
 {
@@ -24,7 +24,7 @@ abstract class AbstractOAuthToken extends AbstractToken implements OAuthTokenInt
     private $providerKey;
 
     /**
-     * @var \sonrac\Auth\Security\Scope\Scope[]
+     * @var \Sonrac\OAuth2\Security\Scope\Scope[]
      */
     private $scopes = [];
 

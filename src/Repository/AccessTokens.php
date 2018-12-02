@@ -36,12 +36,13 @@ class AccessTokens extends ServiceEntityRepository implements AccessTokenReposit
      * AccessTokens constructor.
      *
      * @param \Symfony\Bridge\Doctrine\RegistryInterface $registry
-     * @param ContainerInterface                         $container
+     * @param ContainerInterface $container
      */
     public function __construct(RegistryInterface $registry, ContainerInterface $container)
     {
-        $this->container = $container;
         parent::__construct($registry, AccessToken::class);
+
+        $this->container = $container;
     }
 
     /**

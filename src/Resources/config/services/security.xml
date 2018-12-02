@@ -23,7 +23,7 @@
         </service>
 
         <service id="sonrac_oauth.security.authorization_validator.bearer_token_configurator"
-                 class="sonrac\Auth\Configurator\BearerTokenValidatorConfigurator" public="false">
+                 class="Sonrac\OAuth2\Configurator\BearerTokenValidatorConfigurator" public="false">
             <argument type="service" id="sonrac_oauth.security.secure_key_factory"/>
         </service>
 
@@ -35,13 +35,13 @@
         </service>
 
         <service id="sonrac_oauth.security.authentication_provider.abstract"
-                 class="sonrac\Auth\Security\OAuthAuthenticationProvider"
+                 class="Sonrac\OAuth2\Security\OAuthAuthenticationProvider"
                  public="false"
                  abstract="true">
         </service>
 
         <service id="sonrac_oauth.security.authentication_listener.abstract"
-                 class="sonrac\Auth\Security\OAuthAuthenticationListener" public="false" abstract="true">
+                 class="Sonrac\OAuth2\Security\OAuthAuthenticationListener" public="false" abstract="true">
             <argument key="$authorizationValidator" type="service"
                       id="sonrac_oauth.security.authorization_validator.bearer_token"/>
             <argument key="$authenticationManager" type="service" id="security.authentication.manager"/>
@@ -53,7 +53,7 @@
         </service>
 
         <service id="sonrac_oauth.security.authorization_server_configurator.abstract"
-                 class="sonrac\Auth\Configurator\AuthorizationServerConfigurator" public="false" abstract="true">
+                 class="Sonrac\OAuth2\Configurator\AuthorizationServerConfigurator" public="false" abstract="true">
             <argument type="service" id="sonrac_oauth.security.grant_type_factory"/>
         </service>
 

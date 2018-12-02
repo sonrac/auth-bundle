@@ -2,13 +2,12 @@
 
 declare(strict_types=1);
 
-namespace sonrac\Auth\Security;
+namespace Sonrac\OAuth2\Security;
 
 use League\OAuth2\Server\AuthorizationServer;
 use League\OAuth2\Server\AuthorizationValidators\AuthorizationValidatorInterface;
 use League\OAuth2\Server\Exception\OAuthServerException;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
 use Sonrac\OAuth2\Security\Factory\OAuthTokenFactory;
 use Symfony\Bridge\PsrHttpMessage\Factory\DiactorosFactory;
 use Symfony\Bridge\PsrHttpMessage\Factory\HttpFoundationFactory;
@@ -23,7 +22,7 @@ use Symfony\Component\Security\Http\HttpUtils;
 
 /**
  * Class OAuthAuthenticationListener
- * @package sonrac\Auth\Security
+ * @package Sonrac\OAuth2\Security
  */
 class OAuthAuthenticationListener implements ListenerInterface
 {

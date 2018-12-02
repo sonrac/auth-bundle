@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace sonrac\Auth\Entity;
 
-use Lcobucci\JWT\Token;
 use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Entities\ScopeEntityInterface;

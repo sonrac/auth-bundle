@@ -11,6 +11,8 @@ trait ExpiryTimeTrait
 {
     /**
      * {@inheritdoc}
+     *
+     * @throws \Exception
      */
     public function getExpiryDateTimeAsInt()
     {
@@ -25,6 +27,9 @@ trait ExpiryTimeTrait
         return null;
     }
 
+    /**
+     * @return string
+     */
     public function getExpireAtFieldName(): string
     {
         return 'expire_at';

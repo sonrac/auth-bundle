@@ -10,7 +10,7 @@ doctrine:
     # configure these for your database server
     default_connection: default
     types:
-      enum_grant_type: sonrac\Auth\Types\GrantTypesEnum
+      enum_grant_type: Sonrac\OAuth2\Doctrine\Type\GrantTypesEnum
     connections:
       default:
         driver: 'pdo_sqlite'

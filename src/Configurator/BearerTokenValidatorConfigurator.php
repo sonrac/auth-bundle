@@ -8,14 +8,14 @@
 
 declare(strict_types=1);
 
-namespace sonrac\Auth\Configurator;
+namespace Sonrac\OAuth2\Configurator;
 
 use League\OAuth2\Server\AuthorizationValidators\BearerTokenValidator;
 use Sonrac\OAuth2\Factory\SecureKeyFactory;
 
 /**
  * Class BearerTokenValidatorConfigurator
- * @package sonrac\Auth\Configurator
+ * @package Sonrac\OAuth2\Configurator
  */
 class BearerTokenValidatorConfigurator
 {

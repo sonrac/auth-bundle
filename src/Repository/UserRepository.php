@@ -47,7 +47,7 @@ class UserRepository extends ServiceEntityRepository implements UserRepositoryIn
         $grantType,
         ClientEntityInterface $clientEntity
     ) {
-        $user = $this->loadByUsernameOrEmail($username);
+        $user = $this->findByUsernameOrEmail($username);
 
         if (null === $user || false === \password_verify($password, $user->getPassword())) {
             throw new \InvalidArgumentException('User not found');
@@ -70,7 +70,7 @@ class UserRepository extends ServiceEntityRepository implements UserRepositoryIn
      *
      * @return \sonrac\Auth\Entity\User|null
      */
-    public function loadByUsernameOrEmail(string $username): ?UserEntityInterface
+    public function findByUsernameOrEmail(string $username): ?UserEntityInterface
     {
         return $this->createQueryBuilder('user')
             ->orWhere('user.email = :username')
@@ -78,17 +78,5 @@ class UserRepository extends ServiceEntityRepository implements UserRepositoryIn
             ->setParameter('username', $username)
             ->getQuery()
             ->getOneOrNullResult(Query::HYDRATE_OBJECT);
-    }
-
-    /**
-     * Refresh user.
-     *
-     * @param object $user
-     *
-     * @throws \Doctrine\ORM\ORMException
-     */
-    public function refreshUser($user)
-    {
-        $this->getEntityManager()->refresh($user);
     }
 }

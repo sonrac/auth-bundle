@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace sonrac\Auth\Security\Token;
+namespace Sonrac\OAuth2\Security\Token;
 
 use Sonrac\OAuth2\Adapter\League\Entity\ClientEntityInterface;
 
 /**
  * Class OAuthClientToken
- * @package sonrac\Auth\Security\Token
+ * @package Sonrac\OAuth2\Security\Token
  */
 class OAuthClientToken extends AbstractOAuthToken
 {

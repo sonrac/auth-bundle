@@ -8,7 +8,7 @@
 
 declare(strict_types=1);
 
-namespace sonrac\Auth\Configurator;
+namespace Sonrac\OAuth2\Configurator;
 
 use League\OAuth2\Server\AuthorizationServer;
 use Sonrac\OAuth2\Adapter\League\Grant\AuthCodeGrant;
@@ -20,7 +20,7 @@ use Sonrac\OAuth2\Factory\GrantTypeFactory;
 
 /**
  * Class AuthorizationServerConfigurator
- * @package sonrac\Auth\Configurator
+ * @package Sonrac\OAuth2\Configurator
  */
 class AuthorizationServerConfigurator
 {

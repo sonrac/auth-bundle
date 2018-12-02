@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace sonrac\Auth\Security\Token;
+namespace Sonrac\OAuth2\Security\Token;
 
 use Sonrac\OAuth2\Adapter\League\Entity\ClientEntityInterface;
 
 /**
  * Interface OAuthTokenInterface
- * @package sonrac\Auth\Security\Token
+ * @package Sonrac\OAuth2\Security\Token
  */
 interface OAuthTokenInterface extends \Symfony\Component\Security\Core\Authentication\Token\TokenInterface
 {
@@ -23,7 +23,7 @@ interface OAuthTokenInterface extends \Symfony\Component\Security\Core\Authentic
     public function getProviderKey(): string;
 
     /**
-     * @return \sonrac\Auth\Security\Scope\Scope[]
+     * @return \Sonrac\OAuth2\Security\Scope\Scope[]
      */
     public function getScopes(): array;
 }

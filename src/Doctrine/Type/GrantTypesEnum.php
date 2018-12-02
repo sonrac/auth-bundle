@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace sonrac\Auth\Types;
+namespace Sonrac\OAuth2\Doctrine\Type;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
@@ -13,7 +13,8 @@ use Sonrac\OAuth2\Adapter\League\Grant\PasswordGrant;
 use Sonrac\OAuth2\Adapter\League\Grant\RefreshTokenGrant;
 
 /**
- * Class GrantTypesEnum.
+ * Class GrantTypesEnum
+ * @package Sonrac\OAuth2\Doctrine\Type
  */
 class GrantTypesEnum extends Type
 {

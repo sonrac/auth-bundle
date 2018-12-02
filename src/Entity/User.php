@@ -16,6 +16,7 @@ use Sonrac\OAuth2\Adapter\League\Entity\UserEntityInterface;
  *     description="User entity",
  *     required={"email", "username", "first_name", "last_name", "password", "avatar"}
  * )
+ * //TODO: remove api token and api token expire time
  */
 class User implements UserEntityInterface
 {
@@ -266,20 +267,12 @@ class User implements UserEntityInterface
     protected $additional_permissions;
 
     /**
-     * Container.
-     *
-     * @var \Psr\Container\ContainerInterface
-     */
-    private $container;
-
-    /**
      * User constructor.
      *
      * @param \Psr\Container\ContainerInterface $container
      */
     public function __construct(ContainerInterface $container)
     {
-        $this->container = $container;
     }
 
     /**
@@ -463,7 +456,8 @@ class User implements UserEntityInterface
      */
     public function getSalt()
     {
-        return $this->getContainer()->get('service_container')->get('oauth.pass_salt') ?? null;
+        //TODO: save salt as field in database
+        return null;
     }
 
     /**

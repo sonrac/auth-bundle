@@ -10,7 +10,6 @@ use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
-//use Symfony\Component\Routing\Loader\YamlFileLoader as RoutesYamlLoader;
 
 /**
  * Class SonracOAuthExtension
@@ -36,9 +35,6 @@ class SonracOAuthExtension extends Extension
 
         $xmlLoader->load('services.xml');
         $xmlLoader->load('services/security.xml');
-
-//        $routerLoader = new RoutesYamlLoader($fileLocator);
-//        $routerLoader->load('routes.yaml');
 
         $configuration = $this->getConfiguration($configs, $container);
 

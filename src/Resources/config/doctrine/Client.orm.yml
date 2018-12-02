@@ -8,12 +8,6 @@ sonrac\Auth\Entity\Client:
       nullable: false
       uniqueItems: true
       length: 255
-  OneToOne:
-    user_id:
-      targetEntity: User
-      joinColumn:
-        name: user_id
-        referenceColumnName: id
   fields:
     description:
       type: string

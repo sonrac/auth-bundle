@@ -6,11 +6,13 @@
  * Time: 9:48 PM
  */
 
-namespace sonrac\Auth\Security\Scope;
+declare(strict_types=1);
+
+namespace Sonrac\OAuth2\Security\Scope;
 
 /**
  * Class Scope
- * @package sonrac\Auth\Security\Scope
+ * @package Sonrac\OAuth2\Security\Scope
  */
 class Scope
 {

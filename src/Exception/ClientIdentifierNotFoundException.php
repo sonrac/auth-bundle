@@ -8,14 +8,13 @@
 
 declare(strict_types=1);
 
-
-namespace sonrac\Auth\Exception;
+namespace Sonrac\OAuth2\Exception;
 
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 /**
  * Class ClientIdentifierNotFoundException
- * @package sonrac\Auth\Exception
+ * @package Sonrac\OAuth2\Exception
  */
 class ClientIdentifierNotFoundException extends AuthenticationException
 {

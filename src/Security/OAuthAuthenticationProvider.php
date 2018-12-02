@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace sonrac\Auth\Security;
+namespace Sonrac\OAuth2\Security;
 
-use sonrac\Auth\Security\Token\AbstractOAuthToken;
 use Sonrac\OAuth2\Adapter\League\Repository\ClientRepositoryInterface;
+use Sonrac\OAuth2\Security\Token\AbstractOAuthToken;
 use Symfony\Component\Security\Core\Authentication\Provider\AuthenticationProviderInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 /**
  * Class OAuthAuthenticationProvider
- * @package sonrac\Auth\Security
+ * @package Sonrac\OAuth2\Security
  */
 class OAuthAuthenticationProvider implements AuthenticationProviderInterface
 {
