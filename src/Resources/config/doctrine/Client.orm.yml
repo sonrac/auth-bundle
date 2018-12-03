@@ -24,9 +24,6 @@ sonrac\Auth\Entity\Client:
     redirect_uris:
       type: json_array
       nullable: true
-    user_id:
-      type: integer
-      nullable: true
     created_at:
       type: integer
       length: 20

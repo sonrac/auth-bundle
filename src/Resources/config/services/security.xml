@@ -59,8 +59,8 @@
 
         <service id="sonrac_oauth.security.authorization_server.abstract"
                  class="League\OAuth2\Server\AuthorizationServer" public="false" abstract="true">
-            <argument key="$privateKey">%sonrac_oauth.keys.pair.path%/%sonrac_oauth.keys.pair.private_key_name%</argument>
-            <argument key="$encryptionKey">%sonrac_oauth.keys.encryption%%</argument>
+            <factory class="Sonrac\OAuth2\Factory\AuthorizationServerFactory" method="createServer"/>
+            <argument key="$secureKeyFactory" type="service" id="sonrac_oauth.security.secure_key_factory"/>
         </service>
 
     </services>

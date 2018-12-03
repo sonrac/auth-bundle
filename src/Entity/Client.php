@@ -48,15 +48,6 @@ class Client implements ClientEntityInterface
     protected $secret;
 
     /**
-     * User identifier.
-     *
-     * @var int
-     *
-     * @OA\Property(example=1)
-     */
-    protected $user_id;
-
-    /**
      * Allowed grant types.
      *
      * @var array
@@ -123,7 +114,7 @@ class Client implements ClientEntityInterface
     /**
      * {@inheritdoc}
      */
-    public function getIdentifier(): ?string
+    public function getIdentifier(): string
     {
         return $this->name;
     }
@@ -236,7 +227,8 @@ class Client implements ClientEntityInterface
     public function addRedirectUri(string $uri): void
     {
         $uri = \mb_strtolower($uri);
-        if (!\in_array($uri, $this->redirect_uris, true)) {
+
+        if (false === \in_array($uri, $this->redirect_uris, true)) {
             $this->redirect_uris[] = $uri;
         }
     }
