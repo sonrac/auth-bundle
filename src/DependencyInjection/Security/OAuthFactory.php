@@ -19,6 +19,9 @@ use Symfony\Component\DependencyInjection\Reference;
 /**
  * Class OAuthFactory
  * @package Sonrac\OAuth2\DependencyInjection\Security
+ *
+ * //TODO: add option default_scopes
+ * //TODO: add option token validator with default value
  */
 class OAuthFactory implements SecurityFactoryInterface
 {
