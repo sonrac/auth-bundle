@@ -88,7 +88,7 @@ class OAuthListener implements ListenerInterface
                 $this->logger->critical($exception->getMessage(), ['context' => $exception]);
             }
 
-            // add conversion to http 500 error
+            //TODO: add conversion to http 500 error
             return null;
         }
 

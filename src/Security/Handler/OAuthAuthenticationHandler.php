@@ -133,6 +133,7 @@ class OAuthAuthenticationHandler extends AbstractOAuthPsrHandler
         $userId = $request->getAttribute('oauth_user_id');
 
         //TODO: check to add default scopes.
+        //TODO: add write info about current request(controller and action from request) to perform further scopes validation
         $scopes = $request->getAttribute('oauth_scopes');
         $scopes = false === is_array($scopes)
             ? (null !== $this->defaultScopes ? $this->defaultScopes : [])
