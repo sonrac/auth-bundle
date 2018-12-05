@@ -461,16 +461,6 @@ class User implements UserEntityInterface
     }
 
     /**
-     * Get container.
-     *
-     * @return \Psr\Container\ContainerInterface
-     */
-    public function getContainer(): ContainerInterface
-    {
-        return $this->container;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function eraseCredentials()

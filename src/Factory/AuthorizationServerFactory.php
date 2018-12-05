@@ -8,7 +8,6 @@
 
 declare(strict_types=1);
 
-
 namespace Sonrac\OAuth2\Factory;
 
 use League\OAuth2\Server\AuthorizationServer;

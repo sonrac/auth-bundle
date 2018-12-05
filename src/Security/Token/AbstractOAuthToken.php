@@ -4,15 +4,23 @@ declare(strict_types=1);
 
 namespace Sonrac\OAuth2\Security\Token;
 
+use Sonrac\OAuth2\Adapter\League\Entity\ClientEntityInterface;
 use Sonrac\OAuth2\Security\Scope\Scope;
 use Symfony\Component\Security\Core\Authentication\Token\AbstractToken;
+use Symfony\Component\Security\Core\Role\Role;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Class AbstractOAuthToken
  * @package Sonrac\OAuth2\Security\Token
  */
-abstract class AbstractOAuthToken extends AbstractToken implements OAuthTokenInterface
+abstract class AbstractOAuthToken extends AbstractToken
 {
+    /**
+     * @var \Sonrac\OAuth2\Adapter\League\Entity\ClientEntityInterface
+     */
+    private $client;
+
     /**
      * @var string
      */
@@ -29,18 +37,29 @@ abstract class AbstractOAuthToken extends AbstractToken implements OAuthTokenInt
     private $scopes = [];
 
     /**
-     * AbstractOAuthToken constructor.
+     * OAuthToken constructor.
+     * @param \Sonrac\OAuth2\Adapter\League\Entity\ClientEntityInterface $client
      * @param string $credentials
      * @param string $providerKey
      * @param array $scopes
      * @param array $roles
      */
-    public function __construct(string $credentials, string $providerKey, array $scopes = [], array $roles = [])
-    {
+    public function __construct(
+        ClientEntityInterface $client,
+        string $providerKey,
+        ?string $credentials = null,
+        array $scopes = [],
+        array $roles = []
+    ) {
         parent::__construct($roles);
 
-        $this->credentials = $credentials;
+        if ('' === $providerKey) {
+            throw new \InvalidArgumentException('$providerKey must not be empty.');
+        }
+
+        $this->client = $client;
         $this->providerKey = $providerKey;
+        $this->credentials = $credentials;
 
         foreach ($scopes as $scope) {
             if (\is_string($scope)) {
@@ -51,6 +70,18 @@ abstract class AbstractOAuthToken extends AbstractToken implements OAuthTokenInt
 
             $this->scopes[] = $scope;
         }
+
+        if (0 !== count($this->scopes)) {
+            parent::setAuthenticated(true);
+        }
+    }
+
+    /**
+     * @return \Sonrac\OAuth2\Adapter\League\Entity\ClientEntityInterface
+     */
+    public function getClient(): ClientEntityInterface
+    {
+        return $this->client;
     }
 
     /**
@@ -60,7 +91,6 @@ abstract class AbstractOAuthToken extends AbstractToken implements OAuthTokenInt
     {
         return $this->credentials;
     }
-
 
     /**
      * {@inheritdoc}
@@ -76,5 +106,97 @@ abstract class AbstractOAuthToken extends AbstractToken implements OAuthTokenInt
     public function getScopes(): array
     {
         return $this->scopes;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Symfony\Component\Security\Core\User\UserInterface|null
+     */
+    public function getUser(): ?UserInterface
+    {
+        return parent::getUser();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setAuthenticated($authenticated)
+    {
+        if ($authenticated) {
+            throw new \LogicException('Cannot set this token to trusted after instantiation.');
+        }
+
+        parent::setAuthenticated(false);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function eraseCredentials()
+    {
+        parent::eraseCredentials();
+
+        $this->credentials = null;
+        //TODO: add erase credentials for client
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function serialize()
+    {
+        return \serialize([
+            clone $this->client,
+            $this->providerKey,
+            $this->credentials,
+            array_map(function (Scope $scope) {
+                return clone $scope;
+            }, $this->getScopes()),
+            parent::serialize(),
+        ]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function unserialize($serialized)
+    {
+        [
+            $this->client,
+            $this->providerKey,
+            $this->credentials,
+            $this->scopes,
+            $parent
+        ] = \unserialize($serialized);
+
+        parent::unserialize($parent);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __toString()
+    {
+        $class = \get_class($this);
+        $class = substr($class, strrpos($class, '\\') + 1);
+
+        $roles = array_map(function (Role $role) {
+            return $role->getRole();
+        }, $this->getRoles());
+
+        $scopes = array_map(function (Scope $scope) {
+            return $scope->getScope();
+        }, $this->scopes);
+
+        return sprintf(
+            '%s(client="%s", user="%s", authenticated=%s, scopes="%s", roles="%s")',
+            $class,
+            $this->client->getIdentifier(),
+            $this->getUsername(),
+            json_encode($this->isAuthenticated()),
+            implode(', ', $scopes),
+            implode(', ', $roles)
+        );
     }
 }

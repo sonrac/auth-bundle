@@ -16,12 +16,6 @@
             <argument type="service" id="service_container"/>
         </service>
 
-        <service id="sonrac_oauth.security.token_factory.abstract"
-                 class="Sonrac\OAuth2\Security\Factory\OAuthTokenFactory"
-                 public="false"
-                 abstract="true">
-        </service>
-
         <service id="sonrac_oauth.security.authorization_validator.bearer_token_configurator"
                  class="Sonrac\OAuth2\Configurator\BearerTokenValidatorConfigurator" public="false">
             <argument type="service" id="sonrac_oauth.security.secure_key_factory"/>
@@ -35,21 +29,44 @@
         </service>
 
         <service id="sonrac_oauth.security.authentication_provider.abstract"
-                 class="Sonrac\OAuth2\Security\OAuthAuthenticationProvider"
+                 class="Sonrac\OAuth2\Security\Provider\OAuthAuthenticationProvider"
                  public="false"
                  abstract="true">
+            <argument key="$userChecker" type="service" id="security.user_checker"/>
         </service>
 
-        <service id="sonrac_oauth.security.authentication_listener.abstract"
-                 class="Sonrac\OAuth2\Security\OAuthAuthenticationListener" public="false" abstract="true">
+        <service id="sonrac_oauth.security.oauth_path_config.abstract"
+                 class="Sonrac\OAuth2\Security\Config\OAuthPathConfig" public="false" abstract="true">
+            <argument key="$httpUtils" type="service" id="security.http_utils"/>
+        </service>
+
+        <service id="sonrac_oauth.security.oauth_authentication_handler.abstract"
+                 class="Sonrac\OAuth2\Security\Handler\OAuthAuthenticationHandler" public="false" abstract="true">
             <argument key="$authorizationValidator" type="service"
                       id="sonrac_oauth.security.authorization_validator.bearer_token"/>
             <argument key="$authenticationManager" type="service" id="security.authentication.manager"/>
             <argument key="$tokenStorage" type="service" id="security.token_storage"/>
-            <argument key="$httpUtils" type="service" id="security.http_utils"/>
             <argument key="$diactorosFactory" type="service" id="sensio_framework_extra.psr7.http_message_factory"/>
             <argument key="$httpFoundationFactory" type="service"
                       id="sensio_framework_extra.psr7.http_foundation_factory"/>
+        </service>
+
+        <service id="sonrac_oauth.security.oauth_authorization_handler.abstract"
+                 class="Sonrac\OAuth2\Security\Handler\OAuthAuthorizationHandler" public="false" abstract="true">
+            <argument key="$diactorosFactory" type="service" id="sensio_framework_extra.psr7.http_message_factory"/>
+            <argument key="$httpFoundationFactory" type="service"
+                      id="sensio_framework_extra.psr7.http_foundation_factory"/>
+        </service>
+
+        <service id="sonrac_oauth.security.oauth_issue_token_handler.abstract"
+                 class="Sonrac\OAuth2\Security\Handler\OAuthIssueTokenHandler" public="false" abstract="true">
+            <argument key="$diactorosFactory" type="service" id="sensio_framework_extra.psr7.http_message_factory"/>
+            <argument key="$httpFoundationFactory" type="service"
+                      id="sensio_framework_extra.psr7.http_foundation_factory"/>
+        </service>
+
+        <service id="sonrac_oauth.security.authentication_listener.abstract"
+                 class="Sonrac\OAuth2\Security\Firewall\OAuthListener" public="false" abstract="true">
         </service>
 
         <service id="sonrac_oauth.security.authorization_server_configurator.abstract"
