@@ -6,11 +6,11 @@ namespace Sonrac\OAuth2\Doctrine\Type;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
-use Sonrac\OAuth2\Adapter\League\Grant\AuthCodeGrant;
-use Sonrac\OAuth2\Adapter\League\Grant\ClientCredentialsGrant;
-use Sonrac\OAuth2\Adapter\League\Grant\ImplicitGrant;
-use Sonrac\OAuth2\Adapter\League\Grant\PasswordGrant;
-use Sonrac\OAuth2\Adapter\League\Grant\RefreshTokenGrant;
+use Sonrac\OAuth2\Bridge\Grant\AuthCodeGrant;
+use Sonrac\OAuth2\Bridge\Grant\ClientCredentialsGrant;
+use Sonrac\OAuth2\Bridge\Grant\ImplicitGrant;
+use Sonrac\OAuth2\Bridge\Grant\PasswordGrant;
+use Sonrac\OAuth2\Bridge\Grant\RefreshTokenGrant;
 
 /**
  * Class GrantTypesEnum

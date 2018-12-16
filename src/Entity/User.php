@@ -2,23 +2,16 @@
 
 declare(strict_types=1);
 
-namespace sonrac\Auth\Entity;
+namespace Sonrac\OAuth2\Entity;
 
 use OpenApi\Annotations as OA;
-use Psr\Container\ContainerInterface;
-use Sonrac\OAuth2\Adapter\League\Entity\UserEntityInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * Class User.
- *
- * @OA\Schema(
- *     title="User",
- *     description="User entity",
- *     required={"email", "username", "first_name", "last_name", "password", "avatar"}
- * )
- * //TODO: remove api token and api token expire time
+ * Class User
+ * @package Sonrac\OAuth2\Entity
  */
-class User implements UserEntityInterface
+class User implements UserInterface
 {
     use TimeEntityTrait;
 
@@ -106,179 +99,110 @@ class User implements UserEntityInterface
     /**
      * User identifier.
      *
-     * @var int
-     *
-     * @OA\Property(example=1)
+     * @var int|null
      */
     protected $id;
 
     /**
      * Username.
      *
-     * @var string
-     *
-     * @OA\Property(example="username")
+     * @var string|null
      */
     protected $username;
 
     /**
      * User email.
      *
-     * @var string
-     *
-     * @OA\Property(example="test@test.com", format="email")
+     * @var string|null
      */
     protected $email;
 
     /**
-     * Password as bcrypt hash.
+     * Password hash.
      *
-     * @var string
-     *
-     * @OA\Property(readOnly=true, example="password-hash")
+     * @var string|null
      */
     protected $password;
 
     /**
      * User roles with " " as delimiter.
      *
-     * @var string
-     *
-     * @OA\Property(example="ROLE_ADMIN|ROLE_MANAGER")
+     * @var array|null
      */
     protected $roles;
 
     /**
      * First name.
      *
-     * @var string
-     *
-     * @OA\Property(example="John")
+     * @var string|null
      */
-    protected $first_name;
+    protected $firstName;
 
     /**
      * Last name.
      *
-     * @var string
-     *
-     * @OA\Property(example="Doe")
+     * @var string|null
      */
-    protected $last_name;
-
-    /**
-     * Middle name.
-     *
-     * @var string
-     *
-     * @OA\Property(example="Middle")
-     */
-    protected $middle_name;
-
-    /**
-     * User avatar.
-     *
-     * @var string
-     *
-     * @OA\Property(example="/path/to/avatar.jpg")
-     */
-    protected $avatar;
-
-    /**
-     * User api token.
-     *
-     * @var string
-     *
-     * @OA\Property(example="example-token")
-     */
-    protected $api_token;
-
-    /**
-     * Created time.
-     *
-     * @var int
-     *
-     * @OA\Property(format="bigInt", example="1529397813")
-     */
-    protected $created_at;
-
-    /**
-     * Lst login time.
-     *
-     * @var int
-     *
-     * @OA\Property(format="bigInt", example="1529397813")
-     */
-    protected $last_login;
-
-    /**
-     * User api token expire date.
-     *
-     * @var int
-     *
-     * @OA\Property(format="bigInt", example="1529397813")
-     */
-    protected $api_token_expire_at;
+    protected $lastName;
 
     /**
      * Birth date.
      *
-     * @var int
+     * @var int|null
      *
      * @OA\Property(format="bigInt", example="1529397813")
      */
     protected $birthday;
 
     /**
-     * Updated time.
+     * User avatar.
      *
-     * @var int
-     *
-     * @OA\Property(format="bigInt", example="1529397813")
+     * @var string|null
      */
-    protected $updated_at;
+    protected $avatar;
 
     /**
      * User status.
      * One of "pending", "active", "disabled" or "deleted".
      *
-     * @var string
-     *
-     * @OA\Property(
-     *     example="pending",
-     *     default="active",
-     *     enum={"pending", "active", "disabled", "deleted"}
-     * )
+     * @var string|null
      */
     protected $status;
 
     /**
      * Additional user permissions.
      *
-     * @var array
-     *
-     * @OA\Property(
-     *     example={"permission1", "permission2"},
-     *     @OA\Items(
-     *         type="string"
-     *     )
-     * )
+     * @var array|null
      */
-    protected $additional_permissions;
+    protected $additionalPermissions;
 
     /**
-     * User constructor.
+     * Lst login time.
      *
-     * @param \Psr\Container\ContainerInterface $container
+     * @var int|null
      */
-    public function __construct(ContainerInterface $container)
-    {
-    }
+    protected $lastLogin;
 
     /**
-     * {@inheritdoc}
+     * Created time.
+     *
+     * @var int|null
      */
-    public function getIdentifier()
+    protected $createdAt;
+
+    /**
+     * Updated time.
+     *
+     * @var int|null
+     */
+    protected $updatedAt;
+
+    /**
+     * Get id.
+     *
+     * @return int|null
+     */
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -286,7 +210,7 @@ class User implements UserEntityInterface
     /**
      * Get username.
      *
-     * @return string
+     * @return string|null
      */
     public function getUsername(): ?string
     {
@@ -297,6 +221,8 @@ class User implements UserEntityInterface
      * Set username.
      *
      * @param string $username
+     *
+     * @return void
      */
     public function setUsername(string $username): void
     {
@@ -306,7 +232,7 @@ class User implements UserEntityInterface
     /**
      * Get email.
      *
-     * @return string
+     * @return string|null
      */
     public function getEmail(): ?string
     {
@@ -317,6 +243,8 @@ class User implements UserEntityInterface
      * Set email.
      *
      * @param string $email
+     *
+     * @return void
      */
     public function setEmail(string $email): void
     {
@@ -326,7 +254,7 @@ class User implements UserEntityInterface
     /**
      * Get user password hash.
      *
-     * @return string
+     * @return string|null
      */
     public function getPassword(): ?string
     {
@@ -337,6 +265,8 @@ class User implements UserEntityInterface
      * Set user password.
      *
      * @param string $password
+     *
+     * @return void
      */
     public function setPassword(string $password): void
     {
@@ -346,19 +276,21 @@ class User implements UserEntityInterface
     /**
      * Get user roles.
      *
-     * @return string
+     * @return array
      */
-    public function getRoles(): ?string
+    public function getRoles(): array
     {
-        return $this->roles;
+        return $this->roles ?? $this->roles = [self::ROLE_USER];
     }
 
     /**
      * Set user roles.
      *
-     * @param string $roles
+     * @param array $roles
+     *
+     * @return void
      */
-    public function setRoles(string $roles): void
+    public function setRoles(array $roles): void
     {
         $this->roles = $roles;
     }
@@ -366,21 +298,23 @@ class User implements UserEntityInterface
     /**
      * Get user first name.
      *
-     * @return string
+     * @return string|null
      */
     public function getFirstName(): ?string
     {
-        return $this->first_name;
+        return $this->firstName;
     }
 
     /**
      * Set user first name.
      *
-     * @param string $first_name
+     * @param string $firstName
+     *
+     * @return void
      */
-    public function setFirstName(string $first_name): void
+    public function setFirstName(string $firstName): void
     {
-        $this->first_name = $first_name;
+        $this->firstName = $firstName;
     }
 
     /**
@@ -390,121 +324,19 @@ class User implements UserEntityInterface
      */
     public function getLastName(): ?string
     {
-        return $this->last_name;
+        return $this->lastName;
     }
 
     /**
      * Set user last name.
      *
-     * @param string $last_name
-     */
-    public function setLastName(string $last_name): void
-    {
-        $this->last_name = $last_name;
-    }
-
-    /**
-     * Get user avatar.
+     * @param string $lastName
      *
-     * @return string
+     * @return void
      */
-    public function getAvatar(): string
+    public function setLastName(string $lastName): void
     {
-        return $this->avatar;
-    }
-
-    /**
-     * Set user avatar.
-     *
-     * @param string $avatar
-     */
-    public function setAvatar(string $avatar): void
-    {
-        $this->avatar = $avatar;
-    }
-
-    /**
-     * @return int
-     */
-    public function getCreatedAt(): int
-    {
-        return $this->created_at;
-    }
-
-    /**
-     * Get user status.
-     *
-     * @return string
-     */
-    public function getStatus(): string
-    {
-        return $this->status ?? $this->status = 'active';
-    }
-
-    /**
-     * Set user status.
-     *
-     * @param string $status
-     */
-    public function setStatus(string $status): void
-    {
-        $this->status = $status;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getSalt()
-    {
-        //TODO: save salt as field in database
-        return null;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function eraseCredentials()
-    {
-    }
-
-    /**
-     * Get user api token.
-     *
-     * @return string
-     */
-    public function getApiToken(): string
-    {
-        return $this->api_token;
-    }
-
-    /**
-     * Set user api token.
-     *
-     * @param string $api_token
-     */
-    public function setApiToken(string $api_token): void
-    {
-        $this->api_token = $api_token;
-    }
-
-    /**
-     * Get api token expire date.
-     *
-     * @return int
-     */
-    public function getApiTokenExpireAt(): ?int
-    {
-        return $this->api_token_expire_at;
-    }
-
-    /**
-     * Set expire date for user api token.
-     *
-     * @param int $api_token_expire_at
-     */
-    public function setApiTokenExpireAt(int $api_token_expire_at): void
-    {
-        $this->api_token_expire_at = $api_token_expire_at;
+        $this->lastName = $lastName;
     }
 
     /**
@@ -521,10 +353,56 @@ class User implements UserEntityInterface
      * Set birth date.
      *
      * @param int $birthday
+     *
+     * @return void
      */
     public function setBirthday(int $birthday): void
     {
         $this->birthday = $birthday;
+    }
+
+    /**
+     * Get user avatar.
+     *
+     * @return string|null
+     */
+    public function getAvatar(): ?string
+    {
+        return $this->avatar;
+    }
+
+    /**
+     * Set user avatar.
+     *
+     * @param string|null $avatar
+     *
+     * @return void
+     */
+    public function setAvatar(?string $avatar): void
+    {
+        $this->avatar = $avatar;
+    }
+
+    /**
+     * Get user status.
+     *
+     * @return string
+     */
+    public function getStatus(): string
+    {
+        return $this->status ?? $this->status = self::STATUS_ACTIVE;
+    }
+
+    /**
+     * Set user status.
+     *
+     * @param string $status
+     *
+     * @return void
+     */
+    public function setStatus(string $status): void
+    {
+        $this->status = $status;
     }
 
     /**
@@ -534,17 +412,19 @@ class User implements UserEntityInterface
      */
     public function getLastLogin(): ?int
     {
-        return $this->last_login;
+        return $this->lastLogin;
     }
 
     /**
      * Set last login time.
      *
-     * @param int $last_login
+     * @param int $lastLogin
+     *
+     * @return void
      */
-    public function setLastLogin(int $last_login): void
+    public function setLastLogin(int $lastLogin): void
     {
-        $this->last_login = $last_login;
+        $this->lastLogin = $lastLogin;
     }
 
     /**
@@ -554,20 +434,32 @@ class User implements UserEntityInterface
      */
     public function getAdditionalPermissions(): array
     {
-        if (!$this->additional_permissions || \is_string($this->additional_permissions)) {
-            $this->additional_permissions = \explode('|', $this->additional_permissions ?? '') ?? [];
-        }
-
-        return $this->additional_permissions;
+        return null !== $this->additionalPermissions ? $this->additionalPermissions : [];
     }
 
     /**
      * Get additional user permissions.
      *
      * @param array $additionalPermissions
+     *
+     * @return void
      */
     public function setAdditionalPermissions(array $additionalPermissions): void
     {
-        $this->additional_permissions = $additionalPermissions;
+        $this->additionalPermissions = $additionalPermissions;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSalt()
+    {
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function eraseCredentials()
+    {
     }
 }

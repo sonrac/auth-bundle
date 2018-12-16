@@ -2,14 +2,15 @@
 
 declare(strict_types=1);
 
-namespace sonrac\Auth\Tests\Functional;
+namespace Sonrac\OAuth2\Tests\Functional;
 
-use Sonrac\OAuth2\Adapter\League\Grant\ClientCredentialsGrant;
-use Sonrac\OAuth2\Adapter\League\Grant\PasswordGrant;
-use Sonrac\OAuth2\Adapter\League\Grant\RefreshTokenGrant;
+use Sonrac\OAuth2\Bridge\Grant\ClientCredentialsGrant;
+use Sonrac\OAuth2\Bridge\Grant\PasswordGrant;
+use Sonrac\OAuth2\Bridge\Grant\RefreshTokenGrant;
 
 /**
- * Class AuthorizeTest.
+ * Class AuthorizeTest
+ * @package Sonrac\OAuth2\Tests\Functional
  */
 class AuthorizeTest extends BaseFunctionalTester
 {
@@ -70,7 +71,7 @@ class AuthorizeTest extends BaseFunctionalTester
         $client = static::createClient();
         $client->request('POST', '/api/auth/token', [
             'grant_type'    => ClientCredentialsGrant::TYPE,
-            'client_id'     => 'Test Client',
+            'client_id'     => 'test_client',
             'client_secret' => 'secret-key',
             'scope'         => 'default',
         ]);
@@ -97,7 +98,7 @@ class AuthorizeTest extends BaseFunctionalTester
         $client = static::createClient();
         $client->request('POST', '/api/auth/token', [
             'grant_type'    => PasswordGrant::TYPE,
-            'client_id'     => 'Test Client',
+            'client_id'     => 'test_client',
             'client_secret' => 'secret-key',
             'scope'         => 'default',
             'username'      => 'username',
@@ -139,7 +140,7 @@ class AuthorizeTest extends BaseFunctionalTester
         $client = static::createClient();
         $client->request('POST', '/api/auth/token', [
             'grant_type'    => RefreshTokenGrant::TYPE,
-            'client_id'     => 'Test Client',
+            'client_id'     => 'test_client',
             'refresh_token' => $tokens[2],
             'client_secret' => 'secret-key',
             'scope'         => 'default',
@@ -171,7 +172,7 @@ class AuthorizeTest extends BaseFunctionalTester
 //            'GET',
 //            '/auth/authorize?'.\http_build_query([
 //                'grant_type'    => Client::GRANT_IMPLICIT,
-//                'client_id'     => 'Test Client',
+//                'client_id'     => 'test_client',
 //                'redirect_uri'  => 'http://test.com',
 //                'scope'         => 'default',
 //                'response_type' => Client::RESPONSE_TYPE_TOKEN,
@@ -204,7 +205,7 @@ class AuthorizeTest extends BaseFunctionalTester
 //            'GET',
 //            '/auth/authorize?'.\http_build_query([
 //                'grant_type'    => Client::GRANT_AUTH_CODE,
-//                'client_id'     => 'Test Client',
+//                'client_id'     => 'test_client',
 //                'redirect_uri'  => 'http://test.com',
 //                'scope'         => 'default',
 //                'response_type' => Client::RESPONSE_TYPE_CODE,
@@ -235,7 +236,7 @@ class AuthorizeTest extends BaseFunctionalTester
 //
 //        $client->request('POST', '/auth/token', [
 //            'grant_type'    => Client::GRANT_AUTH_CODE,
-//            'client_id'     => 'Test Client',
+//            'client_id'     => 'test_client',
 //            'client_secret' => 'secret-key',
 //            'scope'         => 'default',
 //            'redirect_uri'  => 'http://test.com',

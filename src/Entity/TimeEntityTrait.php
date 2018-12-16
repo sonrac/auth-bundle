@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace sonrac\Auth\Entity;
+namespace Sonrac\OAuth2\Entity;
 
 /**
  * Class TimeEntityTrait.
  *
- * Class property created_at and updated_at must be exists.
+ * Class property createdAt and updatedAt must be exists.
  */
 trait TimeEntityTrait
 {
@@ -16,29 +16,19 @@ trait TimeEntityTrait
      *
      * @return int
      */
-    public function getCreatedAt(): int
+    public function getCreatedAt(): ?int
     {
-        return (int) ($this->{$this->getCreatedAtFieldName()});
-    }
-
-    /**
-     * Get created at field name.
-     *
-     * @return string
-     */
-    protected function getCreatedAtFieldName(): string
-    {
-        return 'created_at';
+        return $this->{$this->getCreatedAtFieldName()};
     }
 
     /**
      * Set created time.
      *
-     * @param int|string $created_at
+     * @param int $createdAt
      */
-    public function setCreatedAt($created_at): void
+    public function setCreatedAt(int $createdAt): void
     {
-        $this->{$this->getCreatedAtFieldName()} = (int) $created_at;
+        $this->{$this->getCreatedAtFieldName()} = $createdAt;
     }
 
     /**
@@ -52,22 +42,32 @@ trait TimeEntityTrait
     }
 
     /**
+     * Set updated time.
+     *
+     * @param int $updatedAt
+     */
+    public function setUpdatedAt(int $updatedAt): void
+    {
+        $this->{$this->getUpdatedAtFieldName()} = $updatedAt;
+    }
+
+    /**
+     * Get created at field name.
+     *
+     * @return string
+     */
+    protected function getCreatedAtFieldName(): string
+    {
+        return 'createdAt';
+    }
+
+    /**
      * Get updated at field name.
      *
      * @return string
      */
     protected function getUpdatedAtFieldName(): string
     {
-        return 'updated_at';
-    }
-
-    /**
-     * Set updated time.
-     *
-     * @param int|string $updated_at
-     */
-    public function setUpdatedAt($updated_at): void
-    {
-        $this->{$this->getUpdatedAtFieldName()} = (int) $updated_at;
+        return 'updatedAt';
     }
 }

@@ -1,8 +1,7 @@
 <?php
 
-namespace sonrac\Auth\Tests\App\Controller;
+namespace Sonrac\OAuth2\Tests\App\Controller;
 
-use sonrac\Auth\Repository\Users;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;

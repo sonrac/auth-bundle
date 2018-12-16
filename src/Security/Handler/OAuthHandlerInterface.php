@@ -22,13 +22,6 @@ interface OAuthHandlerInterface
     /**
      * @param \Symfony\Component\HttpFoundation\Request $request
      *
-     * @return bool
-     */
-    public function requires(Request $request): bool;
-
-    /**
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     *
      * @return \Symfony\Component\HttpFoundation\Response|null
      */
     public function handle(Request $request): ?Response;

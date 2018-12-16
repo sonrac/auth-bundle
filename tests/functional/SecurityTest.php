@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace sonrac\Auth\Tests\Functional;
+namespace Sonrac\OAuth2\Tests\Functional;
 
 /**
  * Class SecurityTest
+ * @package Sonrac\OAuth2\Tests\Functional
  */
 class SecurityTest extends AbstractSecurityControllerTest
 {

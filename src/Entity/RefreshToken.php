@@ -2,246 +2,143 @@
 
 declare(strict_types=1);
 
-namespace sonrac\Auth\Entity;
-
-use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
-use League\OAuth2\Server\Entities\RefreshTokenEntityInterface;
-use League\OAuth2\Server\Entities\ScopeEntityInterface;
-use League\OAuth2\Server\Entities\Traits\RefreshTokenTrait;
-use Openapi\Annotations as OA;
+namespace Sonrac\OAuth2\Entity;
 
 /**
- * Class RefreshToken.
- * Refresh token entity.
- *
- * @OA\Schema(
- *     title="RefreshToken",
- *     description="Refresh token entity",
- *     required={"refresh_token", "token", "expire_at"}
- * )
+ * Class RefreshToken
+ * @package Sonrac\OAuth2\Entity
  */
-class RefreshToken implements RefreshTokenEntityInterface
+class RefreshToken
 {
-    use TimeEntityTrait, RefreshTokenTrait{
-        setAccessToken as setAccessTokenTrait;
-        setExpiryDateTime as setExpiryDateTimeTrait;
-    }
+    use TimeEntityTrait;
 
     /**
-     * Refresh token.
+     * Refresh token identifier.
      *
-     * @var string
-     *
-     * @OA\Property(example="refresh_token", maxLength=2000)
+     * @var string|null
      */
-    protected $refresh_token;
+    protected $id;
 
     /**
      * Access token.
      *
-     * @var string
-     *
-     * @OA\Property(example="token", maxLength=2000, uniqueItems=true)
+     * @var string|null
      */
-    protected $token;
+    protected $accessToken;
 
     /**
-     * Expire date.
+     * Expired time.
      *
-     * @var int
-     *
-     * @OA\Property(example=1529397813, format="bigInt")
+     * @var int|null
      */
-    protected $expire_at;
+    protected $expireAt;
 
     /**
-     * Refresh token scopes.
-     *
-     * @var array
-     *
-     * @OA\Property(
-     *     example={"client", "admin"},
-     *     default={"default"},
-     *     @OA\Items(
-     *         type="string"
-     *     )
-     * )
-     */
-    protected $token_scopes;
-
-    /**
-     * Is revoked token.
+     * Is revoked.
      *
      * @var bool
-     *
-     * @OA\Property(example=false, default=false)
      */
-    protected $is_revoked = false;
+    protected $isRevoked = false;
 
     /**
      * Created time.
      *
-     * @var int
-     *
-     * @OA\Property(format="bigInt", example="1529397813")
+     * @var int|null
      */
-    protected $created_at;
+    protected $createdAt;
 
     /**
      * Updated time.
      *
-     * @var int
+     * @var int|null
+     */
+    protected $updatedAt;
+
+    /**
+     * Get id.
      *
-     * @OA\Property(format="bigInt", example="1529397813")
+     * @return string|null
      */
-    protected $updated_at;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getIdentifier(): string
+    public function getId(): ?string
     {
-        return $this->refresh_token ?? '';
+        return $this->id;
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function setIdentifier($identifier): void
-    {
-        $this->refresh_token = $identifier;
-    }
-
-    /**
-     * @return string
-     */
-    public function getRefreshToken(): string
-    {
-        return $this->refresh_token ?? '';
-    }
-
-    /**
-     * @param string $refresh_token
-     */
-    public function setRefreshToken(string $refresh_token): void
-    {
-        $this->refresh_token = $refresh_token;
-    }
-
-    /**
-     * Get token.
+     * Set id.
      *
-     * @return string
-     */
-    public function getToken(): ?string
-    {
-        return $this->token;
-    }
-
-    /**
-     * Set token.
+     * @param string $id
      *
-     * @param string $token
+     * @return void
      */
-    public function setToken(string $token): void
+    public function setId(string $id): void
     {
-        $this->token = $token;
+        $this->id = $id;
     }
 
     /**
-     * @return int
+     * Get access token.
+     *
+     * @return string|null
      */
-    public function getExpireAt(): int
+    public function getAccessToken(): ?string
     {
-        return $this->expire_at ?? 0;
+        return $this->accessToken;
     }
 
     /**
-     * @param int $expire_at
+     * Set access token.
+     *
+     * @param string $accessToken
+     *
+     * @return void
      */
-    public function setExpireAt(int $expire_at): void
+    public function setAccessToken(string $accessToken): void
     {
-        $this->expire_at = $expire_at;
+        $this->accessToken = $accessToken;
     }
 
     /**
+     * Get expired time.
+     *
+     * @return int|null
+     */
+    public function getExpireAt(): ?int
+    {
+        return $this->expireAt;
+    }
+
+    /**
+     * Set expire time.
+     *
+     * @param int $expireAt
+     *
+     * @return void
+     */
+    public function setExpireAt(int $expireAt): void
+    {
+        $this->expireAt = $expireAt;
+    }
+
+    /**
+     * Check auth code is revoked.
+     *
      * @return bool
      */
     public function isRevoked(): bool
     {
-        return $this->is_revoked ?? false;
+        return $this->isRevoked;
     }
 
     /**
-     * @param bool $is_revoked
-     */
-    public function setIsRevoked(bool $is_revoked): void
-    {
-        $this->is_revoked = $is_revoked;
-    }
-
-    /**
-     * @return int
-     */
-    public function getCreatedAt(): int
-    {
-        return $this->created_at ?? \time();
-    }
-
-    /**
-     * @param int $created_at
-     */
-    public function setCreatedAt(int $created_at): void
-    {
-        $this->created_at = $created_at;
-    }
-
-    /**
-     * Get scopes.
+     * Set auth code revoked.
      *
-     * @return array
-     */
-    public function getScopes(): ?array
-    {
-        return $this->token_scopes;
-    }
-
-    /**
-     * Set scopes.
+     * @param bool $isRevoked
      *
-     * @param array $scopes
+     * @return void
      */
-    public function setScopes(array $scopes): void
+    public function setIsRevoked(bool $isRevoked): void
     {
-        $this->token_scopes = $this->token_scopes ?? [];
-        foreach ($scopes as $scope) {
-            if (\is_object($scope) && \in_array(ScopeEntityInterface::class, \class_implements($scope))) {
-                $this->token_scopes[] = $scope->getIdentifier();
-
-                continue;
-            }
-
-            $this->token_scopes[] = $scope;
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setAccessToken(AccessTokenEntityInterface $accessToken): void
-    {
-        $this->token = $accessToken->getIdentifier();
-
-        $this->setAccessTokenTrait($accessToken);
-        $this->setScopes($accessToken->getScopes());
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setExpiryDateTime(\DateTime $dateTime): void
-    {
-        $this->expire_at = $dateTime->getTimestamp();
-        $this->setExpiryDateTimeTrait($dateTime);
+        $this->isRevoked = $isRevoked;
     }
 }

@@ -13,10 +13,8 @@ namespace Sonrac\OAuth2\Security\Handler;
 use League\OAuth2\Server\AuthorizationServer;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Sonrac\OAuth2\Security\Config\OAuthPathConfig;
 use Symfony\Bridge\PsrHttpMessage\Factory\DiactorosFactory;
 use Symfony\Bridge\PsrHttpMessage\Factory\HttpFoundationFactory;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class OAuthIssueTokenHandler
@@ -30,35 +28,19 @@ class OAuthIssueTokenHandler extends AbstractOAuthPsrHandler
     private $authorizationServer;
 
     /**
-     * @var \Sonrac\OAuth2\Security\Config\OAuthPathConfig
-     */
-    private $pathConfig;
-
-    /**
      * OAuthIssueTokenHandler constructor.
      * @param \League\OAuth2\Server\AuthorizationServer $authorizationServer
-     * @param \Sonrac\OAuth2\Security\Config\OAuthPathConfig $pathConfig
      * @param \Symfony\Bridge\PsrHttpMessage\Factory\DiactorosFactory $diactorosFactory
      * @param \Symfony\Bridge\PsrHttpMessage\Factory\HttpFoundationFactory $httpFoundationFactory
      */
     public function __construct(
         AuthorizationServer $authorizationServer,
-        OAuthPathConfig $pathConfig,
         DiactorosFactory $diactorosFactory,
         HttpFoundationFactory $httpFoundationFactory
     ) {
         parent::__construct($diactorosFactory, $httpFoundationFactory);
 
         $this->authorizationServer = $authorizationServer;
-        $this->pathConfig = $pathConfig;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function requires(Request $request): bool
-    {
-        return $this->pathConfig->isIssueTokenPath($request) && $request->isMethod('POST');
     }
 
     /**

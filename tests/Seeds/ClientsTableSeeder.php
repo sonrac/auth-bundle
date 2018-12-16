@@ -2,17 +2,18 @@
 
 declare(strict_types=1);
 
-namespace sonrac\Auth\Tests\Seeds;
+namespace Sonrac\OAuth2\Tests\Seeds;
 
-use Sonrac\OAuth2\Adapter\League\Grant\AuthCodeGrant;
-use Sonrac\OAuth2\Adapter\League\Grant\ClientCredentialsGrant;
-use Sonrac\OAuth2\Adapter\League\Grant\ImplicitGrant;
-use Sonrac\OAuth2\Adapter\League\Grant\PasswordGrant;
-use Sonrac\OAuth2\Adapter\League\Grant\RefreshTokenGrant;
+use Sonrac\OAuth2\Bridge\Grant\AuthCodeGrant;
+use Sonrac\OAuth2\Bridge\Grant\ClientCredentialsGrant;
+use Sonrac\OAuth2\Bridge\Grant\ImplicitGrant;
+use Sonrac\OAuth2\Bridge\Grant\PasswordGrant;
+use Sonrac\OAuth2\Bridge\Grant\RefreshTokenGrant;
 use sonrac\SimpleSeed\RollBackSeedWithCheckExists;
 
 /**
- * Class Clients.
+ * Class ClientsTableSeeder
+ * @package Sonrac\OAuth2\Tests\Seeds
  */
 class ClientsTableSeeder extends RollBackSeedWithCheckExists
 {
@@ -21,7 +22,7 @@ class ClientsTableSeeder extends RollBackSeedWithCheckExists
      */
     protected function getTable(): string
     {
-        return 'clients';
+        return 'oauth2_clients';
     }
 
     /**
@@ -31,10 +32,10 @@ class ClientsTableSeeder extends RollBackSeedWithCheckExists
     {
         return [
             [
+                'id' => 'test_client',
                 'name' => 'Test Client',
                 'description' => 'First test client',
                 'secret' => 'secret-key',
-                'created_at' => \time(),
                 'allowed_grant_types' => \json_encode([
                     ClientCredentialsGrant::TYPE,
                     AuthCodeGrant::TYPE,
@@ -46,6 +47,7 @@ class ClientsTableSeeder extends RollBackSeedWithCheckExists
                     'http://test.com',
                     'https://test.com',
                 ]),
+                'created_at' => \time(),
             ],
         ];
     }
@@ -55,7 +57,7 @@ class ClientsTableSeeder extends RollBackSeedWithCheckExists
      */
     protected function getWhereForRow($data): array
     {
-        return ['name' => $data['name']];
+        return ['id' => $data['id']];
     }
 
     /**

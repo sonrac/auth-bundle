@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Sonrac\OAuth2\Security\Token;
 
-use Sonrac\OAuth2\Adapter\League\Entity\ClientEntityInterface;
+use League\OAuth2\Server\Entities\ClientEntityInterface;
 use Symfony\Component\Security\Core\Authentication\Token\AbstractToken;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -17,9 +17,9 @@ class OAuthToken extends AbstractOAuthToken
     /**
      * OAuthToken constructor.
      * @param \Symfony\Component\Security\Core\User\UserInterface $user
-     * @param \Sonrac\OAuth2\Adapter\League\Entity\ClientEntityInterface $client
-     * @param string $credentials
+     * @param \League\OAuth2\Server\Entities\ClientEntityInterface $client
      * @param string $providerKey
+     * @param string $credentials
      * @param array $scopes
      * @param array $roles
      */

@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-namespace sonrac\Auth\Tests\Seeds;
+namespace Sonrac\OAuth2\Tests\Seeds;
 
 use sonrac\SimpleSeed\RollBackSeedWithCheckExists;
 
 /**
- * Class RefreshTokensTableSeeder.
+ * Class RefreshTokensTableSeeder
+ * @package Sonrac\OAuth2\Tests\Seeds
  */
 class RefreshTokensTableSeeder extends RollBackSeedWithCheckExists
 {
@@ -16,7 +17,7 @@ class RefreshTokensTableSeeder extends RollBackSeedWithCheckExists
      */
     protected function getTable(): string
     {
-        return 'refresh_tokens';
+        return 'oauth2_refresh_tokens';
     }
 
     /**
@@ -26,10 +27,11 @@ class RefreshTokensTableSeeder extends RollBackSeedWithCheckExists
     {
         return [
             [
-                'refresh_token' => 'refresh_token1',
-                'token'         => 'test_token',
-                'expire_at'     => \time() + 3600,
-                'created_at'    => \time(),
+                'id' => 'refresh_token1',
+                'access_token' => 'test_token',
+                'expire_at' => \time() + 3600,
+                'is_revoked' => 0,
+                'created_at' => \time(),
             ],
         ];
     }
@@ -39,7 +41,7 @@ class RefreshTokensTableSeeder extends RollBackSeedWithCheckExists
      */
     protected function getWhereForRow($data): array
     {
-        return ['refresh_token' => $data['refresh_token']];
+        return ['id' => $data['id']];
     }
 
     /**

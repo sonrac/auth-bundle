@@ -5,6 +5,8 @@
   "require": {
     "php": ">=7.1",
     "ext-json": "*",
+    "ext-mbstring": "*",
+    "ext-openssl": "*",
     "symfony/config": "^4.0",
     "symfony/console": "^4.0",
     "symfony/dependency-injection": "^4.0",
@@ -49,23 +51,15 @@
   },
   "autoload": {
     "psr-4": {
-      "Sonrac\\OAuth2\\Adapter\\": "src/Adapter",
-      "Sonrac\\OAuth2\\Command\\": "src/Command",
-      "Sonrac\\OAuth2\\Configurator\\": "src/Configurator",
-      "Sonrac\\OAuth2\\DependencyInjection\\": "src/DependencyInjection",
-      "Sonrac\\OAuth2\\Doctrine\\Type\\": "src/Doctrine/Type",
-      "Sonrac\\OAuth2\\Exception\\": "src/Exception",
-      "Sonrac\\OAuth2\\Factory\\": "src/Factory",
-      "Sonrac\\OAuth2\\Security\\": "src/Security",
-      "sonrac\\Auth\\": "src"
+      "Sonrac\\OAuth2\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "sonrac\\Auth\\Tests\\": "tests",
-      "sonrac\\Auth\\Tests\\App\\": "tests/app/src",
-      "sonrac\\Auth\\Tests\\Units\\": "tests/units",
-      "sonrac\\Auth\\Tests\\Functional\\": "tests/functional"
+      "Sonrac\\OAuth2\\Tests\\": "tests",
+      "Sonrac\\OAuth2\\Tests\\App\\": "tests/app/src",
+      "Sonrac\\OAuth2\\Tests\\Units\\": "tests/units",
+      "Sonrac\\OAuth2\\Tests\\Functional\\": "tests/functional"
     }
   }
 }

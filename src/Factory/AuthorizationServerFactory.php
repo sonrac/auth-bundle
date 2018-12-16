@@ -12,9 +12,9 @@ namespace Sonrac\OAuth2\Factory;
 
 use League\OAuth2\Server\AuthorizationServer;
 use League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface;
+use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
 use League\OAuth2\Server\Repositories\ScopeRepositoryInterface;
 use League\OAuth2\Server\ResponseTypes\ResponseTypeInterface;
-use Sonrac\OAuth2\Adapter\League\Repository\ClientRepositoryInterface;
 
 /**
  * Class AuthorizationServerFactory
@@ -23,7 +23,7 @@ use Sonrac\OAuth2\Adapter\League\Repository\ClientRepositoryInterface;
 class AuthorizationServerFactory
 {
     /**
-     * @param \Sonrac\OAuth2\Adapter\League\Repository\ClientRepositoryInterface $clientRepository
+     * @param \League\OAuth2\Server\Repositories\ClientRepositoryInterface $clientRepository
      * @param \League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface $accessTokenRepository
      * @param \League\OAuth2\Server\Repositories\ScopeRepositoryInterface $scopeRepository
      * @param \Sonrac\OAuth2\Factory\SecureKeyFactory $secureKeyFactory

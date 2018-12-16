@@ -1,6 +1,6 @@
 <?php
 
-namespace sonrac\Auth\Tests\App;
+namespace Sonrac\OAuth2\Tests\App;
 
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Config\Loader\LoaderInterface;
@@ -10,7 +10,8 @@ use Symfony\Component\HttpKernel\Kernel as BaseKernel;
 use Symfony\Component\Routing\RouteCollectionBuilder;
 
 /**
- * Class Kernel.
+ * Class Kernel
+ * @package Sonrac\OAuth2\Tests\App
  */
 class Kernel extends BaseKernel
 {

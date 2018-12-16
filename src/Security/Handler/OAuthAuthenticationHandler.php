@@ -13,13 +13,11 @@ namespace Sonrac\OAuth2\Security\Handler;
 use League\OAuth2\Server\AuthorizationValidators\AuthorizationValidatorInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Sonrac\OAuth2\Security\Config\OAuthPathConfig;
 use Sonrac\OAuth2\Security\Token\AbstractPreAuthenticationToken;
 use Sonrac\OAuth2\Security\Token\PreAuthenticationClientToken;
 use Sonrac\OAuth2\Security\Token\PreAuthenticationToken;
 use Symfony\Bridge\PsrHttpMessage\Factory\DiactorosFactory;
 use Symfony\Bridge\PsrHttpMessage\Factory\HttpFoundationFactory;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
@@ -45,11 +43,6 @@ class OAuthAuthenticationHandler extends AbstractOAuthPsrHandler
     private $tokenStorage;
 
     /**
-     * @var \Sonrac\OAuth2\Security\Config\OAuthPathConfig
-     */
-    private $pathConfig;
-
-    /**
      * @var string
      */
     private $providerKey;
@@ -64,7 +57,6 @@ class OAuthAuthenticationHandler extends AbstractOAuthPsrHandler
      * @param \League\OAuth2\Server\AuthorizationValidators\AuthorizationValidatorInterface $authorizationValidator
      * @param \Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface $authenticationManager
      * @param \Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface $tokenStorage
-     * @param \Sonrac\OAuth2\Security\Config\OAuthPathConfig $pathConfig
      * @param string $providerKey
      * @param \Symfony\Bridge\PsrHttpMessage\Factory\DiactorosFactory $diactorosFactory
      * @param \Symfony\Bridge\PsrHttpMessage\Factory\HttpFoundationFactory $httpFoundationFactory
@@ -73,7 +65,6 @@ class OAuthAuthenticationHandler extends AbstractOAuthPsrHandler
         AuthorizationValidatorInterface $authorizationValidator,
         AuthenticationManagerInterface $authenticationManager,
         TokenStorageInterface $tokenStorage,
-        OAuthPathConfig $pathConfig,
         string $providerKey,
         DiactorosFactory $diactorosFactory,
         HttpFoundationFactory $httpFoundationFactory
@@ -83,7 +74,6 @@ class OAuthAuthenticationHandler extends AbstractOAuthPsrHandler
         $this->authorizationValidator = $authorizationValidator;
         $this->authenticationManager = $authenticationManager;
         $this->tokenStorage = $tokenStorage;
-        $this->pathConfig = $pathConfig;
         $this->providerKey = $providerKey;
     }
 
@@ -95,15 +85,6 @@ class OAuthAuthenticationHandler extends AbstractOAuthPsrHandler
     public function setDefaultScopes(array $defaultScopes): void
     {
         $this->defaultScopes = $defaultScopes;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function requires(Request $request): bool
-    {
-        return false === $this->pathConfig->isAuthorizationPath($request)
-            && false === $this->pathConfig->isIssueTokenPath($request);
     }
 
     /**
@@ -132,6 +113,7 @@ class OAuthAuthenticationHandler extends AbstractOAuthPsrHandler
         $clientId = $request->getAttribute('oauth_client_id');
         $userId = $request->getAttribute('oauth_user_id');
 
+        //TODO: add check for scopes and scopes validator interface.
         //TODO: check to add default scopes.
         //TODO: add write info about current request(controller and action from request) to perform further scopes validation
         $scopes = $request->getAttribute('oauth_scopes');

@@ -6,11 +6,11 @@ namespace Sonrac\OAuth2\Command;
 
 use Doctrine\Bundle\DoctrineBundle\Command\DoctrineCommand;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
-use Sonrac\OAuth2\Adapter\League\Grant\AuthCodeGrant;
-use Sonrac\OAuth2\Adapter\League\Grant\ClientCredentialsGrant;
-use Sonrac\OAuth2\Adapter\League\Grant\ImplicitGrant;
-use Sonrac\OAuth2\Adapter\League\Grant\PasswordGrant;
-use Sonrac\OAuth2\Adapter\League\Grant\RefreshTokenGrant;
+use Sonrac\OAuth2\Bridge\Grant\AuthCodeGrant;
+use Sonrac\OAuth2\Bridge\Grant\ClientCredentialsGrant;
+use Sonrac\OAuth2\Bridge\Grant\ImplicitGrant;
+use Sonrac\OAuth2\Bridge\Grant\PasswordGrant;
+use Sonrac\OAuth2\Bridge\Grant\RefreshTokenGrant;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Sonrac\OAuth2\Security\Provider;
 
-use Sonrac\OAuth2\Adapter\League\Repository\ClientRepositoryInterface;
+use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
 use Sonrac\OAuth2\Security\Token\AbstractPreAuthenticationToken;
 use Sonrac\OAuth2\Security\Token\OAuthClientToken;
 use Sonrac\OAuth2\Security\Token\OAuthToken;
@@ -29,7 +29,7 @@ class OAuthAuthenticationProvider implements AuthenticationProviderInterface
     private $userProvider;
 
     /**
-     * @var \Sonrac\OAuth2\Adapter\League\Repository\ClientRepositoryInterface
+     * @var \League\OAuth2\Server\Repositories\ClientRepositoryInterface
      */
     private $clientRepository;
 
@@ -46,7 +46,7 @@ class OAuthAuthenticationProvider implements AuthenticationProviderInterface
     /**
      * OAuthAuthenticationProvider constructor.
      * @param \Symfony\Component\Security\Core\User\UserProviderInterface $userProvider
-     * @param \Sonrac\OAuth2\Adapter\League\Repository\ClientRepositoryInterface $clientRepository
+     * @param \League\OAuth2\Server\Repositories\ClientRepositoryInterface $clientRepository
      * @param \Symfony\Component\Security\Core\User\UserCheckerInterface $userChecker
      * @param string $providerKey
      */
@@ -73,7 +73,9 @@ class OAuthAuthenticationProvider implements AuthenticationProviderInterface
             throw new AuthenticationException('The token is not supported by this authentication provider.');
         }
 
-        $client = $this->clientRepository->getClientEntityByIdentifier($token->getClientIdentifier());
+        $client = $this->clientRepository->getClientEntity(
+            $token->getClientIdentifier(), null, null, false
+        );
 
         if (null === $client) {
             throw new BadCredentialsException('Bad client credentials.');
@@ -88,8 +90,6 @@ class OAuthAuthenticationProvider implements AuthenticationProviderInterface
         } catch (UsernameNotFoundException $exception) {
             throw new BadCredentialsException('Bad user credentials.', 0, $exception);
         }
-
-        //TODO: add check for scopes.
 
         if (false === $user instanceof UserInterface) {
             return new OAuthClientToken($client, $token->getProviderKey(), $token->getCredentials(), $token->getScopes());

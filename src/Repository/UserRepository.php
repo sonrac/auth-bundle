@@ -2,25 +2,22 @@
 
 declare(strict_types=1);
 
-namespace sonrac\Auth\Repository;
+namespace Sonrac\OAuth2\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\Query;
-use League\OAuth2\Server\Entities\ClientEntityInterface;
-use League\OAuth2\Server\Entities\UserEntityInterface;
-use League\OAuth2\Server\Repositories\UserRepositoryInterface;
-use sonrac\Auth\Entity\User;
+use Sonrac\OAuth2\Entity\User;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * Class UserRepository.
+ * Class UserRepository
+ * @package Sonrac\OAuth2\Repository
  *
  * @method User|null find($id, $lockMode = null, $lockVersion = null)
  * @method User|null findOneBy(array $criteria, array $orderBy = null)
  * @method User[]    findAll()
  * @method User[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class UserRepository extends ServiceEntityRepository implements UserRepositoryInterface
+class UserRepository extends ServiceEntityRepository
 {
     /**
      * AccessTokens constructor.
@@ -33,50 +30,21 @@ class UserRepository extends ServiceEntityRepository implements UserRepositoryIn
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @param \sonrac\Auth\Entity\Client $clientEntity
-     *
-     * @throws \InvalidArgumentException              if User not found or password does not verified
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     * @throws \LogicException                        if grant type does not allowed
-     */
-    public function getUserEntityByUserCredentials(
-        $username,
-        $password,
-        $grantType,
-        ClientEntityInterface $clientEntity
-    ) {
-        $user = $this->findByUsernameOrEmail($username);
-
-        if (null === $user || false === \password_verify($password, $user->getPassword())) {
-            throw new \InvalidArgumentException('User not found');
-        }
-
-        if (false === \in_array($grantType, $clientEntity->getAllowedGrantTypes(), true)) {
-            throw new \LogicException('Grant type does not allowed for client');
-        }
-
-        return $user;
-    }
-
-    /**
      * Load user by username or email.
      *
      * @param string $username
      *
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     * @throws \InvalidArgumentException
+     * @return \Sonrac\OAuth2\Entity\User|null
      *
-     * @return \sonrac\Auth\Entity\User|null
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function findByUsernameOrEmail(string $username): ?UserEntityInterface
+    public function findByUsernameOrEmail(string $username): ?User
     {
         return $this->createQueryBuilder('user')
             ->orWhere('user.email = :username')
             ->orWhere('user.username = :username')
             ->setParameter('username', $username)
             ->getQuery()
-            ->getOneOrNullResult(Query::HYDRATE_OBJECT);
+            ->getOneOrNullResult();
     }
 }

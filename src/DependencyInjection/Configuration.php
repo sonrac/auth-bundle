@@ -4,6 +4,17 @@ declare(strict_types=1);
 
 namespace Sonrac\OAuth2\DependencyInjection;
 
+use League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface;
+use League\OAuth2\Server\Repositories\AuthCodeRepositoryInterface;
+use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
+use League\OAuth2\Server\Repositories\RefreshTokenRepositoryInterface;
+use League\OAuth2\Server\Repositories\ScopeRepositoryInterface;
+use League\OAuth2\Server\Repositories\UserRepositoryInterface;
+use Sonrac\OAuth2\Bridge\Grant\AuthCodeGrant;
+use Sonrac\OAuth2\Bridge\Grant\ClientCredentialsGrant;
+use Sonrac\OAuth2\Bridge\Grant\ImplicitGrant;
+use Sonrac\OAuth2\Bridge\Grant\PasswordGrant;
+use Sonrac\OAuth2\Bridge\Grant\RefreshTokenGrant;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -25,6 +36,35 @@ class Configuration implements ConfigurationInterface
         $rootNode = $treeBuilder->root('sonrac_oauth');
 
         $rootNode->children()
+            ->arrayNode('repository')
+                ->addDefaultsIfNotSet()
+                ->children()
+                    ->scalarNode('access_token')->defaultValue(AccessTokenRepositoryInterface::class)->end()
+                    ->scalarNode('auth_code')->defaultValue(AuthCodeRepositoryInterface::class)->end()
+                    ->scalarNode('client')->defaultValue(ClientRepositoryInterface::class)->end()
+                    ->scalarNode('refresh_token')->defaultValue(RefreshTokenRepositoryInterface::class)->end()
+                    ->scalarNode('scope')->defaultValue(ScopeRepositoryInterface::class)->end()
+                    ->scalarNode('user')->defaultValue(UserRepositoryInterface::class)->end()
+                ->end()
+            ->end()
+            ->arrayNode('grant_types')
+                ->addDefaultsIfNotSet()
+                ->children()
+                    ->booleanNode(AuthCodeGrant::TYPE)->defaultValue(false)->end()
+                    ->booleanNode(ClientCredentialsGrant::TYPE)->defaultValue(true)->end()
+                    ->booleanNode(ImplicitGrant::TYPE)->defaultValue(false)->end()
+                    ->booleanNode(PasswordGrant::TYPE)->defaultValue(true)->end()
+                    ->booleanNode(RefreshTokenGrant::TYPE)->defaultValue(true)->end()
+                ->end()
+            ->end()
+            ->arrayNode('tokens_ttl')
+                ->addDefaultsIfNotSet()
+                ->children()
+                    ->scalarNode('auth_code')->defaultValue('PT1H')->end()
+                    ->scalarNode('access_token')->defaultValue('PT1H')->end()
+                    ->scalarNode('refresh_token')->defaultValue('PT1H')->end()
+                ->end()
+            ->end()
             ->arrayNode('keys')
                 ->isRequired()
                 ->children()
@@ -70,27 +110,8 @@ class Configuration implements ConfigurationInterface
                     ->end()
                 ->end()
             ->end()
-            ->arrayNode('repository')
-                ->addDefaultsIfNotSet()
-                ->children()
-                    ->scalarNode('access_token')
-                        ->defaultValue('sonrac_oauth.repository.access_token')
-                    ->end()
-                    ->scalarNode('auth_code')
-                        ->defaultValue('sonrac_oauth.repository.auth_code')
-                    ->end()
-                    ->scalarNode('client')
-                        ->defaultValue('sonrac_oauth.repository.client')
-                    ->end()
-                    ->scalarNode('refresh_token')
-                        ->defaultValue('sonrac_oauth.repository.refresh_token')
-                    ->end()
-                    ->scalarNode('scope')
-                        ->defaultValue('sonrac_oauth.repository.scope')
-                    ->end()
-                    ->scalarNode('user')
-                        ->defaultValue('sonrac_oauth.repository.user')
-                    ->end()
+            ->arrayNode('default_scopes')
+                ->scalarPrototype()
                 ->end()
             ->end()
             ->arrayNode('swagger_constants')

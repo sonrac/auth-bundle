@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity repository-class="Sonrac\OAuth2\Repository\RefreshTokenRepository" name="Sonrac\OAuth2\Entity\RefreshToken"
+            table="oauth2_refresh_tokens">
+        <id name="id" column="id" type="string" length="255">
+        </id>
+
+        <field name="accessToken" column="access_token" type="string" length="255" nullable="false" unique="true"/>
+
+        <field name="expireAt" column="expire_at" type="integer" nullable="false"/>
+
+        <field name="isRevoked" column="is_revoked" type="boolean" nullable="false"/>
+
+        <field name="createdAt" column="created_at" type="integer" nullable="false"/>
+
+        <field name="updatedAt" column="updated_at" type="integer" nullable="true"/>
+
+    </entity>
+</doctrine-mapping>

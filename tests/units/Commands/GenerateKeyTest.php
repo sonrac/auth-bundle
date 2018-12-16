@@ -2,13 +2,14 @@
 
 declare(strict_types=1);
 
-namespace sonrac\Auth\Tests\Units\Commands;
+namespace Sonrac\OAuth2\Tests\Units\Commands;
 
-use sonrac\Auth\Tests\Units\BaseUnitTester;
+use Sonrac\OAuth2\Tests\Units\BaseUnitTester;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
- * Class GenerateKeyTest.
+ * Class GenerateKeyTest
+ * @package Sonrac\OAuth2\Tests\Units\Commands
  */
 class GenerateKeyTest extends BaseUnitTester
 {
@@ -34,12 +35,29 @@ class GenerateKeyTest extends BaseUnitTester
     private $command;
 
     /**
+     * {@inheritdoc}
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->keyPath = __DIR__ . '/../../app/resources/keys/';
+
+        foreach (['pub.key', 'priv.key'] as $file) {
+            @\unlink($this->keyPath . $file);
+        }
+
+        $this->command = $this->getConsoleApp()->find('sonrac_auth:generate:keys');
+        $this->commandTester = new CommandTester($this->command);
+    }
+
+    /**
      * Test generate keys.
      */
     public function testGenerateFirst(): void
     {
         foreach (['pub.key', 'priv.key'] as $file) {
-            static::assertFileNotExists($this->keyPath.$file);
+            static::assertFileNotExists($this->keyPath . $file);
         }
 
         $output = $this->runCommand('sonrac_auth:generate:keys', ['--disable-out' => null]);
@@ -47,7 +65,7 @@ class GenerateKeyTest extends BaseUnitTester
         $this->assertContains('generated', $output);
 
         foreach (['pub.key', 'priv.key'] as $file) {
-            static::assertFileExists($this->keyPath.$file);
+            static::assertFileExists($this->keyPath . $file);
         }
 
         $this->checkKeys();
@@ -60,9 +78,9 @@ class GenerateKeyTest extends BaseUnitTester
      */
     protected function checkKeys($phrase = null): void
     {
-        $key = @\openssl_pkey_get_public(\file_get_contents($this->keyPath.'pub.key'));
+        $key = @\openssl_pkey_get_public(\file_get_contents($this->keyPath . 'pub.key'));
         $this->assertNotEmpty($key);
-        $key = @\openssl_pkey_get_private(\file_get_contents($this->keyPath.'priv.key'), $phrase ?? '');
+        $key = @\openssl_pkey_get_private(\file_get_contents($this->keyPath . 'priv.key'), $phrase ?? '');
         $this->assertNotEmpty($key);
     }
 
@@ -82,7 +100,7 @@ class GenerateKeyTest extends BaseUnitTester
     public function testGenerateForce($withPhrase = null): void
     {
         foreach (['pub.key', 'priv.key'] as $file) {
-            static::assertFileNotExists($this->keyPath.$file);
+            static::assertFileNotExists($this->keyPath . $file);
         }
 
         $output = $this->runCommand('sonrac_auth:generate:keys', ['--disable-out' => null]);
@@ -93,8 +111,8 @@ class GenerateKeyTest extends BaseUnitTester
 
         $dir = $this->keyPath;
         foreach (['pub.key', 'priv.key'] as $file) {
-            static::assertFileExists($dir.$file);
-            $contents[$dir.$file] = \file_get_contents($dir.$file);
+            static::assertFileExists($dir . $file);
+            $contents[$dir . $file] = \file_get_contents($dir . $file);
         }
 
         $this->checkKeys();
@@ -115,27 +133,10 @@ class GenerateKeyTest extends BaseUnitTester
         $this->assertContains('generated', $output);
 
         foreach (['pub.key', 'priv.key'] as $file) {
-            static::assertFileExists($dir.$file);
-            static::assertNotEquals($contents[$dir.$file], \file_get_contents($dir.$file));
+            static::assertFileExists($dir . $file);
+            static::assertNotEquals($contents[$dir . $file], \file_get_contents($dir . $file));
         }
 
         $this->checkKeys($withPhrase ? '123' : null);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->keyPath = __DIR__.'/../../app/resources/keys/';
-
-        foreach (['pub.key', 'priv.key'] as $file) {
-            @\unlink($this->keyPath.$file);
-        }
-
-        $this->command       = $this->getConsoleApp()->find('sonrac_auth:generate:keys');
-        $this->commandTester = new CommandTester($this->command);
     }
 }

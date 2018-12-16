@@ -2,13 +2,14 @@
 
 declare(strict_types=1);
 
-namespace sonrac\Auth\Tests\Seeds;
+namespace Sonrac\OAuth2\Tests\Seeds;
 
 use sonrac\SimpleSeed\RollBackSeedWithCheckExists;
 use Symfony\Component\Security\Core\Encoder\BCryptPasswordEncoder;
 
 /**
- * Class UsersTableSeeder.
+ * Class UsersTableSeeder
+ * @package Sonrac\OAuth2\Tests\Seeds
  */
 class UsersTableSeeder extends RollBackSeedWithCheckExists
 {
@@ -17,7 +18,7 @@ class UsersTableSeeder extends RollBackSeedWithCheckExists
      */
     protected function getTable(): string
     {
-        return 'users';
+        return 'oauth2_users';
     }
 
     /**
@@ -28,10 +29,12 @@ class UsersTableSeeder extends RollBackSeedWithCheckExists
         return [
             [
                 'username'   => 'username',
+                'email'      => 'email@email.com',
+                'password'   => (new BCryptPasswordEncoder(12))->encodePassword('password', null),
+                'roles' => \json_encode(['ROLE_USER']),
                 'first_name' => 'John',
                 'last_name'  => 'Doe',
-                'email'      => 'email@email.com',
-                'password'   => (new BCryptPasswordEncoder(13))->encodePassword('password', null),
+                'status'  => 'active',
                 'created_at' => \time(),
             ],
         ];

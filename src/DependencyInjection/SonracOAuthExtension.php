@@ -8,7 +8,6 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
-use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
@@ -25,16 +24,13 @@ class SonracOAuthExtension extends Extension
     public function load(array $configs, ContainerBuilder $container): void
     {
         $fileLocator = new FileLocator(__DIR__ . '/../Resources/config');
-        $loader = new YamlFileLoader(
-            $container,
-            $fileLocator
-        );
-        $xmlLoader = new XmlFileLoader($container, $fileLocator);
+        $loader = new XmlFileLoader($container, $fileLocator);
 
-        $loader->load('services.yaml');
-
-        $xmlLoader->load('services.xml');
-        $xmlLoader->load('services/security.xml');
+        $loader->load('services.xml');
+        $loader->load('services/repository.xml');
+        $loader->load('services/oauth2.xml');
+        $loader->load('services/security.xml');
+        $loader->load('services/commands.xml');
 
         $configuration = $this->getConfiguration($configs, $container);
 
@@ -46,7 +42,7 @@ class SonracOAuthExtension extends Extension
 
         $this->setParameters($container, $config);
 
-        $this->replaceServiceDefinitions($container, $config);
+        $this->configureServiceDefinitions($container, $config);
     }
 
     /**
@@ -65,13 +61,6 @@ class SonracOAuthExtension extends Extension
         $container->setParameter('sonrac_oauth.keys.pair.public_key_name', $config['keys']['pair']['public_key_name']);
         $container->setParameter('sonrac_oauth.keys.pair.pass_phrase', $config['keys']['pair']['pass_phrase']);
 
-        $container->setParameter('sonrac_oauth.repository.access_token', $config['repository']['access_token']);
-        $container->setParameter('sonrac_oauth.repository.auth_code', $config['repository']['auth_code']);
-        $container->setParameter('sonrac_oauth.repository.client', $config['repository']['client']);
-        $container->setParameter('sonrac_oauth.repository.refresh_token', $config['repository']['refresh_token']);
-        $container->setParameter('sonrac_oauth.repository.scope', $config['repository']['scope']);
-        $container->setParameter('sonrac_oauth.repository.user', $config['repository']['user']);
-
         if (isset($config['swagger_constants']) && \is_array($config['swagger_constants'])) {
             foreach ($config['swagger_constants'] as $swagger_constant => $value) {
                 $swagger_constant = 'SWAGGER_' . \mb_strtoupper($swagger_constant);
@@ -89,20 +78,46 @@ class SonracOAuthExtension extends Extension
      *
      * @return void
      */
-    private function replaceServiceDefinitions(ContainerBuilder $container, array &$config): void
+    private function configureServiceDefinitions(ContainerBuilder $container, array &$config): void
     {
-        $repositories = $config['repository'];
+        // authorization server configurator
+
+        $container->getDefinition('sonrac_oauth.oauth2.authorization_server_configurator')
+            ->setArgument('$authCodeTTL', $config['tokens_ttl']['auth_code'])
+            ->setArgument('$authCodeTTL', $config['tokens_ttl']['access_token'])
+            ->setArgument('$authCodeTTL', $config['tokens_ttl']['refresh_token']);
+
+        foreach ($config['grant_types'] as $grantType => $enable) {
+            if ($enable) {
+                $container->getDefinition('sonrac_oauth.oauth2.authorization_server_configurator')
+                    ->addMethodCall('enableGrantType', [$grantType]);
+            }
+        }
+
+        // authorization server
+
+        $container->getDefinition('sonrac_oauth.oauth2.authorization_server')
+            ->setArgument('$clientRepository', new Reference($config['repository']['client']))
+            ->setArgument('$accessTokenRepository', new Reference($config['repository']['access_token']))
+            ->setArgument('$scopeRepository', new Reference($config['repository']['scope']));
+
+        // bearer token validator
 
         $container->getDefinition('sonrac_oauth.security.authorization_validator.bearer_token')
-            ->setArgument('$accessTokenRepository', new Reference($repositories['access_token']));
+            ->setArgument('$accessTokenRepository', new Reference($config['repository']['access_token']));
+
+        // authentication provider
 
         $container->getDefinition('sonrac_oauth.security.authentication_provider.abstract')
-            ->setArgument('$clientRepository', new Reference($repositories['client']));
+            ->setArgument('$clientRepository', new Reference($config['repository']['client']));
 
-        $container->getDefinition('sonrac_oauth.security.authorization_server.abstract')
-            ->setArgument('$clientRepository', new Reference($repositories['client']))
-            ->setArgument('$accessTokenRepository', new Reference($repositories['access_token']))
-            ->setArgument('$scopeRepository', new Reference($repositories['scope']));
+        // authentication handler
+
+        if (isset($config['default_scopes']) && \is_array($config['default_scopes'])) {
+            $container->getDefinition('sonrac_oauth.security.oauth_authentication_handler.abstract')
+                ->addMethodCall('setDefaultScopes', [$config['default_scopes']]);
+
+        }
     }
 
     /**

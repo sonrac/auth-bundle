@@ -2,17 +2,18 @@
 
 declare(strict_types=1);
 
-namespace sonrac\Auth\Tests\Units\Repository;
+namespace Sonrac\OAuth2\Tests\Units\Repository;
 
+use League\OAuth2\Server\Entities\UserEntityInterface;
+use League\OAuth2\Server\Exception\OAuthServerException;
 use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
 use League\OAuth2\Server\Repositories\UserRepositoryInterface;
-use sonrac\Auth\Entity\User;
-use sonrac\Auth\Tests\Units\BaseUnitTester;
-use Sonrac\OAuth2\Adapter\League\Grant\ClientCredentialsGrant;
+use Sonrac\OAuth2\Bridge\Grant\ClientCredentialsGrant;
+use Sonrac\OAuth2\Tests\Units\BaseUnitTester;
 
 /**
  * Class UserRepositoryTest
- * @package sonrac\Auth\Tests\Units\Repository
+ * @package Sonrac\OAuth2\Tests\Units\Repository
  */
 class UserRepositoryTest extends BaseUnitTester
 {
@@ -22,16 +23,21 @@ class UserRepositoryTest extends BaseUnitTester
     protected $seeds = ['users', 'clients'];
 
     /**
+     * @var array
+     */
+    protected $clearTablesList = ['oauth2_users', 'oauth2_clients'];
+
+    /**
      * Users repository.
      *
-     * @var \sonrac\Auth\Repository\UserRepository
+     * @var \League\OAuth2\Server\Repositories\UserRepositoryInterface
      */
     protected $repository;
 
     /**
      * Clients repository.
      *
-     * @var \sonrac\Auth\Repository\ClientRepository
+     * @var \League\OAuth2\Server\Repositories\ClientRepositoryInterface
      */
     protected $clientsRepository;
 
@@ -42,20 +48,19 @@ class UserRepositoryTest extends BaseUnitTester
     {
         parent::setUp();
 
-        $this->repository        = static::$container->get(UserRepositoryInterface::class);
+        $this->repository = static::$container->get(UserRepositoryInterface::class);
         $this->clientsRepository = static::$container->get(ClientRepositoryInterface::class);
     }
 
     /**
      * Test get user by credentials not found.
-     *
-     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function testGetUserByCredentialsNotFound(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(OAuthServerException::class);
 
-        $client = $this->clientsRepository->find('Test Client');
+        $client = $this->clientsRepository->getClientEntity('test_client', null, null, false);
+
         $this->repository->getUserEntityByUserCredentials(
             'user',
             'password',
@@ -66,14 +71,13 @@ class UserRepositoryTest extends BaseUnitTester
 
     /**
      * Test get user by credentials credentials are not equals.
-     *
-     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function testGetUserByCredentialsNotEquals(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(OAuthServerException::class);
 
-        $client = $this->clientsRepository->find('Test Client');
+        $client = $this->clientsRepository->getClientEntity('test_client', null, null, false);
+
         $this->repository->getUserEntityByUserCredentials(
             'username',
             'password1',
@@ -84,37 +88,18 @@ class UserRepositoryTest extends BaseUnitTester
 
     /**
      * Test get user by credentials grant type not allowed.
-     *
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     */
-    public function testGetUserByCredentialsGrantTypeNotAllowed(): void
-    {
-        $this->expectException(\LogicException::class);
-
-        $client = $this->clientsRepository->find('Test Client');
-        $this->repository->getUserEntityByUserCredentials(
-            'username',
-            'password',
-            ClientCredentialsGrant::TYPE.'1',
-            $client
-        );
-    }
-
-    /**
-     * Test get user by credentials grant type not allowed.
-     *
-     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function testGetUserByCredentials(): void
     {
-        $client = $this->clientsRepository->find('Test Client');
-        $user   = $this->repository->getUserEntityByUserCredentials(
+        $client = $this->clientsRepository->getClientEntity('test_client', null, null, false);
+
+        $user = $this->repository->getUserEntityByUserCredentials(
             'username',
             'password',
             ClientCredentialsGrant::TYPE,
             $client
         );
 
-        $this->assertInstanceOf(User::class, $user);
+        $this->assertInstanceOf(UserEntityInterface::class, $user);
     }
 }

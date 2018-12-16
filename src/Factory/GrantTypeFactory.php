@@ -10,14 +10,14 @@ declare(strict_types=1);
 
 namespace Sonrac\OAuth2\Factory;
 
-use League\OAuth2\Server\Grant\AuthCodeGrant;
-use League\OAuth2\Server\Grant\ClientCredentialsGrant;
-use League\OAuth2\Server\Grant\ImplicitGrant;
-use League\OAuth2\Server\Grant\PasswordGrant;
-use League\OAuth2\Server\Grant\RefreshTokenGrant;
 use League\OAuth2\Server\Repositories\AuthCodeRepositoryInterface;
 use League\OAuth2\Server\Repositories\RefreshTokenRepositoryInterface;
 use League\OAuth2\Server\Repositories\UserRepositoryInterface;
+use Sonrac\OAuth2\Bridge\Grant\AuthCodeGrant;
+use Sonrac\OAuth2\Bridge\Grant\ClientCredentialsGrant;
+use Sonrac\OAuth2\Bridge\Grant\ImplicitGrant;
+use Sonrac\OAuth2\Bridge\Grant\PasswordGrant;
+use Sonrac\OAuth2\Bridge\Grant\RefreshTokenGrant;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -44,7 +44,7 @@ class GrantTypeFactory
      * @param \DateInterval $authCodeTTL
      * @param \DateInterval $refreshTokenTTL
      *
-     * @return \League\OAuth2\Server\Grant\AuthCodeGrant
+     * @return \Sonrac\OAuth2\Bridge\Grant\AuthCodeGrant
      */
     public function createAuthCodeGrant(\DateInterval $authCodeTTL, \DateInterval $refreshTokenTTL): AuthCodeGrant
     {
@@ -63,7 +63,7 @@ class GrantTypeFactory
     /**
      * @param \DateInterval $refreshTokenTTL
      *
-     * @return \League\OAuth2\Server\Grant\ClientCredentialsGrant
+     * @return \Sonrac\OAuth2\Bridge\Grant\ClientCredentialsGrant
      */
     public function createClientCredentialsGrant(\DateInterval $refreshTokenTTL): ClientCredentialsGrant
     {
@@ -78,7 +78,7 @@ class GrantTypeFactory
      * @param \DateInterval $accessTokenTTL
      * @param string $queryDelimiter
      *
-     * @return \League\OAuth2\Server\Grant\ImplicitGrant
+     * @return \Sonrac\OAuth2\Bridge\Grant\ImplicitGrant
      */
     public function createImplicitGrant(\DateInterval $accessTokenTTL, string $queryDelimiter = '#'): ImplicitGrant
     {
@@ -91,7 +91,7 @@ class GrantTypeFactory
     /**
      * @param \DateInterval $refreshTokenTTL
      *
-     * @return \League\OAuth2\Server\Grant\PasswordGrant
+     * @return \Sonrac\OAuth2\Bridge\Grant\PasswordGrant
      */
     public function createPasswordGrant(\DateInterval $refreshTokenTTL): PasswordGrant
     {
@@ -108,7 +108,7 @@ class GrantTypeFactory
     /**
      * @param \DateInterval $refreshTokenTTL
      *
-     * @return \League\OAuth2\Server\Grant\RefreshTokenGrant
+     * @return \Sonrac\OAuth2\Bridge\Grant\RefreshTokenGrant
      */
     public function createRefreshTokenGrant(\DateInterval $refreshTokenTTL): RefreshTokenGrant
     {

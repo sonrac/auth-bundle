@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-namespace sonrac\Auth\Tests\Units\Repository;
+namespace Sonrac\OAuth2\Tests\Units\Repository;
 
+use League\OAuth2\Server\Entities\ClientEntityInterface;
+use League\OAuth2\Server\Exception\OAuthServerException;
 use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
-use sonrac\Auth\Entity\Client;
-use sonrac\Auth\Repository\ClientRepository;
-use sonrac\Auth\Tests\Units\BaseUnitTester;
+use Sonrac\OAuth2\Bridge\Grant\ClientCredentialsGrant;
+use Sonrac\OAuth2\Tests\Units\BaseUnitTester;
 
 /**
  * Class ClientRepositoryTest
@@ -21,9 +22,14 @@ class ClientRepositoryTest extends BaseUnitTester
     protected $seeds = ['clients'];
 
     /**
+     * @var array
+     */
+    protected $clearTablesList = ['oauth2_clients'];
+
+    /**
      * Clients repository.
      *
-     * @var \sonrac\Auth\Repository\ClientRepository
+     * @var \League\OAuth2\Server\Repositories\ClientRepositoryInterface
      */
     protected $repository;
 
@@ -42,40 +48,48 @@ class ClientRepositoryTest extends BaseUnitTester
      */
     public function testGetClientEntity(): void
     {
-        $this->assertInstanceOf(ClientRepository::class, $this->repository);
+        $client = $this->repository->getClientEntity('test_client', null, null, false);
 
-        $data = $this->repository->find(['name' => 'Test Client']);
-        $this->assertInstanceOf(Client::class, $data);
+        $this->assertInstanceOf(ClientEntityInterface::class, $client);
     }
 
     /**
-     * Test client entity not found.
+     * Test client repository get entity with valid credentials.
      */
-    public function testGetClientEntityNotFound(): void
+    public function testGetClientEntityWithValidSecret(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $client = $this->repository->getClientEntity('test_client', null, 'secret-key', true);
 
-        $this->repository->getClientEntity(1);
+        $this->assertInstanceOf(ClientEntityInterface::class, $client);
     }
 
     /**
-     * Test grant type not allowed.
+     * Test client repository get entity with invalid credentials.
      */
-    public function testGrantTypeNotAllowed(): void
+    public function testGetClientEntityWithInvalidSecret(): void
     {
-        $this->expectException(\LogicException::class);
+        $this->expectException(OAuthServerException::class);
 
-        $this->repository->getClientEntity('Test Client', 'client');
+        $this->repository->getClientEntity('test_client');
     }
 
     /**
-     * Test invalid secret.
+     * Test client repository get entity with supported grant type.
      */
-    public function testInvalidSecret(): void
+    public function testGetClientWithSupportedGrant(): void
     {
-        $entity = $this->repository->getClientEntity('Test Client', null, null, false);
-        $this->assertInstanceOf(Client::class, $entity);
-        $this->expectException(\LogicException::class);
-        $this->repository->getClientEntity('Test Client', null, null, true);
+        $client = $this->repository->getClientEntity('test_client', ClientCredentialsGrant::TYPE, null, false);
+
+        $this->assertInstanceOf(ClientEntityInterface::class, $client);
+    }
+
+    /**
+     * Test client repository get entity with not supported grant type.
+     */
+    public function testGetClientWithNotSupportedGrant(): void
+    {
+        $this->expectException(OAuthServerException::class);
+
+        $this->repository->getClientEntity('test_client', 'invalid');
     }
 }

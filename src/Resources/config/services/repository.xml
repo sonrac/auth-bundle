@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services
+        http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+
+        <service id="sonrac_oauth.doctrine.repository.access_token"
+                 class="Sonrac\OAuth2\Repository\AccessTokenRepository"
+                 public="false">
+            <argument type="service" id="doctrine"/>
+        </service>
+
+        <service id="sonrac_oauth.doctrine.repository.auth_code"
+                 class="Sonrac\OAuth2\Repository\AuthCodeRepository"
+                 public="false">
+            <argument type="service" id="doctrine"/>
+        </service>
+
+        <service id="sonrac_oauth.doctrine.repository.client"
+                 class="Sonrac\OAuth2\Repository\ClientRepository"
+                 public="false">
+            <argument type="service" id="doctrine"/>
+        </service>
+
+        <service id="sonrac_oauth.doctrine.repository.refresh_token"
+                 class="Sonrac\OAuth2\Repository\RefreshTokenRepository"
+                 public="false">
+            <argument type="service" id="doctrine"/>
+        </service>
+
+        <service id="sonrac_oauth.doctrine.repository.scope"
+                 class="Sonrac\OAuth2\Repository\ScopeRepository"
+                 public="false">
+            <argument type="service" id="doctrine"/>
+        </service>
+
+        <service id="sonrac_oauth.doctrine.repository.user"
+                 class="Sonrac\OAuth2\Repository\UserRepository"
+                 public="false">
+            <argument type="service" id="doctrine"/>
+        </service>
+
+    </services>
+</container>

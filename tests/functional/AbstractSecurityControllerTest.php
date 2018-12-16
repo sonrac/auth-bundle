@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-namespace sonrac\Auth\Tests\Functional;
+namespace Sonrac\OAuth2\Tests\Functional;
 
-use Sonrac\OAuth2\Adapter\League\Grant\ClientCredentialsGrant;
+use Sonrac\OAuth2\Bridge\Grant\ClientCredentialsGrant;
 
 /**
  * Class AbstractSecurityControllerTest
+ * @package Sonrac\OAuth2\Tests\Functional\
  */
 abstract class AbstractSecurityControllerTest extends BaseFunctionalTester
 {
@@ -45,7 +46,7 @@ abstract class AbstractSecurityControllerTest extends BaseFunctionalTester
         $client = static::createClient();
         $client->request('POST', '/api/auth/token', [
             'grant_type' => ClientCredentialsGrant::TYPE,
-            'client_id' => 'Test Client',
+            'client_id' => 'test_client',
             'client_secret' => 'secret-key',
             'scope' => 'default',
         ]);

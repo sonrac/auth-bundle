@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Sonrac\OAuth2\Security\Token;
 
-use Sonrac\OAuth2\Adapter\League\Entity\ClientEntityInterface;
+use League\OAuth2\Server\Entities\ClientEntityInterface;
 use Sonrac\OAuth2\Security\Scope\Scope;
 use Symfony\Component\Security\Core\Authentication\Token\AbstractToken;
 use Symfony\Component\Security\Core\Role\Role;
@@ -17,7 +17,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 abstract class AbstractOAuthToken extends AbstractToken
 {
     /**
-     * @var \Sonrac\OAuth2\Adapter\League\Entity\ClientEntityInterface
+     * @var \League\OAuth2\Server\Entities\ClientEntityInterface
      */
     private $client;
 
@@ -38,9 +38,9 @@ abstract class AbstractOAuthToken extends AbstractToken
 
     /**
      * OAuthToken constructor.
-     * @param \Sonrac\OAuth2\Adapter\League\Entity\ClientEntityInterface $client
-     * @param string $credentials
+     * @param \League\OAuth2\Server\Entities\ClientEntityInterface $client
      * @param string $providerKey
+     * @param string $credentials
      * @param array $scopes
      * @param array $roles
      */
@@ -77,7 +77,7 @@ abstract class AbstractOAuthToken extends AbstractToken
     }
 
     /**
-     * @return \Sonrac\OAuth2\Adapter\League\Entity\ClientEntityInterface
+     * @return \League\OAuth2\Server\Entities\ClientEntityInterface
      */
     public function getClient(): ClientEntityInterface
     {
@@ -138,7 +138,6 @@ abstract class AbstractOAuthToken extends AbstractToken
         parent::eraseCredentials();
 
         $this->credentials = null;
-        //TODO: add erase credentials for client
     }
 
     /**

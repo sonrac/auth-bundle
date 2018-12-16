@@ -1,2 +1,2 @@
 maker:
-  root_namespace: 'sonrac\Auth'
+  root_namespace: 'Sonrac\OAuth2'

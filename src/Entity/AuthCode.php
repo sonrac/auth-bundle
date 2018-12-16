@@ -2,285 +2,209 @@
 
 declare(strict_types=1);
 
-namespace sonrac\Auth\Entity;
-
-use League\OAuth2\Server\Entities\AuthCodeEntityInterface;
-use League\OAuth2\Server\Entities\ClientEntityInterface;
-use League\OAuth2\Server\Entities\ScopeEntityInterface;
-use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
-use Psr\Container\ContainerInterface;
-use Openapi\Annotations as OA;
+namespace Sonrac\OAuth2\Entity;
 
 /**
- * Class AuthCode.
- * Auth code entity.
- *
- * @OA\Schema(
- *     title="AuthCode",
- *     description="Auth code entity",
- *     required={"code", "redirect_uri", "client_id", "scopes"}
- * )
+ * Class AuthCode
+ * @package Sonrac\OAuth2\Entity
  */
-class AuthCode implements AuthCodeEntityInterface
+class AuthCode
 {
-    use TimeEntityTrait, ExpiryTimeTrait {
-        getExpiryDateTimeAsInt as getExpiryDateTime;
-        setExpiryDateTimeAsInt as setExpiryDateTime;
-    }
+    use TimeEntityTrait;
 
     /**
-     * Auth code.
+     * AuthCode identifier.
      *
-     * @var string
-     *
-     * @OA\Property(example="auth_code", uniqueItems=true)
+     * @var string|null
      */
-    protected $code;
+    protected $id;
+
+    /**
+     * Client identifier.
+     *
+     * @var string|null
+     */
+    protected $clientId;
+
+    /**
+     * User identifier.
+     *
+     * @var int|null
+     */
+    protected $userId;
+
+    /**
+     * Redirect url.
+     *
+     * @var string|null
+     */
+    protected $redirectUri;
+
+    /**
+     * Scopes.
+     *
+     * @var array|null
+     */
+    protected $scopes;
+
+    /**
+     * Expired time.
+     *
+     * @var int|null
+     */
+    protected $expireAt;
 
     /**
      * Is revoked.
      *
      * @var bool
-     *
-     * @OA\Property(
-     *     example=false,
-     *     default=false
-     * )
      */
-    protected $is_revoked = false;
-
-    /**
-     * Redirect url.
-     *
-     * @var string
-     *
-     * @OA\Property(
-     *     example="http://example.com./redirect",
-     * )
-     */
-    protected $redirect_uri;
-
-    /**
-     * User identifier.
-     *
-     * @var int
-     *
-     * @OA\Property(example=1)
-     */
-    protected $user_id;
-
-    /**
-     * Client identifier.
-     *
-     * @var int
-     *
-     * @OA\Property(example=1, default="null")
-     */
-    protected $client_id;
-
-    /**
-     * Expired time.
-     *
-     * @var int
-     *
-     * @OA\Property(format="bigInt", example="1529397813")
-     */
-    protected $expire_at;
+    protected $isRevoked = false;
 
     /**
      * Created time.
      *
-     * @var int
-     *
-     * @OA\Property(format="bigInt", example="1529397813")
+     * @var int|null
      */
-    protected $created_at;
+    protected $createdAt;
 
     /**
      * Updated time.
      *
-     * @var int
-     *
-     * @OA\Property(format="bigInt", example="1529397813")
+     * @var int|null
      */
-    protected $updated_at;
+    protected $updatedAt;
 
     /**
-     * Container.
+     * Get id.
      *
-     * @var \Psr\Container\ContainerInterface
+     * @return string|null
      */
-    protected $container;
-
-    /**
-     * Scopes.
-     *
-     * @var array
-     *
-     * @OA\Property(
-     *     example={"user_get", "clients_get"},
-     *     default={},
-     *     @OA\Items(
-     *         type="string"
-     *     )
-     * )
-     */
-    protected $token_scopes;
-
-    /**
-     * Token scopes object.
-     *
-     * @var \League\OAuth2\Server\Entities\ScopeEntityInterface[]
-     */
-    protected $scopes;
-
-    /**
-     * Client.
-     *
-     * @var \League\OAuth2\Server\Entities\ClientEntityInterface|null
-     */
-    protected $client;
-
-    /**
-     * User.
-     *
-     * @var \League\OAuth2\Server\Entities\UserEntityInterface|null
-     */
-    protected $user;
-
-    /**
-     * AuthCode constructor.
-     *
-     * @param \Psr\Container\ContainerInterface $container
-     */
-    public function __construct(ContainerInterface $container)
+    public function getId(): ?string
     {
-        $this->container = $container;
+        return $this->id;
     }
 
     /**
-     * {@inheritdoc}
+     * Set id.
+     *
+     * @param string $id
+     *
+     * @return void
+     */
+    public function setId(string $id): void
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * Get client identifier.
+     *
+     * @return string|null
+     */
+    public function getClientId(): ?string
+    {
+        return $this->clientId;
+    }
+
+    /**
+     * Set client identifier.
+     *
+     * @param string $clientId
+     *
+     * @return void
+     */
+    public function setClientId(string $clientId): void
+    {
+        $this->clientId = $clientId;
+    }
+
+    /**
+     * Get user identifier.
+     *
+     * @return int|null
+     */
+    public function getUserId(): ?int
+    {
+        return $this->userId;
+    }
+
+    /**
+     * Set user identifier.
+     *
+     * @param int|null $userId
+     *
+     * @return void
+     */
+    public function setUserId(?int $userId): void
+    {
+        $this->userId = $userId;
+    }
+
+    /**
+     * Get redirect uri.
+     *
+     * @return string|null
      */
     public function getRedirectUri(): ?string
     {
-        return $this->redirect_uri;
+        return $this->redirectUri;
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function setRedirectUri($uri): void
-    {
-        $this->redirect_uri = $uri;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getIdentifier(): ?string
-    {
-        return $this->code;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setIdentifier($identifier): void
-    {
-        $this->code = $identifier;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setUserIdentifier($identifier): void
-    {
-        $this->user_id = $identifier;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getUserIdentifier()
-    {
-        return $this->user_id;
-    }
-
-    /**
-     * {@inheritdoc}
+     * Set redirect uri.
      *
-     * @throws \Psr\Container\ContainerExceptionInterface
+     * @param string|null $redirectUri
+     *
+     * @return void
      */
-    public function getClient()
+    public function setRedirectUri(?string $redirectUri): void
     {
-        if ($this->client) {
-            return $this->client;
-        }
-
-        if (!$this->client_id) {
-            return null;
-        }
-
-        return $this->client = $this->container->get(ClientRepositoryInterface::class)->find($this->client_id);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setClient(ClientEntityInterface $client): void
-    {
-        $this->client_id = $client->getIdentifier();
-
-        $this->client = $client;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function addScope(ScopeEntityInterface $scope): void
-    {
-        $this->token_scopes[] = $scope->getIdentifier();
-        $this->scopes[]       = $scope;
+        $this->redirectUri = $redirectUri;
     }
 
     /**
      * Get scopes.
      *
-     * {@inheritdoc}
-     */
-    public function getScopes(): ?array
-    {
-        return $this->getTokenScopes();
-    }
-
-    /**
-     * Get token scopes list.
-     *
      * @return array
      */
-    public function getTokenScopes(): ?array
+    public function getScopes(): array
     {
-        return $this->token_scopes;
+        return null !== $this->scopes ? $this->scopes : [];
     }
 
     /**
-     * Get auth code.
+     * Set scopes.
      *
-     * @return string
+     * @param array $scopes
+     *
+     * @return void
      */
-    public function getCode(): string
+    public function setScopes(array $scopes): void
     {
-        return $this->code ?? '';
+        $this->scopes = $scopes;
     }
 
     /**
-     * Set auth code.
+     * Get expired time.
      *
-     * @param string $code
+     * @return int|null
      */
-    public function setCode(string $code): void
+    public function getExpireAt(): ?int
     {
-        $this->code = $code;
+        return $this->expireAt;
+    }
+
+    /**
+     * Set expire time.
+     *
+     * @param int $expireAt
+     *
+     * @return void
+     */
+    public function setExpireAt(int $expireAt): void
+    {
+        $this->expireAt = $expireAt;
     }
 
     /**
@@ -290,76 +214,18 @@ class AuthCode implements AuthCodeEntityInterface
      */
     public function isRevoked(): bool
     {
-        return (bool) ($this->is_revoked ?? false);
+        return $this->isRevoked;
     }
 
     /**
      * Set auth code revoked.
      *
-     * @param bool $is_revoked
-     */
-    public function setIsRevoked(bool $is_revoked): void
-    {
-        $this->is_revoked = $is_revoked;
-    }
-
-    /**
-     * Get user identifier.
+     * @param bool $isRevoked
      *
-     * @return int|null
+     * @return void
      */
-    public function getUserId(): int
+    public function setIsRevoked(bool $isRevoked): void
     {
-        return (int) $this->user_id;
-    }
-
-    /**
-     * Set user identifier.
-     *
-     * @param int $user_id
-     */
-    public function setUserId(int $user_id): void
-    {
-        $this->user_id = $user_id;
-    }
-
-    /**
-     * Get client identifier.
-     *
-     * @return int|null
-     */
-    public function getClientId(): int
-    {
-        return (int) $this->client_id;
-    }
-
-    /**
-     * Set client identifier.
-     *
-     * @param int $client_id
-     */
-    public function setClientId(int $client_id): void
-    {
-        $this->client_id = $client_id;
-    }
-
-    /**
-     * Get expired time.
-     *
-     * @return int|null
-     */
-    public function getExpireAt(): int
-    {
-        return (int) $this->expire_at;
-    }
-
-    /**
-     * Set expire time.
-     *
-     * @param int $expire_at
-     */
-    public function setExpireAt(int $expire_at): void
-    {
-        $this->expire_at = $expire_at;
+        $this->isRevoked = $isRevoked;
     }
 }

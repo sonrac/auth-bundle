@@ -2,13 +2,14 @@
 
 declare(strict_types=1);
 
-namespace sonrac\Auth\Tests;
+namespace Sonrac\OAuth2\Tests;
 
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
- * Trait DatabaseTrait.
+ * Trait DatabaseTrait
+ * @package Sonrac\OAuth2\Tests
  */
 trait DatabaseTrait
 {
@@ -38,16 +39,20 @@ trait DatabaseTrait
      *
      * @var string
      */
-    protected $seedNameSpace = 'sonrac\Auth\Tests\Seeds\\';
+    protected $seedNameSpace = 'Sonrac\OAuth2\Tests\Seeds\\';
 
     /**
      * Setup database.
      */
     protected function setUpDatabase(): void
     {
-        $this->runCommand('doctrine:migrations:migrate', [
-            '--no-interaction',
-        ]);
+//        $this->runCommand('doctrine:migrations:migrate', [
+//            '--no-interaction',
+//        ]);
+
+//        $this->runCommand('doctrine:schema:update', [
+//            '--no-interaction'
+//        ]);
 
         if (empty($this->seeds)) {
             return;

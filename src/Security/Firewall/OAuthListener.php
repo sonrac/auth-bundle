@@ -11,9 +11,8 @@ declare(strict_types=1);
 namespace Sonrac\OAuth2\Security\Firewall;
 
 use Psr\Log\LoggerInterface;
-use Sonrac\OAuth2\Security\Handler\OAuthHandlerInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Sonrac\OAuth2\Security\Config\OAuthPathConfig;
+use Sonrac\OAuth2\Security\Handler\OAuthAuthenticationHandler;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Http\Firewall\ListenerInterface;
@@ -25,9 +24,14 @@ use Symfony\Component\Security\Http\Firewall\ListenerInterface;
 class OAuthListener implements ListenerInterface
 {
     /**
-     * @var \IteratorAggregate
+     * @var \Sonrac\OAuth2\Security\Handler\OAuthAuthenticationHandler
      */
-    private $handlers;
+    private $authenticationHandler;
+
+    /**
+     * @var \Sonrac\OAuth2\Security\Config\OAuthPathConfig
+     */
+    private $pathConfig;
 
     /**
      * @var \Psr\Log\LoggerInterface|null
@@ -36,14 +40,22 @@ class OAuthListener implements ListenerInterface
 
     /**
      * OAuthListener constructor.
-     * @param \IteratorAggregate $handlers
-     * @param \Psr\Log\LoggerInterface|null $logger
+     * @param \Sonrac\OAuth2\Security\Handler\OAuthAuthenticationHandler $authenticationHandler
+     * @param \Sonrac\OAuth2\Security\Config\OAuthPathConfig $pathConfig
      */
-    public function __construct(
-        \IteratorAggregate $handlers,
-        ?LoggerInterface $logger = null
-    ) {
-        $this->handlers = $handlers;
+    public function __construct(OAuthAuthenticationHandler $authenticationHandler, OAuthPathConfig $pathConfig)
+    {
+        $this->authenticationHandler = $authenticationHandler;
+        $this->pathConfig = $pathConfig;
+    }
+
+    /**
+     * @param \Psr\Log\LoggerInterface $logger
+     *
+     * @return void
+     */
+    public function setLogger(LoggerInterface $logger): void
+    {
         $this->logger = $logger;
     }
 
@@ -52,34 +64,18 @@ class OAuthListener implements ListenerInterface
      */
     public function handle(GetResponseEvent $event)
     {
+        $request = $event->getRequest();
+
+        if (false === $this->pathConfig->isAuthorizationPath($request)
+            && false === $this->pathConfig->isIssueTokenPath($request)
+        ) {
+            return;
+        }
+
         $response = null;
 
-        foreach ($this->handlers as $handler) {
-            /** @var \Sonrac\OAuth2\Security\Handler\OAuthHandlerInterface $handler */
-            if (false === $handler->requires($event->getRequest())) {
-                continue;
-            }
-
-            $response = $this->runHandler($event->getRequest(), $handler);
-
-            break;
-        }
-
-        if (null !== $response) {
-            $event->setResponse($response);
-        }
-    }
-
-    /**
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param \Sonrac\OAuth2\Security\Handler\OAuthHandlerInterface $handler
-     *
-     * @return \Symfony\Component\HttpFoundation\Response|null
-     */
-    private function runHandler(Request $request, OAuthHandlerInterface $handler): ?Response
-    {
         try {
-            $response = $handler->handle($request);
+            $response = $this->authenticationHandler->handle($request);
         } catch (AuthenticationException $exception) {
             //TODO: add handling for AuthenticationException
             return null;
@@ -92,6 +88,8 @@ class OAuthListener implements ListenerInterface
             return null;
         }
 
-        return $response;
+        if (null !== $response) {
+            $event->setResponse($response);
+        }
     }
 }

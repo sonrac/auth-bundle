@@ -2,316 +2,199 @@
 
 declare(strict_types=1);
 
-namespace sonrac\Auth\Entity;
-
-use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
-use League\OAuth2\Server\Entities\ClientEntityInterface;
-use League\OAuth2\Server\Entities\ScopeEntityInterface;
-use League\OAuth2\Server\Entities\Traits\AccessTokenTrait;
-use League\OAuth2\Server\Entities\Traits\TokenEntityTrait;
-use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
-use Openapi\Annotations as OA;
+namespace Sonrac\OAuth2\Entity;
 
 /**
- * Class AccessToken.
- *
- * @OA\Schema(
- *     title="AccessToken",
- *     description="Access token entity",
- *     required={"token", "user_id", "token_scopes"}
- * )
+ * Class AccessToken
+ * @package Sonrac\OAuth2\Entity
  */
-class AccessToken implements AccessTokenEntityInterface
+class AccessToken
 {
-    use AccessTokenTrait, TimeEntityTrait, ExpiryTimeTrait, TokenEntityTrait {
-        setExpiryDateTime as setExpiryDateTimeTrait;
-        setClient as setClientTrait;
-        addScope as addScopeTrait;
-    }
+    use TimeEntityTrait;
 
     /**
-     * Access token.
+     * AccessToken identifier.
      *
-     * @var string
-     *
-     * @OA\Property(maxLength=2000, example="token", uniqueItems=true)
+     * @var string|null
      */
-    protected $token;
-
-    /**
-     * Token scopes with | as delimiter.
-     *
-     * @var array
-     *
-     * @OA\Property(
-     *     example={"client", "admin"},
-     *     maxLength=5000,
-     *     @OA\Items(
-     *         type="string"
-     *     )
-     * )
-     */
-    protected $token_scopes = [];
-
-    /**
-     * User identifier.
-     *
-     * @var int
-     *
-     * @OA\Property(example=1)
-     */
-    protected $user_id;
+    protected $id;
 
     /**
      * Client identifier.
      *
-     * @var string
-     *
-     * @OA\Property(example=1)
+     * @var string|null
      */
-    protected $client_id;
+    protected $clientId;
+
+    /**
+     * User identifier.
+     *
+     * @var int|null
+     */
+    protected $userId;
+
+    /**
+     * Scopes.
+     *
+     * @var array|null
+     */
+    protected $scopes;
 
     /**
      * Expired time.
      *
-     * @var int
-     *
-     * @OA\Property(format="bigInt", example="1529397813")
+     * @var int|null
      */
-    protected $expire_at;
+    protected $expireAt;
+
+    /**
+     * Is revoked.
+     *
+     * @var bool
+     */
+    protected $isRevoked = false;
 
     /**
      * Created time.
      *
-     * @var int
-     *
-     * @OA\Property(format="bigInt", example="1529397813")
+     * @var int|null
      */
-    protected $created_at;
+    protected $createdAt;
 
     /**
      * Updated time.
      *
-     * @var int
+     * @var int|null
+     */
+    protected $updatedAt;
+
+    /**
+     * Get id.
      *
-     * @OA\Property(format="bigInt", example="1529397813")
+     * @return string|null
      */
-    protected $updated_at;
+    public function getId(): ?string
+    {
+        return $this->id;
+    }
 
     /**
-     * Access token revoked.
+     * Set id.
      *
-     * @var bool
+     * @param string $id
      *
-     * @OA\Property(example=false, default=false)
+     * @return void
      */
-    protected $is_revoked = false;
-
-    /**
-     * Access token grant_type.
-     *
-     * @var string
-     *
-     * @OA\Property(example="client_credentials", enum={"password", "code", "client_credentials", "implicit"})
-     */
-    protected $grant_type;
-
-    /**
-     * @var \League\OAuth2\Server\Repositories\ClientRepositoryInterface
-     */
-    private $repository;
-
-    public function __construct(ClientRepositoryInterface $repository)
+    public function setId(string $id): void
     {
-        $this->repository = $repository;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getIdentifier(): ?string
-    {
-        return $this->token;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setIdentifier($identifier): void
-    {
-        $this->token = $identifier;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setUserIdentifier($identifier): void
-    {
-        $this->user_id = $identifier;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getUserIdentifier()
-    {
-        return $this->user_id;
-    }
-
-    /**
-     * @return int
-     */
-    public function getUserId(): ?int
-    {
-        return $this->user_id;
-    }
-
-    /**
-     * @param int $user_id
-     */
-    public function setUserId(int $user_id): void
-    {
-        $this->user_id = $user_id;
+        $this->id = $id;
     }
 
     /**
      * Get client identifier.
      *
-     * @return string
+     * @return string|null
      */
     public function getClientId(): ?string
     {
-        return $this->client_id;
+        return $this->clientId;
     }
 
     /**
-     * @param string $client_id
-     */
-    public function setClientId(string $client_id): void
-    {
-        $this->client_id = $client_id;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setClient(ClientEntityInterface $client): void
-    {
-        $this->setClientId($client->getIdentifier());
-
-        $this->setClientTrait($client);
-    }
-
-    /**
-     * @return int
-     */
-    public function getExpireAt(): ?int
-    {
-        return $this->expire_at;
-    }
-
-    /**
-     * @param int $expire_at
-     */
-    public function setExpireAt(int $expire_at): void
-    {
-        $this->expire_at = $expire_at;
-    }
-
-    /**
-     * Check token is revoked.
+     * Set client identifier.
      *
-     * @return bool|int
+     * @param string $clientId
      */
-    public function isRevoked()
+    public function setClientId(string $clientId): void
     {
-        return $this->is_revoked;
+        $this->clientId = $clientId;
     }
 
     /**
-     * @param bool $is_revoked
-     */
-    public function setIsRevoked(bool $is_revoked): void
-    {
-        $this->is_revoked = $is_revoked;
-    }
-
-    /**
-     * Get token scopes.
+     * Get user identifier.
      *
-     * @return array|null
+     * @return int|null
      */
-    public function getTokenScopes(): ?array
+    public function getUserId(): ?int
     {
-        return $this->token_scopes;
+        return $this->userId;
     }
 
     /**
-     * Set token scopes.
+     * Set user identifier.
      *
-     * @param array $scopes
-     */
-    public function setTokenScopes(array $scopes): void
-    {
-        $this->token_scopes = $scopes;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getClient()
-    {
-        if (!$this->client && $this->client_id) {
-            $this->client = $this->repository->find($this->client_id);
-        }
-
-        return $this->client;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function addScope(ScopeEntityInterface $scope): void
-    {
-        $this->token_scopes[] = $scope->getIdentifier();
-        $this->addScopeTrait($scope);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setExpiryDateTime(\DateTime $dateTime): void
-    {
-        $this->setExpiryDateTimeAsInt($dateTime);
-
-        $this->setExpiryDateTimeTrait($dateTime);
-    }
-
-    /**
-     * Get grant type.
+     * @param int|null $userId
      *
-     * @return string
+     * @return void
      */
-    public function getGrantType(): string
+    public function setUserId(?int $userId): void
     {
-        return $this->grant_type ?? '';
+        $this->userId = $userId;
     }
 
     /**
-     * Set grant type.
+     * Get scopes.
      *
-     * @param string $grantType
-     */
-    public function setGrantType(string $grantType): void
-    {
-        $this->grant_type = $grantType;
-    }
-
-    /**
-     * {@inheritdoc}
+     * @return array
      */
     public function getScopes(): array
     {
-        return $this->token_scopes ?? [];
+        return null !== $this->scopes ? $this->scopes : [];
+    }
+
+    /**
+     * Set scopes.
+     *
+     * @param array $scopes
+     *
+     * @return void
+     */
+    public function setScopes(array $scopes): void
+    {
+        $this->scopes = $scopes;
+    }
+
+    /**
+     * Get expired time.
+     *
+     * @return int|null
+     */
+    public function getExpireAt(): ?int
+    {
+        return $this->expireAt;
+    }
+
+    /**
+     * Set expire time.
+     *
+     * @param int $expireAt
+     *
+     * @return void
+     */
+    public function setExpireAt(int $expireAt): void
+    {
+        $this->expireAt = $expireAt;
+    }
+
+    /**
+     * Check auth code is revoked.
+     *
+     * @return bool
+     */
+    public function isRevoked(): bool
+    {
+        return $this->isRevoked;
+    }
+
+    /**
+     * Set auth code revoked.
+     *
+     * @param bool $isRevoked
+     *
+     * @return void
+     */
+    public function setIsRevoked(bool $isRevoked): void
+    {
+        $this->isRevoked = $isRevoked;
     }
 }
