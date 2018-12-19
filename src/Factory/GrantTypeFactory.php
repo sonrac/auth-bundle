@@ -118,4 +118,18 @@ class GrantTypeFactory
 
         return $refreshTokenGrant;
     }
+
+    /**
+     * @return array
+     */
+    public static function grantTypes(): array
+    {
+        return [
+            AuthCodeGrant::TYPE,
+            ClientCredentialsGrant::TYPE,
+            ImplicitGrant::TYPE,
+            PasswordGrant::TYPE,
+            RefreshTokenGrant::TYPE,
+        ];
+    }
 }

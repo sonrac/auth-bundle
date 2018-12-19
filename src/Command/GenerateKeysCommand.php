@@ -14,6 +14,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @package Sonrac\OAuth2\Command
  *
  * Generate oauth2 server keys.
+ * //TODO: refactor to use ext-openssl, add options bits and hash alg
  */
 class GenerateKeysCommand extends ContainerAwareCommand
 {
@@ -143,7 +144,7 @@ class GenerateKeysCommand extends ContainerAwareCommand
     }
 
     /**
-     * Generate private outh2 key.
+     * Generate private oauth2 key.
      *
      * @param string $keyPath
      * @param null|string $phrase Secret phrase

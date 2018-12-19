@@ -16,6 +16,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Class ClearTokensCommand
  * @package Sonrac\OAuth2\Command
+ *
+ * //TODO: refactor and refactor tests
  */
 class ClearTokensCommand extends DoctrineCommand
 {

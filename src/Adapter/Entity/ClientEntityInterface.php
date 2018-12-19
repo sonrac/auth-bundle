@@ -34,10 +34,10 @@ interface ClientEntityInterface
     /**
      * @return string[]
      */
-    public function getRedirectUris(): array;
+    public function getAllowedGrantTypes(): array;
 
     /**
      * @return string[]
      */
-    public function getAllowedGrantTypes(): array;
+    public function getRedirectUris(): array;
 }

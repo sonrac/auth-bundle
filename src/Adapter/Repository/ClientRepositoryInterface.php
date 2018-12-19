@@ -19,6 +19,26 @@ use Sonrac\OAuth2\Adapter\Entity\ClientEntityInterface;
 interface ClientRepositoryInterface
 {
     /**
+     * @param string $name
+     * @param string $secret
+     * @param array $grantTypes
+     * @param array $redirectUris
+     * @param string|int|null $identifier
+     * @param array $options
+     *
+     * @return \Sonrac\OAuth2\Adapter\Entity\ClientEntityInterface
+     *
+     */
+    public function createClientEntity(
+        string $name,
+        string $secret,
+        array $grantTypes,
+        array $redirectUris,
+        $identifier = null,
+        array $options = []
+    ): ClientEntityInterface;
+
+    /**
      * @param string|int $identifier
      *
      * @return \Sonrac\OAuth2\Adapter\Entity\ClientEntityInterface|null

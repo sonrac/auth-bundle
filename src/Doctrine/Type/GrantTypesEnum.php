@@ -6,11 +6,7 @@ namespace Sonrac\OAuth2\Doctrine\Type;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
-use Sonrac\OAuth2\Bridge\Grant\AuthCodeGrant;
-use Sonrac\OAuth2\Bridge\Grant\ClientCredentialsGrant;
-use Sonrac\OAuth2\Bridge\Grant\ImplicitGrant;
-use Sonrac\OAuth2\Bridge\Grant\PasswordGrant;
-use Sonrac\OAuth2\Bridge\Grant\RefreshTokenGrant;
+use Sonrac\OAuth2\Factory\GrantTypeFactory;
 
 /**
  * Class GrantTypesEnum
@@ -34,27 +30,11 @@ class GrantTypesEnum extends Type
     {
         $statuses = '';
 
-        foreach (self::getStatuses() as $status) {
+        foreach (GrantTypeFactory::grantTypes() as $status) {
             $statuses .= (\mb_strlen($statuses) ? ', ' : '') . "'{$status}'";
         }
 
         return "ENUM({$statuses})";
-    }
-
-    /**
-     * Get statuses list.
-     *
-     * @return array
-     */
-    public static function getStatuses(): array
-    {
-        return [
-            AuthCodeGrant::TYPE,
-            ClientCredentialsGrant::TYPE,
-            ImplicitGrant::TYPE,
-            PasswordGrant::TYPE,
-            RefreshTokenGrant::TYPE,
-        ];
     }
 
     /**
@@ -72,7 +52,7 @@ class GrantTypesEnum extends Type
      */
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
-        if (!\in_array($value, self::getStatuses(), true)) {
+        if (!\in_array($value, GrantTypeFactory::grantTypes(), true)) {
             throw new \InvalidArgumentException('Invalid status');
         }
 

@@ -106,6 +106,11 @@ class SonracOAuthExtension extends Extension
         $container->getDefinition(UserRepositoryInterface::class)
             ->setArgument('$userRepository', new Reference($config['repository']['user']));
 
+        // commands configuration
+
+        $container->getDefinition('sonrac_oauth.command.generate_client')
+            ->setArgument('$clientRepository', new Reference($config['repository']['client']));
+
         // authorization server configurator
 
         $container->getDefinition('sonrac_oauth.oauth2.authorization_server_configurator')

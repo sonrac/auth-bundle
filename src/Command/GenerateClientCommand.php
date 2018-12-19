@@ -5,12 +5,10 @@ declare(strict_types=1);
 namespace Sonrac\OAuth2\Command;
 
 use Doctrine\Bundle\DoctrineBundle\Command\DoctrineCommand;
-use League\OAuth2\Server\Entities\ClientEntityInterface;
-use Sonrac\OAuth2\Bridge\Grant\AuthCodeGrant;
-use Sonrac\OAuth2\Bridge\Grant\ClientCredentialsGrant;
-use Sonrac\OAuth2\Bridge\Grant\ImplicitGrant;
-use Sonrac\OAuth2\Bridge\Grant\PasswordGrant;
-use Sonrac\OAuth2\Bridge\Grant\RefreshTokenGrant;
+use Sonrac\OAuth2\Adapter\Exception\NotUniqueClientIdentifierException;
+use Sonrac\OAuth2\Adapter\Repository\ClientRepositoryInterface;
+use Sonrac\OAuth2\Factory\GrantTypeFactory;
+use Symfony\Component\Console\Exception\InvalidOptionException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -22,67 +20,96 @@ use Symfony\Component\Console\Output\OutputInterface;
 class GenerateClientCommand extends DoctrineCommand
 {
     /**
+     * @var \Sonrac\OAuth2\Adapter\Repository\ClientRepositoryInterface
+     */
+    private $clientRepository;
+
+    /**
+     * GenerateClientCommand constructor.
+     * @param \Sonrac\OAuth2\Adapter\Repository\ClientRepositoryInterface $clientRepository
+     * @param string|null $name
+     */
+    public function __construct(ClientRepositoryInterface $clientRepository, ?string $name = null)
+    {
+        parent::__construct($name);
+
+        $this->clientRepository = $clientRepository;
+    }
+
+    /**
      * {@inheritdoc}
      *
      * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
      */
     protected function configure(): void
     {
-        $this->setName('sonrac_auth:generate:client');
+        $this->setName('sonrac_oauth:generate:client');
 
         $this->addOption(
             'name',
-            'm',
+            'nm',
             InputOption::VALUE_REQUIRED,
             'Client application name'
         )->addOption(
-            'description',
-            'd',
+            'identifier',
+            'id',
             InputOption::VALUE_OPTIONAL,
-            'Client application description',
-            'Created by console command'
+            'Client application identifier',
+            null
         )->addOption(
             'grant-types',
             'g',
             InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
-            'Allowed grant types. By default include all implement grant types',
-            [
-                AuthCodeGrant::TYPE,
-                ClientCredentialsGrant::TYPE,
-                ImplicitGrant::TYPE,
-                PasswordGrant::TYPE,
-                RefreshTokenGrant::TYPE,
-            ]
+            'Allowed grant types. By default include all available grant types',
+            GrantTypeFactory::grantTypes()
+        )->addOption(
+            'redirect-uris',
+            'r',
+            InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
+            'Allowed redirect uris. By default is empty'
         );
     }
 
     /**
      * {@inheritdoc}
      *
-     * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\ORMInvalidArgumentException
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $name = $input->getOption('name');
-        $grantTypes = $input->getOption('grant-types');
-        $description = $input->getOption('description');
-        $secret = $this->generateRandomString();
-        /** @var \sonrac\Auth\Entity\Client $entity */
-        $entity = $this->getContainer()->get(ClientEntityInterface::class);
-        $entity->setName($name);
-        $entity->setAllowedGrantTypes($grantTypes);
-        $entity->setSecret($secret);
-        $entity->setCreatedAt(\time());
-        $entity->setDescription($description ?? '');
+        $identifier = $input->getOption('identifier');
 
-        $em = $this->getEntityManager('default');
-        $em->persist($entity);
-        $em->flush($entity);
+        $name = $input->getOption('name');
+
+        if ('' === $identifier) {
+            throw new InvalidOptionException('Option "identifier" can not be an empty string.');
+        }
+
+        $grantTypes = $input->getOption('grant-types');
+        $grantTypes = \is_array($grantTypes)
+            ? $grantTypes
+            : (null === $grantTypes || '' === $grantTypes ? [] : [$grantTypes]);
+
+        if (\count($grantTypes) !== \count(array_intersect(GrantTypeFactory::grantTypes(), $grantTypes))) {
+            throw new InvalidOptionException('Option "grant-types" contains invalid value.');
+        }
+
+        $redirectUris = $input->getOption('redirect-uris');
+        $redirectUris = \is_array($redirectUris) ? $redirectUris : [];
+
+        $secret = $this->generateRandomString();
+
+        try {
+            $client = $this->clientRepository->createClientEntity(
+                $name, $secret, $grantTypes, $redirectUris, $identifier, $input->getOptions()
+            );
+        } catch (NotUniqueClientIdentifierException $exception) {
+            throw new InvalidOptionException('Option "identifier" is not unique.');
+        }
 
         $output->writeln('Client successfully generated');
-        $output->writeln('Client ID: ' . $entity->getIdentifier());
-        $output->writeln('Client secret: ' . $entity->getSecret());
+        $output->writeln('Client ID: ' . $client->getIdentifier());
+        $output->writeln('Client secret: ' . $client->getSecret());
     }
 
     /**
@@ -97,6 +124,7 @@ class GenerateClientCommand extends DoctrineCommand
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()<>?.,+=-_';
         $charactersLength = \mb_strlen($characters);
         $randomString = '';
+
         for ($i = 0; $i < $length; ++$i) {
             $randomString .= $characters[\rand(0, $charactersLength - 1)];
         }

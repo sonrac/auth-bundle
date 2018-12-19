@@ -11,11 +11,11 @@
             <!--<tag name="sonrac.oauth.commands"/>-->
         <!--</service>-->
 
-        <!--<service id="sonrac_oauth.command.generate_client" class="Sonrac\OAuth2\Command\GenerateClientCommand"-->
-                 <!--public="false">-->
-            <!--<tag name="console.command"/>-->
-            <!--<tag name="sonrac.oauth.commands"/>-->
-        <!--</service>-->
+        <service id="sonrac_oauth.command.generate_client" class="Sonrac\OAuth2\Command\GenerateClientCommand"
+                 public="false">
+            <argument/>
+            <tag name="console.command"/>
+        </service>
 
         <service id="sonrac_oauth.command.generate_keys" class="Sonrac\OAuth2\Command\GenerateKeysCommand"
                  public="false">
@@ -24,7 +24,6 @@
             <argument>%sonrac_oauth.keys.pair.public_key_name%</argument>
             <argument>%sonrac_oauth.keys.pair.pass_phrase%</argument>
             <tag name="console.command"/>
-            <tag name="sonrac.oauth.commands"/>
         </service>
 
     </services>
