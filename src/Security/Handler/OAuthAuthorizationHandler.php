@@ -13,14 +13,15 @@ namespace Sonrac\OAuth2\Security\Handler;
 use League\OAuth2\Server\AuthorizationServer;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Symfony\Bridge\PsrHttpMessage\Factory\DiactorosFactory;
-use Symfony\Bridge\PsrHttpMessage\Factory\HttpFoundationFactory;
+use Sonrac\OAuth2\Bridge\Util\OAuthHandler;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class OAuthAuthorizationHandler
  * @package Sonrac\OAuth2\Security\Handler
  */
-class OAuthAuthorizationHandler extends AbstractOAuthPsrHandler
+class OAuthAuthorizationHandler
 {
     /**
      * @var \League\OAuth2\Server\AuthorizationServer
@@ -28,35 +29,38 @@ class OAuthAuthorizationHandler extends AbstractOAuthPsrHandler
     private $authorizationServer;
 
     /**
+     * @var \Sonrac\OAuth2\Bridge\Util\OAuthHandler
+     */
+    private $OAuthHandler;
+
+    /**
      * OAuthAuthorizationHandler constructor.
      * @param \League\OAuth2\Server\AuthorizationServer $authorizationServer
-     * @param \Symfony\Bridge\PsrHttpMessage\Factory\DiactorosFactory $diactorosFactory
-     * @param \Symfony\Bridge\PsrHttpMessage\Factory\HttpFoundationFactory $httpFoundationFactory
+     * @param \Sonrac\OAuth2\Bridge\Util\OAuthHandler $OAuthHandler
      */
-    public function __construct(
-        AuthorizationServer $authorizationServer,
-        DiactorosFactory $diactorosFactory,
-        HttpFoundationFactory $httpFoundationFactory
-    ) {
-        parent::__construct($diactorosFactory, $httpFoundationFactory);
-
+    public function __construct(AuthorizationServer $authorizationServer, OAuthHandler $OAuthHandler)
+    {
         $this->authorizationServer = $authorizationServer;
+        $this->OAuthHandler = $OAuthHandler;
     }
 
     /**
-     * {@inheritdoc}
+     * @param \Symfony\Component\HttpFoundation\Request $request
      *
-     * @throws \League\OAuth2\Server\Exception\OAuthServerException
+     * @return \Symfony\Component\HttpFoundation\Response
      */
-    protected function psrHandle(ServerRequestInterface $request, ResponseInterface $response): ?ResponseInterface
+    public function attemptAuthorization(Request $request): Response
     {
-        $authRequest = $this->authorizationServer->validateAuthorizationRequest($request);
+        return $this->OAuthHandler->handle(function (ServerRequestInterface $request, ResponseInterface $response) {
+            throw new \RuntimeException('Authorization is not implemented.');
+            $authRequest = $this->authorizationServer->validateAuthorizationRequest($request);
 
-        //TODO: add csrf token data validation.
-        //TODO: implement save auth request state
+            //TODO: add csrf token data validation.
+            //TODO: implement save auth request state
 
-        $response = $this->authorizationServer->completeAuthorizationRequest($authRequest, $response);
+            $response = $this->authorizationServer->completeAuthorizationRequest($authRequest, $response);
 
-        return $response;
+            return $response;
+        }, $request);
     }
 }

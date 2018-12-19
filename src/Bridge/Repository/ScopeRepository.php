@@ -13,8 +13,8 @@ namespace Sonrac\OAuth2\Bridge\Repository;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Exception\OAuthServerException;
 use League\OAuth2\Server\Repositories\ScopeRepositoryInterface;
+use Sonrac\OAuth2\Adapter\Repository\ScopeRepositoryInterface as OAuthScopeRepositoryInterface;
 use Sonrac\OAuth2\Bridge\Entity\Scope;
-use Sonrac\OAuth2\Repository\ScopeRepository as DoctrineScopeRepository;
 
 /**
  * Class ScopeRepository
@@ -23,31 +23,31 @@ use Sonrac\OAuth2\Repository\ScopeRepository as DoctrineScopeRepository;
 class ScopeRepository implements ScopeRepositoryInterface
 {
     /**
-     * @var \Sonrac\OAuth2\Repository\ScopeRepository
+     * @var \Sonrac\OAuth2\Adapter\Repository\ScopeRepositoryInterface
      */
     private $scopeRepository;
 
     /**
      * ScopeRepository constructor.
-     * @param \Sonrac\OAuth2\Repository\ScopeRepository $scopeRepository
+     * @param \Sonrac\OAuth2\Adapter\Repository\ScopeRepositoryInterface $scopeRepository
      */
-    public function __construct(DoctrineScopeRepository $scopeRepository)
+    public function __construct(OAuthScopeRepositoryInterface $scopeRepository)
     {
         $this->scopeRepository = $scopeRepository;
     }
 
     /**
-     * {@inheritdoc}\
+     * {@inheritdoc}
      */
     public function getScopeEntityByIdentifier($identifier)
     {
-        $scope = $this->scopeRepository->findOneBy(['id' => $identifier]);
+        $scope = $this->scopeRepository->findScopeEntityByIdentifier($identifier);
 
         if (null === $scope) {
             throw OAuthServerException::invalidScope($identifier);
         }
 
-        return new Scope($scope->getId());
+        return new Scope($scope->getIdentifier());
     }
 
     /**

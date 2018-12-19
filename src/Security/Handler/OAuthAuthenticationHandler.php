@@ -11,13 +11,15 @@ declare(strict_types=1);
 namespace Sonrac\OAuth2\Security\Handler;
 
 use League\OAuth2\Server\AuthorizationValidators\AuthorizationValidatorInterface;
+use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Sonrac\OAuth2\Bridge\Util\OAuthHandler;
 use Sonrac\OAuth2\Security\Token\AbstractPreAuthenticationToken;
 use Sonrac\OAuth2\Security\Token\PreAuthenticationClientToken;
 use Sonrac\OAuth2\Security\Token\PreAuthenticationToken;
-use Symfony\Bridge\PsrHttpMessage\Factory\DiactorosFactory;
-use Symfony\Bridge\PsrHttpMessage\Factory\HttpFoundationFactory;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
@@ -25,12 +27,17 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
  * Class OAuthAuthenticationHandler
  * @package Sonrac\OAuth2\Security\Handler
  */
-class OAuthAuthenticationHandler extends AbstractOAuthPsrHandler
+class OAuthAuthenticationHandler
 {
     /**
      * @var \League\OAuth2\Server\AuthorizationValidators\AuthorizationValidatorInterface
      */
     private $authorizationValidator;
+
+    /**
+     * @var \League\OAuth2\Server\Repositories\ClientRepositoryInterface
+     */
+    private $clientRepository;
 
     /**
      * @var \Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface
@@ -48,6 +55,11 @@ class OAuthAuthenticationHandler extends AbstractOAuthPsrHandler
     private $providerKey;
 
     /**
+     * @var \Sonrac\OAuth2\Bridge\Util\OAuthHandler
+     */
+    private $OAuthHandler;
+
+    /**
      * @var array|null
      */
     private $defaultScopes;
@@ -55,26 +67,26 @@ class OAuthAuthenticationHandler extends AbstractOAuthPsrHandler
     /**
      * OAuthAuthenticationHandler constructor.
      * @param \League\OAuth2\Server\AuthorizationValidators\AuthorizationValidatorInterface $authorizationValidator
+     * @param \League\OAuth2\Server\Repositories\ClientRepositoryInterface $clientRepository
      * @param \Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface $authenticationManager
      * @param \Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface $tokenStorage
+     * @param \Sonrac\OAuth2\Bridge\Util\OAuthHandler $OAuthHandler
      * @param string $providerKey
-     * @param \Symfony\Bridge\PsrHttpMessage\Factory\DiactorosFactory $diactorosFactory
-     * @param \Symfony\Bridge\PsrHttpMessage\Factory\HttpFoundationFactory $httpFoundationFactory
      */
     public function __construct(
         AuthorizationValidatorInterface $authorizationValidator,
+        ClientRepositoryInterface $clientRepository,
         AuthenticationManagerInterface $authenticationManager,
         TokenStorageInterface $tokenStorage,
-        string $providerKey,
-        DiactorosFactory $diactorosFactory,
-        HttpFoundationFactory $httpFoundationFactory
+        OAuthHandler $OAuthHandler,
+        string $providerKey
     ) {
-        parent::__construct($diactorosFactory, $httpFoundationFactory);
-
         $this->authorizationValidator = $authorizationValidator;
+        $this->clientRepository = $clientRepository;
         $this->authenticationManager = $authenticationManager;
         $this->tokenStorage = $tokenStorage;
         $this->providerKey = $providerKey;
+        $this->OAuthHandler = $OAuthHandler;
     }
 
     /**
@@ -88,19 +100,23 @@ class OAuthAuthenticationHandler extends AbstractOAuthPsrHandler
     }
 
     /**
-     * {@inheritdoc}
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     *
+     * @return \Symfony\Component\HttpFoundation\Response|null
      */
-    protected function psrHandle(ServerRequestInterface $request, ResponseInterface $response): ?ResponseInterface
+    public function attemptAuthentication(Request $request): ?Response
     {
-        $request = $this->authorizationValidator->validateAuthorization($request);
+        return $this->OAuthHandler->handle(function (ServerRequestInterface $request, ResponseInterface $response) {
+            $request = $this->authorizationValidator->validateAuthorization($request);
 
-        $token = $this->createTokenFromRequest($request);
+            $token = $this->createTokenFromRequest($request);
 
-        $authenticatedToken = $this->authenticationManager->authenticate($token);
+            $authenticatedToken = $this->authenticationManager->authenticate($token);
 
-        $this->tokenStorage->setToken($authenticatedToken);
+            $this->tokenStorage->setToken($authenticatedToken);
 
-        return null;
+            return null;
+        }, $request);
     }
 
     /**
@@ -111,6 +127,11 @@ class OAuthAuthenticationHandler extends AbstractOAuthPsrHandler
     private function createTokenFromRequest(ServerRequestInterface $request): AbstractPreAuthenticationToken
     {
         $clientId = $request->getAttribute('oauth_client_id');
+
+        $client = $this->clientRepository->getClientEntity(
+            $clientId, null, null, false
+        );
+
         $userId = $request->getAttribute('oauth_user_id');
 
         //TODO: add check for scopes and scopes validator interface.
@@ -122,9 +143,9 @@ class OAuthAuthenticationHandler extends AbstractOAuthPsrHandler
             : $scopes;
 
         if (null !== $userId && '' !== $userId) {
-            $token = new PreAuthenticationToken($userId, $clientId, $this->providerKey, '', $scopes);
+            $token = new PreAuthenticationToken($userId, $client, $this->providerKey, '', $scopes);
         } else {
-            $token = new PreAuthenticationClientToken($clientId, $this->providerKey, '', $scopes);
+            $token = new PreAuthenticationClientToken($client, $this->providerKey, '', $scopes);
         }
 
         $token->setAttribute('access_token_id', $request->getAttribute('oauth_access_token_id'));

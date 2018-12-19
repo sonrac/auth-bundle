@@ -4,6 +4,13 @@ declare(strict_types=1);
 
 namespace Sonrac\OAuth2\DependencyInjection;
 
+use League\OAuth2\Server\Grant\AbstractGrant;
+use League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface;
+use League\OAuth2\Server\Repositories\AuthCodeRepositoryInterface;
+use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
+use League\OAuth2\Server\Repositories\RefreshTokenRepositoryInterface;
+use League\OAuth2\Server\Repositories\ScopeRepositoryInterface;
+use League\OAuth2\Server\Repositories\UserRepositoryInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
@@ -26,7 +33,6 @@ class SonracOAuthExtension extends Extension
         $fileLocator = new FileLocator(__DIR__ . '/../Resources/config');
         $loader = new XmlFileLoader($container, $fileLocator);
 
-        $loader->load('services.xml');
         $loader->load('services/repository.xml');
         $loader->load('services/oauth2.xml');
         $loader->load('services/security.xml');
@@ -80,6 +86,26 @@ class SonracOAuthExtension extends Extension
      */
     private function configureServiceDefinitions(ContainerBuilder $container, array &$config): void
     {
+        // repositories configuration
+
+        $container->getDefinition(AccessTokenRepositoryInterface::class)
+            ->setArgument('$accessTokenRepository', new Reference($config['repository']['access_token']));
+
+        $container->getDefinition(AuthCodeRepositoryInterface::class)
+            ->setArgument('$authCodeRepository', new Reference($config['repository']['auth_code']));
+
+        $container->getDefinition(ClientRepositoryInterface::class)
+            ->setArgument('$clientRepository', new Reference($config['repository']['client']));
+
+        $container->getDefinition(RefreshTokenRepositoryInterface::class)
+            ->setArgument('$refreshTokenRepository', new Reference($config['repository']['refresh_token']));
+
+        $container->getDefinition(ScopeRepositoryInterface::class)
+            ->setArgument('$scopeRepository', new Reference($config['repository']['scope']));
+
+        $container->getDefinition(UserRepositoryInterface::class)
+            ->setArgument('$userRepository', new Reference($config['repository']['user']));
+
         // authorization server configurator
 
         $container->getDefinition('sonrac_oauth.oauth2.authorization_server_configurator')
@@ -94,28 +120,16 @@ class SonracOAuthExtension extends Extension
             }
         }
 
-        // authorization server
-
-        $container->getDefinition('sonrac_oauth.oauth2.authorization_server')
-            ->setArgument('$clientRepository', new Reference($config['repository']['client']))
-            ->setArgument('$accessTokenRepository', new Reference($config['repository']['access_token']))
-            ->setArgument('$scopeRepository', new Reference($config['repository']['scope']));
-
-        // bearer token validator
-
-        $container->getDefinition('sonrac_oauth.security.authorization_validator.bearer_token')
-            ->setArgument('$accessTokenRepository', new Reference($config['repository']['access_token']));
-
-        // authentication provider
-
-        $container->getDefinition('sonrac_oauth.security.authentication_provider.abstract')
-            ->setArgument('$clientRepository', new Reference($config['repository']['client']));
-
         // authentication handler
 
         if (isset($config['default_scopes']) && \is_array($config['default_scopes'])) {
             $container->getDefinition('sonrac_oauth.security.oauth_authentication_handler.abstract')
                 ->addMethodCall('setDefaultScopes', [$config['default_scopes']]);
+
+            $container->getDefinition('sonrac_oauth.oauth2.authorization_server')
+                ->addMethodCall(
+                    'setDefaultScope', [implode(AbstractGrant::SCOPE_DELIMITER_STRING, $config['default_scopes'])]
+                );
 
         }
     }

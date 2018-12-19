@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Sonrac\OAuth2\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Sonrac\OAuth2\Adapter\Entity\UserEntityInterface;
+use Sonrac\OAuth2\Adapter\Repository\UserRepositoryInterface;
 use Sonrac\OAuth2\Entity\User;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -17,7 +19,7 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  * @method User[]    findAll()
  * @method User[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class UserRepository extends ServiceEntityRepository
+class UserRepository extends ServiceEntityRepository implements UserRepositoryInterface
 {
     /**
      * AccessTokens constructor.
@@ -27,6 +29,16 @@ class UserRepository extends ServiceEntityRepository
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, User::class);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function findUserByUsername($username): ?UserEntityInterface
+    {
+        return $this->findByUsernameOrEmail($username);
     }
 
     /**

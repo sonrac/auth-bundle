@@ -13,8 +13,8 @@ namespace Sonrac\OAuth2\Bridge\Repository;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Exception\OAuthServerException;
 use League\OAuth2\Server\Repositories\UserRepositoryInterface;
+use Sonrac\OAuth2\Adapter\Repository\UserRepositoryInterface as OAuthUserRepositoryInterface;
 use Sonrac\OAuth2\Bridge\Entity\User;
-use Sonrac\OAuth2\Repository\UserRepository as DoctrineUserRepository;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
@@ -24,7 +24,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class UserRepository implements UserRepositoryInterface
 {
     /**
-     * @var \Sonrac\OAuth2\Repository\UserRepository
+     * @var \Sonrac\OAuth2\Adapter\Repository\UserRepositoryInterface
      */
     private $userRepository;
 
@@ -35,10 +35,10 @@ class UserRepository implements UserRepositoryInterface
 
     /**
      * UserRepository constructor.
-     * @param \Sonrac\OAuth2\Repository\UserRepository $userRepository
+     * @param \Sonrac\OAuth2\Adapter\Repository\UserRepositoryInterface $userRepository
      * @param \Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface $passwordEncoder
      */
-    public function __construct(DoctrineUserRepository $userRepository, UserPasswordEncoderInterface $passwordEncoder)
+    public function __construct(OAuthUserRepositoryInterface $userRepository, UserPasswordEncoderInterface $passwordEncoder)
     {
         $this->userRepository = $userRepository;
         $this->passwordEncoder = $passwordEncoder;
@@ -49,12 +49,14 @@ class UserRepository implements UserRepositoryInterface
      */
     public function getUserEntityByUserCredentials($username, $password, $grantType, ClientEntityInterface $clientEntity)
     {
-        $user = $this->userRepository->findByUsernameOrEmail($username);
+        $user = $this->userRepository->findUserByUsername($username);
 
         if (null === $user || false === $this->passwordEncoder->isPasswordValid($user, $password)) {
             throw OAuthServerException::invalidCredentials();
         }
 
-        return new User($user->getId());
+        //TODO: add optional validation for grant type and client.
+
+        return new User($user->getIdentifier());
     }
 }

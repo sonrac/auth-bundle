@@ -13,7 +13,7 @@
 
         <service id="sonrac_oauth.security.authorization_validator.bearer_token"
                  class="League\OAuth2\Server\AuthorizationValidators\BearerTokenValidator">
-            <argument/>
+            <argument type="service" id="League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface"/>
             <configurator service="sonrac_oauth.security.authorization_validator.bearer_token_configurator"
                           method="configure"/>
         </service>
@@ -21,15 +21,13 @@
         <service id="sonrac_oauth.security.oauth2_authorization_handler"
                  class="Sonrac\OAuth2\Security\Handler\OAuthAuthorizationHandler" public="false">
             <argument type="service" id="sonrac_oauth.oauth2.authorization_server"/>
-            <argument type="service" id="sensio_framework_extra.psr7.http_message_factory"/>
-            <argument type="service" id="sensio_framework_extra.psr7.http_foundation_factory"/>
+            <argument type="service" id="sonrac_oauth.util.oauth_handler"/>
         </service>
 
         <service id="sonrac_oauth.security.oauth_issue_token_handler"
                  class="Sonrac\OAuth2\Security\Handler\OAuthIssueTokenHandler" public="false">
             <argument type="service" id="sonrac_oauth.oauth2.authorization_server"/>
-            <argument type="service" id="sensio_framework_extra.psr7.http_message_factory"/>
-            <argument type="service" id="sensio_framework_extra.psr7.http_foundation_factory"/>
+            <argument type="service" id="sonrac_oauth.util.oauth_handler"/>
         </service>
 
         <service id="sonrac_oauth.security.oauth_path_config.abstract"
@@ -46,11 +44,11 @@
         <service id="sonrac_oauth.security.oauth_authentication_handler.abstract"
                  class="Sonrac\OAuth2\Security\Handler\OAuthAuthenticationHandler" public="false" abstract="true">
             <argument/>
+            <argument type="service" id="League\OAuth2\Server\Repositories\ClientRepositoryInterface"/>
             <argument type="service" id="security.authentication.manager"/>
             <argument type="service" id="security.token_storage"/>
+            <argument type="service" id="sonrac_oauth.util.oauth_handler"/>
             <argument/>
-            <argument type="service" id="sensio_framework_extra.psr7.http_message_factory"/>
-            <argument type="service" id="sensio_framework_extra.psr7.http_foundation_factory"/>
         </service>
 
         <service id="sonrac_oauth.security.authentication_listener.abstract"

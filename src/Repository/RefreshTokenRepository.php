@@ -5,6 +5,10 @@ declare(strict_types=1);
 namespace Sonrac\OAuth2\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use League\OAuth2\Server\Entities\RefreshTokenEntityInterface;
+use League\OAuth2\Server\Exception\UniqueTokenIdentifierConstraintViolationException;
+use Sonrac\OAuth2\Adapter\Repository\RefreshTokenRepositoryInterface;
 use Sonrac\OAuth2\Entity\RefreshToken;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -17,7 +21,7 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  * @method RefreshToken[]    findAll()
  * @method RefreshToken[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class RefreshTokenRepository extends ServiceEntityRepository
+class RefreshTokenRepository extends ServiceEntityRepository implements RefreshTokenRepositoryInterface
 {
     /**
      * RefreshTokenRepository constructor.
@@ -29,16 +33,55 @@ class RefreshTokenRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param \Sonrac\OAuth2\Entity\RefreshToken $token
-     *
-     * @return void
+     * {@inheritdoc}
      *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function save(RefreshToken $token)
+    public function persistNewRefreshToken(RefreshTokenEntityInterface $refreshTokenEntity): void
     {
-        $this->_em->persist($token);
+        $refreshToken = new RefreshToken();
+        $refreshToken->setId($refreshTokenEntity->getIdentifier());
+        $refreshToken->setAccessToken($refreshTokenEntity->getAccessToken()->getIdentifier());
+        $refreshToken->setExpireAt($refreshTokenEntity->getExpiryDateTime()->getTimestamp());
+        $refreshToken->setIsRevoked(false);
+        $refreshToken->setCreatedAt(time());
+
+        try {
+            $this->_em->persist($refreshToken);
+            $this->_em->flush();
+        } catch (UniqueConstraintViolationException $exception) {
+            throw UniqueTokenIdentifierConstraintViolationException::create();
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function revokeRefreshToken($tokenId): void
+    {
+        $refreshToken = $this->findOneBy(['id' => $tokenId]);
+
+        if (null === $refreshToken) {
+            return;
+        }
+
+        $refreshToken->setIsRevoked(true);
+
+        $this->_em->persist($refreshToken);
         $this->_em->flush();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isRefreshTokenRevoked($tokenId): bool
+    {
+        $refreshToken = $this->findOneBy(['id' => $tokenId]);
+
+        return null === $refreshToken || $refreshToken->isRevoked();
     }
 }

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Sonrac\OAuth2\Security\Provider;
 
-use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
 use Sonrac\OAuth2\Security\Token\AbstractPreAuthenticationToken;
 use Sonrac\OAuth2\Security\Token\OAuthClientToken;
 use Sonrac\OAuth2\Security\Token\OAuthToken;
@@ -29,11 +28,6 @@ class OAuthAuthenticationProvider implements AuthenticationProviderInterface
     private $userProvider;
 
     /**
-     * @var \League\OAuth2\Server\Repositories\ClientRepositoryInterface
-     */
-    private $clientRepository;
-
-    /**
      * @var \Symfony\Component\Security\Core\User\UserCheckerInterface
      */
     private $userChecker;
@@ -46,18 +40,15 @@ class OAuthAuthenticationProvider implements AuthenticationProviderInterface
     /**
      * OAuthAuthenticationProvider constructor.
      * @param \Symfony\Component\Security\Core\User\UserProviderInterface $userProvider
-     * @param \League\OAuth2\Server\Repositories\ClientRepositoryInterface $clientRepository
      * @param \Symfony\Component\Security\Core\User\UserCheckerInterface $userChecker
      * @param string $providerKey
      */
     public function __construct(
         UserProviderInterface $userProvider,
-        ClientRepositoryInterface $clientRepository,
         UserCheckerInterface $userChecker,
         string $providerKey
     ) {
         $this->userProvider = $userProvider;
-        $this->clientRepository = $clientRepository;
         $this->userChecker = $userChecker;
         $this->providerKey = $providerKey;
     }
@@ -73,14 +64,6 @@ class OAuthAuthenticationProvider implements AuthenticationProviderInterface
             throw new AuthenticationException('The token is not supported by this authentication provider.');
         }
 
-        $client = $this->clientRepository->getClientEntity(
-            $token->getClientIdentifier(), null, null, false
-        );
-
-        if (null === $client) {
-            throw new BadCredentialsException('Bad client credentials.');
-        }
-
         try {
             if (null !== $token->getUser() && '' !== $token->getUser()) {
                 $user = $this->userProvider->loadUserByUsername($token->getUser());
@@ -92,14 +75,14 @@ class OAuthAuthenticationProvider implements AuthenticationProviderInterface
         }
 
         if (false === $user instanceof UserInterface) {
-            return new OAuthClientToken($client, $token->getProviderKey(), $token->getCredentials(), $token->getScopes());
+            return new OAuthClientToken($token->getClient(), $token->getProviderKey(), $token->getCredentials(), $token->getScopes());
         }
 
         $this->userChecker->checkPreAuth($user);
         $this->userChecker->checkPostAuth($user);
 
         return new OAuthToken(
-            $user, $client, $token->getProviderKey(), $token->getCredentials(), $token->getScopes(), $user->getRoles()
+            $user, $token->getClient(), $token->getProviderKey(), $token->getCredentials(), $token->getScopes(), $user->getRoles()
         );
     }
 

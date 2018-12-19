@@ -10,13 +10,10 @@ declare(strict_types=1);
 
 namespace Sonrac\OAuth2\Bridge\Repository;
 
-use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use League\OAuth2\Server\Entities\RefreshTokenEntityInterface;
-use League\OAuth2\Server\Exception\UniqueTokenIdentifierConstraintViolationException;
 use League\OAuth2\Server\Repositories\RefreshTokenRepositoryInterface;
+use Sonrac\OAuth2\Adapter\Repository\RefreshTokenRepositoryInterface as OAuthRefreshTokenRepositoryInterface;
 use Sonrac\OAuth2\Bridge\Entity\RefreshToken;
-use Sonrac\OAuth2\Entity\RefreshToken as DoctrineRefreshToken;
-use Sonrac\OAuth2\Repository\RefreshTokenRepository as DoctrineRefreshTokenRepository;
 
 /**
  * Class RefreshTokenRepository
@@ -25,15 +22,15 @@ use Sonrac\OAuth2\Repository\RefreshTokenRepository as DoctrineRefreshTokenRepos
 class RefreshTokenRepository implements RefreshTokenRepositoryInterface
 {
     /**
-     * @var \Sonrac\OAuth2\Repository\RefreshTokenRepository
+     * @var \Sonrac\OAuth2\Adapter\Repository\RefreshTokenRepositoryInterface
      */
     private $refreshTokenRepository;
 
     /**
      * RefreshTokenRepository constructor.
-     * @param \Sonrac\OAuth2\Repository\RefreshTokenRepository $refreshTokenRepository
+     * @param \Sonrac\OAuth2\Adapter\Repository\RefreshTokenRepositoryInterface $refreshTokenRepository
      */
-    public function __construct(DoctrineRefreshTokenRepository $refreshTokenRepository)
+    public function __construct(OAuthRefreshTokenRepositoryInterface $refreshTokenRepository)
     {
         $this->refreshTokenRepository = $refreshTokenRepository;
     }
@@ -51,18 +48,7 @@ class RefreshTokenRepository implements RefreshTokenRepositoryInterface
      */
     public function persistNewRefreshToken(RefreshTokenEntityInterface $refreshTokenEntity)
     {
-        $refreshToken = new DoctrineRefreshToken();
-        $refreshToken->setId($refreshTokenEntity->getIdentifier());
-        $refreshToken->setAccessToken($refreshTokenEntity->getAccessToken()->getIdentifier());
-        $refreshToken->setExpireAt($refreshTokenEntity->getExpiryDateTime()->getTimestamp());
-        $refreshToken->setIsRevoked(false);
-        $refreshToken->setCreatedAt(time());
-
-        try {
-            $this->refreshTokenRepository->save($refreshToken);
-        } catch (UniqueConstraintViolationException $exception) {
-            throw UniqueTokenIdentifierConstraintViolationException::create();
-        }
+        $this->refreshTokenRepository->persistNewRefreshToken($refreshTokenEntity);
     }
 
     /**
@@ -70,15 +56,7 @@ class RefreshTokenRepository implements RefreshTokenRepositoryInterface
      */
     public function revokeRefreshToken($tokenId)
     {
-        $refreshToken = $this->refreshTokenRepository->findOneBy(['id' => $tokenId]);
-
-        if (null === $refreshToken) {
-            return;
-        }
-
-        $refreshToken->setIsRevoked(true);
-
-        $this->refreshTokenRepository->save($refreshToken);
+        $this->refreshTokenRepository->revokeRefreshToken($tokenId);
     }
 
     /**
@@ -86,8 +64,6 @@ class RefreshTokenRepository implements RefreshTokenRepositoryInterface
      */
     public function isRefreshTokenRevoked($tokenId)
     {
-        $refreshToken = $this->refreshTokenRepository->findOneBy(['id' => $tokenId]);
-
-        return null === $refreshToken || $refreshToken->isRevoked();
+        return $this->refreshTokenRepository->isRefreshTokenRevoked($tokenId);
     }
 }

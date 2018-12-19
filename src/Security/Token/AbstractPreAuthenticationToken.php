@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace Sonrac\OAuth2\Security\Token;
 
+use League\OAuth2\Server\Entities\ClientEntityInterface;
 use Symfony\Component\Security\Core\Authentication\Token\AbstractToken;
 use Symfony\Component\Security\Core\Role\Role;
 
@@ -20,9 +21,9 @@ use Symfony\Component\Security\Core\Role\Role;
 abstract class AbstractPreAuthenticationToken extends AbstractToken
 {
     /**
-     * @var string
+     * @var \League\OAuth2\Server\Entities\ClientEntityInterface
      */
-    private $clientIdentifier;
+    private $client;
 
     /**
      * @var string
@@ -41,14 +42,14 @@ abstract class AbstractPreAuthenticationToken extends AbstractToken
 
     /**
      * AbstractPreAuthenticationToken constructor.
-     * @param string $clientIdentifier
+     * @param \League\OAuth2\Server\Entities\ClientEntityInterface $client
      * @param string $providerKey
      * @param string|null $credentials
      * @param array $scopes
      * @param array $roles
      */
     public function __construct(
-        string $clientIdentifier,
+        ClientEntityInterface $client,
         string $providerKey,
         ?string $credentials = null,
         array $scopes = [],
@@ -56,7 +57,7 @@ abstract class AbstractPreAuthenticationToken extends AbstractToken
     ) {
         parent::__construct($roles);
 
-        $this->clientIdentifier = $clientIdentifier;
+        $this->client = $client;
         $this->providerKey = $providerKey;
         $this->credentials = $credentials;
         $this->scopes = $scopes;
@@ -75,11 +76,11 @@ abstract class AbstractPreAuthenticationToken extends AbstractToken
     }
 
     /**
-     * @return string
+     * @return \League\OAuth2\Server\Entities\ClientEntityInterface
      */
-    public function getClientIdentifier(): string
+    public function getClient(): ClientEntityInterface
     {
-        return $this->clientIdentifier;
+        return $this->client;
     }
 
     /**
@@ -123,7 +124,7 @@ abstract class AbstractPreAuthenticationToken extends AbstractToken
     public function serialize()
     {
         return \serialize([
-            $this->clientIdentifier,
+            clone $this->client,
             $this->credentials,
             $this->providerKey,
             $this->scopes,
@@ -137,7 +138,7 @@ abstract class AbstractPreAuthenticationToken extends AbstractToken
     public function unserialize($serialized)
     {
         [
-            $this->clientIdentifier,
+            $this->client,
             $this->credentials,
             $this->providerKey,
             $this->scopes,
@@ -162,7 +163,7 @@ abstract class AbstractPreAuthenticationToken extends AbstractToken
         return sprintf(
             '%s(client="%s", user="%s", authenticated=%s, scopes="%s", roles="%s")',
             $class,
-            $this->clientIdentifier,
+            $this->client->getIdentifier(),
             $this->getUsername(),
             json_encode($this->isAuthenticated()),
             implode(', ', $this->scopes),

@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Sonrac\OAuth2\Entity;
 
+use Sonrac\OAuth2\Adapter\Entity\ClientEntityInterface;
+
 /**
  * Class Client
  * @package Sonrac\OAuth2\Entity
  */
-class Client
+class Client implements ClientEntityInterface
 {
     use TimeEntityTrait;
 
@@ -87,6 +89,14 @@ class Client
     protected $updatedAt;
 
     /**
+     * {@inheritdoc}
+     */
+    public function getIdentifier()
+    {
+        return $this->id;
+    }
+
+    /**
      * Get client id.
      *
      * @return string|null
@@ -109,11 +119,9 @@ class Client
     }
 
     /**
-     * Get client name.
-     *
-     * @return string|null
+     * {@inheritdoc}
      */
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->name;
     }
@@ -153,11 +161,9 @@ class Client
     }
 
     /**
-     * Get secret key.
-     *
-     * @return string|null
+     * {@inheritdoc}
      */
-    public function getSecret(): ?string
+    public function getSecret(): string
     {
         return $this->secret;
     }
@@ -175,9 +181,7 @@ class Client
     }
 
     /**
-     * Get allowed grant types.
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getAllowedGrantTypes(): array
     {
@@ -213,9 +217,7 @@ class Client
     }
 
     /**
-     * Get redirect uris.
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getRedirectUris(): array
     {

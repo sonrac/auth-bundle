@@ -12,9 +12,9 @@ namespace Sonrac\OAuth2\Bridge\Repository;
 
 use League\OAuth2\Server\Exception\OAuthServerException;
 use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
+use Sonrac\OAuth2\Adapter\Entity\ClientEntityInterface;
+use Sonrac\OAuth2\Adapter\Repository\ClientRepositoryInterface as OAuthClientRepositoryInterface;
 use Sonrac\OAuth2\Bridge\Entity\Client;
-use Sonrac\OAuth2\Entity\Client as DoctrineClient;
-use Sonrac\OAuth2\Repository\ClientRepository as DoctrineClientRepository;
 
 /**
  * Class ClientRepository
@@ -23,15 +23,15 @@ use Sonrac\OAuth2\Repository\ClientRepository as DoctrineClientRepository;
 class ClientRepository implements ClientRepositoryInterface
 {
     /**
-     * @var \Sonrac\OAuth2\Repository\ClientRepository
+     * @var \Sonrac\OAuth2\Adapter\Repository\ClientRepositoryInterface
      */
     private $clientRepository;
 
     /**
      * ClientRepository constructor.
-     * @param \Sonrac\OAuth2\Repository\ClientRepository $clientRepository
+     * @param \Sonrac\OAuth2\Adapter\Repository\ClientRepositoryInterface $clientRepository
      */
-    public function __construct(DoctrineClientRepository $clientRepository)
+    public function __construct(OAuthClientRepositoryInterface $clientRepository)
     {
         $this->clientRepository = $clientRepository;
     }
@@ -41,7 +41,7 @@ class ClientRepository implements ClientRepositoryInterface
      */
     public function getClientEntity($clientIdentifier, $grantType = null, $clientSecret = null, $mustValidateSecret = true)
     {
-        $client = $this->clientRepository->findOneBy(['id' => $clientIdentifier]);
+        $client = $this->clientRepository->findClientEntityByIdentifier($clientIdentifier);
 
         if (null === $client) {
             throw OAuthServerException::invalidClient();
@@ -55,16 +55,16 @@ class ClientRepository implements ClientRepositoryInterface
             throw OAuthServerException::invalidClient();
         }
 
-        return new Client($client->getId(), $client->getName(), $client->getRedirectUris());
+        return new Client($client->getIdentifier(), $client->getName(), $client->getRedirectUris());
     }
 
     /**
-     * @param \Sonrac\OAuth2\Entity\Client $client
+     * @param \Sonrac\OAuth2\Adapter\Entity\ClientEntityInterface $client
      * @param string $grantType
      *
      * @return bool
      */
-    protected function hasGrantType(DoctrineClient $client, string $grantType): bool
+    protected function hasGrantType(ClientEntityInterface $client, string $grantType): bool
     {
         return \in_array(\mb_strtolower($grantType), $client->getAllowedGrantTypes(), true);
     }

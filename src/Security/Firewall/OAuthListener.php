@@ -10,7 +10,6 @@ declare(strict_types=1);
 
 namespace Sonrac\OAuth2\Security\Firewall;
 
-use Psr\Log\LoggerInterface;
 use Sonrac\OAuth2\Security\Config\OAuthPathConfig;
 use Sonrac\OAuth2\Security\Handler\OAuthAuthenticationHandler;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
@@ -34,11 +33,6 @@ class OAuthListener implements ListenerInterface
     private $pathConfig;
 
     /**
-     * @var \Psr\Log\LoggerInterface|null
-     */
-    private $logger;
-
-    /**
      * OAuthListener constructor.
      * @param \Sonrac\OAuth2\Security\Handler\OAuthAuthenticationHandler $authenticationHandler
      * @param \Sonrac\OAuth2\Security\Config\OAuthPathConfig $pathConfig
@@ -47,16 +41,6 @@ class OAuthListener implements ListenerInterface
     {
         $this->authenticationHandler = $authenticationHandler;
         $this->pathConfig = $pathConfig;
-    }
-
-    /**
-     * @param \Psr\Log\LoggerInterface $logger
-     *
-     * @return void
-     */
-    public function setLogger(LoggerInterface $logger): void
-    {
-        $this->logger = $logger;
     }
 
     /**
@@ -75,16 +59,9 @@ class OAuthListener implements ListenerInterface
         $response = null;
 
         try {
-            $response = $this->authenticationHandler->handle($request);
+            $response = $this->authenticationHandler->attemptAuthentication($request);
         } catch (AuthenticationException $exception) {
             //TODO: add handling for AuthenticationException
-            return null;
-        } catch (\Exception $exception) {
-            if (null !== $this->logger) {
-                $this->logger->critical($exception->getMessage(), ['context' => $exception]);
-            }
-
-            //TODO: add conversion to http 500 error
             return null;
         }
 

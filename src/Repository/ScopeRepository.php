@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Sonrac\OAuth2\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Sonrac\OAuth2\Adapter\Entity\ScopeEntityInterface;
+use Sonrac\OAuth2\Adapter\Repository\ScopeRepositoryInterface;
 use Sonrac\OAuth2\Entity\Scope;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -17,7 +19,7 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  * @method Scope[]    findAll()
  * @method Scope[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ScopeRepository extends ServiceEntityRepository
+class ScopeRepository extends ServiceEntityRepository implements ScopeRepositoryInterface
 {
     /**
      * ScopeRepository constructor.
@@ -26,5 +28,13 @@ class ScopeRepository extends ServiceEntityRepository
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Scope::class);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findScopeEntityByIdentifier(string $identifier): ?ScopeEntityInterface
+    {
+        return $this->findOneBy(['id' => $identifier]);
     }
 }

@@ -13,7 +13,6 @@ use Symfony\Component\DependencyInjection\Reference;
 /**
  * Class OAuthFactory
  * @package Sonrac\OAuth2\DependencyInjection\Security
- * //TODO: add check, that firewall is stateless
  */
 class OAuthFactory implements SecurityFactoryInterface
 {

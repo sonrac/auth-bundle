@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Sonrac\OAuth2\Entity;
 
 use OpenApi\Annotations as OA;
-use Symfony\Component\Security\Core\User\UserInterface;
+use Sonrac\OAuth2\Adapter\Entity\UserEntityInterface;
 
 /**
  * Class User
  * @package Sonrac\OAuth2\Entity
  */
-class User implements UserInterface
+class User implements UserEntityInterface
 {
     use TimeEntityTrait;
 
@@ -196,6 +196,14 @@ class User implements UserInterface
      * @var int|null
      */
     protected $updatedAt;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIdentifier()
+    {
+        return $this->id;
+    }
 
     /**
      * Get id.

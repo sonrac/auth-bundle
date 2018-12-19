@@ -10,15 +10,11 @@ declare(strict_types=1);
 
 namespace Sonrac\OAuth2\Bridge\Repository;
 
-use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
-use League\OAuth2\Server\Entities\ScopeEntityInterface;
-use League\OAuth2\Server\Exception\UniqueTokenIdentifierConstraintViolationException;
 use League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface;
+use Sonrac\OAuth2\Adapter\Repository\AccessTokenRepositoryInterface as OAuthAccessTokenRepositoryInterface;
 use Sonrac\OAuth2\Bridge\Entity\AccessToken;
-use Sonrac\OAuth2\Entity\AccessToken as DoctrineAccessToken;
-use Sonrac\OAuth2\Repository\AccessTokenRepository as DoctrineAccessTokenRepository;
 
 /**
  * Class AccessTokenRepository
@@ -27,15 +23,15 @@ use Sonrac\OAuth2\Repository\AccessTokenRepository as DoctrineAccessTokenReposit
 class AccessTokenRepository implements AccessTokenRepositoryInterface
 {
     /**
-     * @var \Sonrac\OAuth2\Repository\AccessTokenRepository
+     * @var \Sonrac\OAuth2\Adapter\Repository\AccessTokenRepositoryInterface
      */
     private $accessTokenRepository;
 
     /**
      * AccessTokenRepository constructor.
-     * @param \Sonrac\OAuth2\Repository\AccessTokenRepository $accessTokenRepository
+     * @param \Sonrac\OAuth2\Adapter\Repository\AccessTokenRepositoryInterface $accessTokenRepository
      */
-    public function __construct(DoctrineAccessTokenRepository $accessTokenRepository)
+    public function __construct(OAuthAccessTokenRepositoryInterface $accessTokenRepository)
     {
         $this->accessTokenRepository = $accessTokenRepository;
     }
@@ -53,24 +49,7 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface
      */
     public function persistNewAccessToken(AccessTokenEntityInterface $accessTokenEntity)
     {
-        $accessToken = new DoctrineAccessToken();
-        $accessToken->setId($accessTokenEntity->getIdentifier());
-        $accessToken->setClientId($accessTokenEntity->getClient()->getIdentifier());
-        $accessToken->setUserId(
-            null !== $accessTokenEntity->getUserIdentifier() ? (int)$accessTokenEntity->getUserIdentifier() : null
-        );
-        $accessToken->setScopes(array_map(function (ScopeEntityInterface $scope) {
-            return $scope->getIdentifier();
-        }, $accessTokenEntity->getScopes()));
-        $accessToken->setExpireAt($accessTokenEntity->getExpiryDateTime()->getTimestamp());
-        $accessToken->setIsRevoked(false);
-        $accessToken->setCreatedAt(time());
-
-        try {
-            $this->accessTokenRepository->save($accessToken);
-        } catch (UniqueConstraintViolationException $exception) {
-            throw UniqueTokenIdentifierConstraintViolationException::create();
-        }
+        $this->accessTokenRepository->persistNewAccessToken($accessTokenEntity);
     }
 
     /**
@@ -78,15 +57,7 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface
      */
     public function revokeAccessToken($tokenId)
     {
-        $accessToken = $this->accessTokenRepository->findOneBy(['id' => $tokenId]);
-
-        if (null === $accessToken) {
-            return;
-        }
-
-        $accessToken->setIsRevoked(true);
-
-        $this->accessTokenRepository->save($accessToken);
+        $this->accessTokenRepository->revokeAccessToken($tokenId);
     }
 
     /**
@@ -94,8 +65,6 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface
      */
     public function isAccessTokenRevoked($tokenId)
     {
-        $accessToken = $this->accessTokenRepository->findOneBy(['id' => $tokenId]);
-
-        return null === $accessToken || $accessToken->isRevoked();
+        return $this->accessTokenRepository->isAccessTokenRevoked($tokenId);
     }
 }

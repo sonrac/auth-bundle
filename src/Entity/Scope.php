@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Sonrac\OAuth2\Entity;
 
+use Sonrac\OAuth2\Adapter\Entity\ScopeEntityInterface;
+
 /**
  * Class Scope
  * @package Sonrac\OAuth2\Entity
  */
-class Scope
+class Scope implements ScopeEntityInterface
 {
     use TimeEntityTrait;
 
@@ -53,6 +55,14 @@ class Scope
      * @var int|null
      */
     protected $updatedAt;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIdentifier(): string
+    {
+        return $this->id;
+    }
 
     /**
      * Get scope identifier
