@@ -16,5 +16,4 @@ namespace Sonrac\OAuth2\Security\Scope;
  */
 interface ScopeValidatorInterface
 {
-    //TODO:
 }

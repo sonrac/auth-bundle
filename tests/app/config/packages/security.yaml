@@ -13,12 +13,11 @@ security:
   firewalls:
     oauth_user:
       pattern: ^/api
-      security: true
       stateless: true
       sonrac_oauth:
         paths:
           authorization: /api/auth/authorize
           token: /api/auth/token
-    admin:
+    site:
       pattern: ^/
       security: false

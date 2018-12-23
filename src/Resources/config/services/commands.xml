@@ -19,10 +19,7 @@
 
         <service id="sonrac_oauth.command.generate_keys" class="Sonrac\OAuth2\Command\GenerateKeysCommand"
                  public="false">
-            <argument>%sonrac_oauth.keys.pair.path%</argument>
-            <argument>%sonrac_oauth.keys.pair.private_key_name%</argument>
-            <argument>%sonrac_oauth.keys.pair.public_key_name%</argument>
-            <argument>%sonrac_oauth.keys.pair.pass_phrase%</argument>
+            <argument type="service" id="sonrac_oauth.oauth2.secure_key_factory"/>
             <tag name="console.command"/>
         </service>
 

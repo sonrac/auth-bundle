@@ -46,13 +46,9 @@ trait DatabaseTrait
      */
     protected function setUpDatabase(): void
     {
-//        $this->runCommand('doctrine:migrations:migrate', [
-//            '--no-interaction',
-//        ]);
-
-//        $this->runCommand('doctrine:schema:update', [
-//            '--no-interaction'
-//        ]);
+        $this->runCommand('doctrine:schema:update', [
+            '--force' => true,
+        ]);
 
         if (empty($this->seeds)) {
             return;
@@ -74,9 +70,9 @@ trait DatabaseTrait
      */
     protected function getSeedClassName(string $class): string
     {
-        $className = \class_exists($class) ? $class : $this->seedNameSpace.$class;
+        $className = \class_exists($class) ? $class : $this->seedNameSpace . $class;
 
-        return \class_exists($className) ? $className : $this->seedNameSpace.\ucfirst($class).'TableSeeder';
+        return \class_exists($className) ? $className : $this->seedNameSpace . \ucfirst($class) . 'TableSeeder';
     }
 
     /**
@@ -108,15 +104,17 @@ trait DatabaseTrait
      * Run console command.
      *
      * @param string $commandName
-     * @param array  $arguments
+     * @param array $arguments
      *
      * @return string
      */
     protected function runCommand(string $commandName, array $arguments = []): ?string
     {
+        $arguments['--env'] = 'test';
+
         $command = $this->getConsoleApp()->find($commandName);
-        $tester  = new CommandTester($command);
-        $tester->execute($arguments);
+        $tester = new CommandTester($command);
+        $tester->execute($arguments, ['interactive' => false]);
 
         return $tester->getDisplay();
     }

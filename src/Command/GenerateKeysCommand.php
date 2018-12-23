@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Sonrac\OAuth2\Command;
 
+use Sonrac\OAuth2\Factory\SecureKeyFactory;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -14,29 +15,13 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @package Sonrac\OAuth2\Command
  *
  * Generate oauth2 server keys.
- * //TODO: refactor to use ext-openssl, add options bits and hash alg
  */
 class GenerateKeysCommand extends ContainerAwareCommand
 {
     /**
-     * @var string
+     * @var \Sonrac\OAuth2\Factory\SecureKeyFactory
      */
-    private $pairKeyPath;
-
-    /**
-     * @var string
-     */
-    private $privateKeyName;
-
-    /**
-     * @var string
-     */
-    private $publicKeyName;
-
-    /**
-     * @var string|null
-     */
-    private $passPhrase;
+    private $secureKeyFactory;
 
     /**
      * Disable output.
@@ -47,25 +32,16 @@ class GenerateKeysCommand extends ContainerAwareCommand
 
     /**
      * GenerateKeysCommand constructor.
-     * @param string $pairKeyPath
-     * @param string $privateKeyName
-     * @param string $publicKeyName
-     * @param string|null $passPhrase
+     * @param \Sonrac\OAuth2\Factory\SecureKeyFactory $secureKeyFactory
      * @param string|null $name
      */
     public function __construct(
-        string $pairKeyPath,
-        string $privateKeyName,
-        string $publicKeyName,
-        ?string $passPhrase = null,
+        SecureKeyFactory $secureKeyFactory,
         ?string $name = null
     ) {
         parent::__construct($name);
 
-        $this->pairKeyPath = $pairKeyPath;
-        $this->privateKeyName = $privateKeyName;
-        $this->publicKeyName = $publicKeyName;
-        $this->passPhrase = $passPhrase;
+        $this->secureKeyFactory = $secureKeyFactory;
     }
 
     /**
@@ -75,7 +51,7 @@ class GenerateKeysCommand extends ContainerAwareCommand
      */
     protected function configure(): void
     {
-        $this->setName('sonrac_auth:generate:keys')
+        $this->setName('sonrac_oauth:generate:keys')
             ->setDescription('Generate oauth2 server keys')
             ->addOption(
                 'force',
@@ -116,30 +92,30 @@ class GenerateKeysCommand extends ContainerAwareCommand
         $this->disableOut = false !== $input->getOption('disable-out');
 
         if (!$phrase) {
-            $phrase = \getenv('SERVER_PASS_PHRASE') ?: $this->passPhrase;
+            $phrase = \getenv('SERVER_PASS_PHRASE') ?: $this->secureKeyFactory->getPassPhrase();
         }
 
-        $ds = DIRECTORY_SEPARATOR;
-
-        if ($force || !\file_exists($this->pairKeyPath . $ds . $this->privateKeyName)) {
-            if (!\is_dir($this->pairKeyPath) && !@\mkdir($this->pairKeyPath, 0755, true)) {
-                throw new \RuntimeException("Error create path {{$this->pairKeyPath}}. Check folder permission");
+        if ($force || !\file_exists($this->secureKeyFactory->getPrivateKeyPath())) {
+            if (!\is_dir($this->secureKeyFactory->getKeysPath()) && !@\mkdir($this->secureKeyFactory->getKeysPath(), 0755, true)) {
+                throw new \RuntimeException(
+                    sprintf("Error create path {%s}. Check folder permission", $this->secureKeyFactory->getKeysPath())
+                );
             }
-            $this->generatePrivateKey($this->pairKeyPath . $ds . $this->privateKeyName, $phrase);
+            $this->generatePrivateKey($this->secureKeyFactory->getPrivateKeyPath(), $phrase);
             $this->generatePublicKey(
-                $this->pairKeyPath . $ds . $this->publicKeyName,
-                $this->pairKeyPath . $ds . $this->privateKeyName,
+                $this->secureKeyFactory->getPublicKeyPath(),
+                $this->secureKeyFactory->getPrivateKeyPath(),
                 $phrase
             );
 
-            foreach ([$this->privateKeyName, $this->publicKeyName] as $file) {
-                \chmod($this->pairKeyPath . $ds . $file, 0660);
+            foreach ([$this->secureKeyFactory->getPrivateKeyPath(), $this->secureKeyFactory->getPublicKeyPath()] as $file) {
+                \chmod($file, 0660);
             }
 
             // CryptKey class from League OAuth also checks a permission key folder
-            \chmod($this->pairKeyPath, 0660);
+            \chmod($this->secureKeyFactory->getKeysPath(), 0660);
 
-            $output->writeln('Keys generated in: ' . $this->pairKeyPath);
+            $output->writeln('Keys generated in: ' . $this->secureKeyFactory->getKeysPath());
         }
     }
 

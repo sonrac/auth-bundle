@@ -37,6 +37,7 @@ class SonracOAuthExtension extends Extension
         $loader->load('services/oauth2.xml');
         $loader->load('services/security.xml');
         $loader->load('services/commands.xml');
+        $loader->load('services/controllers.xml');
 
         $configuration = $this->getConfiguration($configs, $container);
 
@@ -45,6 +46,7 @@ class SonracOAuthExtension extends Extension
         }
 
         $config = $this->processConfiguration($configuration, $configs);
+        $config['default_scopes'] = array_unique($config['default_scopes']);
 
         $this->setParameters($container, $config);
 
@@ -86,6 +88,15 @@ class SonracOAuthExtension extends Extension
      */
     private function configureServiceDefinitions(ContainerBuilder $container, array &$config): void
     {
+        // key factory configuration
+
+        $container->getDefinition('sonrac_oauth.oauth2.secure_key_factory')
+            ->setArgument('$encryptionKey', $config['keys']['encryption'])
+            ->setArgument('$keyPath', $config['keys']['pair']['path'])
+            ->setArgument('$privateKeyName', $config['keys']['pair']['private_key_name'])
+            ->setArgument('$publicKeyName', $config['keys']['pair']['public_key_name'])
+            ->setArgument('$passPhrase', $config['keys']['pair']['pass_phrase'] ?? null);
+
         // repositories configuration
 
         $container->getDefinition(AccessTokenRepositoryInterface::class)
@@ -115,8 +126,8 @@ class SonracOAuthExtension extends Extension
 
         $container->getDefinition('sonrac_oauth.oauth2.authorization_server_configurator')
             ->setArgument('$authCodeTTL', $config['tokens_ttl']['auth_code'])
-            ->setArgument('$authCodeTTL', $config['tokens_ttl']['access_token'])
-            ->setArgument('$authCodeTTL', $config['tokens_ttl']['refresh_token']);
+            ->setArgument('$accessTokenTTL', $config['tokens_ttl']['access_token'])
+            ->setArgument('$refreshTokenTTL', $config['tokens_ttl']['refresh_token']);
 
         foreach ($config['grant_types'] as $grantType => $enable) {
             if ($enable) {
@@ -125,12 +136,27 @@ class SonracOAuthExtension extends Extension
             }
         }
 
+        // tagged controllers
+
+        $authorizationControllerIds = $container->findTaggedServiceIds('sonrac_oauth.controller.authorization');
+
+        foreach ($authorizationControllerIds as $controllerId => $tags) {
+            $container->getDefinition($controllerId)->addMethodCall('setOAuthAuthorizationHandler', [
+                new Reference('sonrac_oauth.security.oauth2_authorization_handler')
+            ]);
+        }
+
+        $issueTokenControllerIds = $container->findTaggedServiceIds('sonrac_oauth.controller.issue_token');
+
+        foreach ($issueTokenControllerIds as $controllerId => $tags) {
+            $container->getDefinition($controllerId)->addMethodCall('setOAuthIssueTokenHandler', [
+                new Reference('sonrac_oauth.security.oauth_issue_token_handler')
+            ]);
+        }
+
         // authentication handler
 
-        if (isset($config['default_scopes']) && \is_array($config['default_scopes'])) {
-            $container->getDefinition('sonrac_oauth.security.oauth_authentication_handler.abstract')
-                ->addMethodCall('setDefaultScopes', [$config['default_scopes']]);
-
+        if (\count($config['default_scopes']) > 0) {
             $container->getDefinition('sonrac_oauth.oauth2.authorization_server')
                 ->addMethodCall(
                     'setDefaultScope', [implode(AbstractGrant::SCOPE_DELIMITER_STRING, $config['default_scopes'])]

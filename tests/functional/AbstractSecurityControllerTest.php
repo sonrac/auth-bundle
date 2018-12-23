@@ -18,6 +18,18 @@ abstract class AbstractSecurityControllerTest extends BaseFunctionalTester
     protected $seeds = ['clients', 'users', 'scopes'];
 
     /**
+     * @var array
+     */
+    protected $clearTablesList = [
+        'oauth2_access_tokens',
+        'oauth2_clients',
+        'oauth2_refresh_tokens',
+        'oauth2_auth_codes',
+        'oauth2_users',
+        'oauth2_scopes',
+    ];
+
+    /**
      * Access token.
      *
      * @var string
@@ -44,7 +56,7 @@ abstract class AbstractSecurityControllerTest extends BaseFunctionalTester
         }
 
         $client = static::createClient();
-        $client->request('POST', '/api/auth/token', [
+        $client->request('POST', '/oauth/token', [
             'grant_type' => ClientCredentialsGrant::TYPE,
             'client_id' => 'test_client',
             'client_secret' => 'secret-key',

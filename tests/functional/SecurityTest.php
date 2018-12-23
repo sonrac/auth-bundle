@@ -11,11 +11,6 @@ namespace Sonrac\OAuth2\Tests\Functional;
 class SecurityTest extends AbstractSecurityControllerTest
 {
     /**
-     * {@inheritdoc}
-     */
-    protected $clearTablesList = ['access_tokens', 'clients', 'refresh_tokens', 'auth_codes'];
-
-    /**
      *
      */
     public function testSecurity()
@@ -30,6 +25,7 @@ class SecurityTest extends AbstractSecurityControllerTest
             array('HTTP_Authorization' => $this->getToken())
         );
 
+        $this->assertJson($client->getResponse()->getContent());
         $this->assertEquals('{"status":true}', $client->getResponse()->getContent());
     }
 }

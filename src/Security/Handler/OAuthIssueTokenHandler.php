@@ -52,7 +52,6 @@ class OAuthIssueTokenHandler
     public function attemptTokenIssue(Request $request): Response
     {
         return $this->OAuthHandler->handle(function (ServerRequestInterface $request, ResponseInterface $response) {
-            //TODO: add csrf token data validation.
             $response = $this->authorizationServer->respondToAccessTokenRequest($request, $response);
 
             return $response;

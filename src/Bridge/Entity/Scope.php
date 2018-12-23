@@ -27,7 +27,7 @@ class Scope implements ScopeEntityInterface
      */
     public function __construct($identifier)
     {
-        $this->$identifier = $identifier;
+        $this->identifier = $identifier;
     }
 
     /**

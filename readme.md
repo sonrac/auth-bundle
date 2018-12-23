@@ -47,3 +47,17 @@ docker stack deploy -c docker-compose.yml auth-bundle
 ```
 
 * [Open local application with bundle for test](http://auth.devinf)
+
+
+TODO:
+1. security-authentication-handler: add scope validator
+2. generate-keys-command: refactor to use ext-openssl, add options bits, hash alg, force
+3. generate-keys-command: add generation of encryption key
+4. security: add authentication entry point
+5. clear-tokens-command: refactor and extend bundle repository interfaces
+6. User repository bridge: add optional validation for grant type and client.
+7. Scope repository bridge: implement finalizeScopes.
+8. security-issue-token-handler: add optional csrf token data validation.
+9. security-authorization-handler: implement(low priority)
+10. add documentation for bundle configuration
+11. AuthorizeTest refactor

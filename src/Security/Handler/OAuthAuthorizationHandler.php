@@ -55,9 +55,6 @@ class OAuthAuthorizationHandler
             throw new \RuntimeException('Authorization is not implemented.');
             $authRequest = $this->authorizationServer->validateAuthorizationRequest($request);
 
-            //TODO: add csrf token data validation.
-            //TODO: implement save auth request state
-
             $response = $this->authorizationServer->completeAuthorizationRequest($authRequest, $response);
 
             return $response;

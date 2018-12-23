@@ -47,7 +47,7 @@ class BaseFunctionalTester extends WebTestCase
     {
         parent::setUp();
 
-        $this->runCommand('sonrac_auth:generate:keys');
+        $this->runCommand('sonrac_oauth:generate:keys');
 
         $this->setUpDatabase();
     }

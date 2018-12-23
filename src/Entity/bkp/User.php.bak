@@ -16,7 +16,6 @@ use Sonrac\OAuth2\Adapter\League\Entity\UserEntityInterface;
  *     description="User entity",
  *     required={"email", "username", "first_name", "last_name", "password", "avatar"}
  * )
- * //TODO: remove api token and api token expire time
  */
 class User implements UserEntityInterface
 {
@@ -456,7 +455,6 @@ class User implements UserEntityInterface
      */
     public function getSalt()
     {
-        //TODO: save salt as field in database
         return null;
     }
 

@@ -60,11 +60,6 @@ class OAuthAuthenticationHandler
     private $OAuthHandler;
 
     /**
-     * @var array|null
-     */
-    private $defaultScopes;
-
-    /**
      * OAuthAuthenticationHandler constructor.
      * @param \League\OAuth2\Server\AuthorizationValidators\AuthorizationValidatorInterface $authorizationValidator
      * @param \League\OAuth2\Server\Repositories\ClientRepositoryInterface $clientRepository
@@ -87,16 +82,6 @@ class OAuthAuthenticationHandler
         $this->tokenStorage = $tokenStorage;
         $this->providerKey = $providerKey;
         $this->OAuthHandler = $OAuthHandler;
-    }
-
-    /**
-     * @param array $defaultScopes
-     *
-     * @return void
-     */
-    public function setDefaultScopes(array $defaultScopes): void
-    {
-        $this->defaultScopes = $defaultScopes;
     }
 
     /**
@@ -134,13 +119,8 @@ class OAuthAuthenticationHandler
 
         $userId = $request->getAttribute('oauth_user_id');
 
-        //TODO: add check for scopes and scopes validator interface.
-        //TODO: check to add default scopes.
-        //TODO: add write info about current request(controller and action from request) to perform further scopes validation
         $scopes = $request->getAttribute('oauth_scopes');
-        $scopes = false === is_array($scopes)
-            ? (null !== $this->defaultScopes ? $this->defaultScopes : [])
-            : $scopes;
+        $scopes = \is_array($scopes) ? $scopes : [$scopes];
 
         if (null !== $userId && '' !== $userId) {
             $token = new PreAuthenticationToken($userId, $client, $this->providerKey, '', $scopes);

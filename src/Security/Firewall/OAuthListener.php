@@ -13,7 +13,6 @@ namespace Sonrac\OAuth2\Security\Firewall;
 use Sonrac\OAuth2\Security\Config\OAuthPathConfig;
 use Sonrac\OAuth2\Security\Handler\OAuthAuthenticationHandler;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Http\Firewall\ListenerInterface;
 
 /**
@@ -50,20 +49,13 @@ class OAuthListener implements ListenerInterface
     {
         $request = $event->getRequest();
 
-        if (false === $this->pathConfig->isAuthorizationPath($request)
-            && false === $this->pathConfig->isIssueTokenPath($request)
+        if ($this->pathConfig->isAuthorizationPath($request)
+            || $this->pathConfig->isIssueTokenPath($request)
         ) {
             return;
         }
 
-        $response = null;
-
-        try {
-            $response = $this->authenticationHandler->attemptAuthentication($request);
-        } catch (AuthenticationException $exception) {
-            //TODO: add handling for AuthenticationException
-            return null;
-        }
+        $response = $this->authenticationHandler->attemptAuthentication($request);
 
         if (null !== $response) {
             $event->setResponse($response);

@@ -55,8 +55,6 @@ class UserRepository implements UserRepositoryInterface
             throw OAuthServerException::invalidCredentials();
         }
 
-        //TODO: add optional validation for grant type and client.
-
         return new User($user->getIdentifier());
     }
 }
