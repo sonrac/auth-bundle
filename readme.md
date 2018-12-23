@@ -61,3 +61,4 @@ TODO:
 9. security-authorization-handler: implement(low priority)
 10. add documentation for bundle configuration
 11. AuthorizeTest refactor
+12. $config['default_scopes'] = array_unique($config['default_scopes']) - check symfony configuration set up

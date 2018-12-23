@@ -63,12 +63,6 @@ class SonracOAuthExtension extends Extension
      */
     private function setParameters(ContainerBuilder $container, array &$config): void
     {
-        $container->setParameter('sonrac_oauth.keys.encryption', $config['keys']['encryption']);
-        $container->setParameter('sonrac_oauth.keys.pair.path', $config['keys']['pair']['path']);
-        $container->setParameter('sonrac_oauth.keys.pair.private_key_name', $config['keys']['pair']['private_key_name']);
-        $container->setParameter('sonrac_oauth.keys.pair.public_key_name', $config['keys']['pair']['public_key_name']);
-        $container->setParameter('sonrac_oauth.keys.pair.pass_phrase', $config['keys']['pair']['pass_phrase']);
-
         if (isset($config['swagger_constants']) && \is_array($config['swagger_constants'])) {
             foreach ($config['swagger_constants'] as $swagger_constant => $value) {
                 $swagger_constant = 'SWAGGER_' . \mb_strtoupper($swagger_constant);
