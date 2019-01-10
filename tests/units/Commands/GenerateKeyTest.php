@@ -60,7 +60,7 @@ class GenerateKeyTest extends BaseUnitTester
             static::assertFileNotExists($this->keyPath . $file);
         }
 
-        $output = $this->runCommand('sonrac_oauth:generate:keys', ['--disable-out' => null]);
+        $output = $this->runCommand('sonrac_oauth:generate:keys');
 
         $this->assertContains('generated', $output);
 
@@ -84,13 +84,13 @@ class GenerateKeyTest extends BaseUnitTester
      *
      * @param bool $withPhrase
      */
-    public function testGenerateForce($withPhrase = null): void
+    public function testGenerateForce(bool $withPhrase = false): void
     {
         foreach (['pub.key', 'priv.key'] as $file) {
             static::assertFileNotExists($this->keyPath . $file);
         }
 
-        $output = $this->runCommand('sonrac_oauth:generate:keys', ['--disable-out' => null]);
+        $output = $this->runCommand('sonrac_oauth:generate:keys');
 
         $this->assertContains('generated', $output);
 
@@ -104,13 +104,10 @@ class GenerateKeyTest extends BaseUnitTester
 
         $this->checkKeys();
 
-        $output = $this->runCommand('sonrac_oauth:generate:keys', ['--disable-out' => null]);
-        $this->assertEmpty($output);
+        $this->expectExceptionMessage('Key pair is already generated.');
+        $this->runCommand('sonrac_oauth:generate:keys');
 
-        $arguments = [
-            '--force' => null,
-            '--disable-out' => null
-        ];
+        $arguments = ['--force' => true];
 
         if ($withPhrase) {
             $arguments['--passphrase'] = 123;
@@ -130,9 +127,9 @@ class GenerateKeyTest extends BaseUnitTester
     /**
      * Check correct keys.
      *
-     * @param null $phrase
+     * @param string|null $phrase
      */
-    protected function checkKeys($phrase = null): void
+    protected function checkKeys(?string $phrase = null): void
     {
         $key = @\openssl_pkey_get_public(\file_get_contents($this->keyPath . 'pub.key'));
         $this->assertNotEmpty($key);

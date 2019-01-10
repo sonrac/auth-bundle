@@ -18,6 +18,10 @@
                           method="configure"/>
         </service>
 
+        <service id="sonrac_oauth.security.scope_validator"
+                 class="Sonrac\OAuth2\Security\Scope\DefaultScopeValidator" public="false">
+        </service>
+
         <service id="sonrac_oauth.security.oauth2_authorization_handler"
                  class="Sonrac\OAuth2\Security\Handler\OAuthAuthorizationHandler" public="false">
             <argument type="service" id="sonrac_oauth.oauth2.authorization_server"/>
@@ -43,6 +47,7 @@
 
         <service id="sonrac_oauth.security.oauth_authentication_handler.abstract"
                  class="Sonrac\OAuth2\Security\Handler\OAuthAuthenticationHandler" public="false" abstract="true">
+            <argument/>
             <argument/>
             <argument type="service" id="League\OAuth2\Server\Repositories\ClientRepositoryInterface"/>
             <argument type="service" id="security.authentication.manager"/>

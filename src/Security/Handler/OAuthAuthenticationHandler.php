@@ -15,6 +15,7 @@ use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Sonrac\OAuth2\Bridge\Util\OAuthHandler;
+use Sonrac\OAuth2\Security\Scope\ScopeValidatorInterface;
 use Sonrac\OAuth2\Security\Token\AbstractPreAuthenticationToken;
 use Sonrac\OAuth2\Security\Token\PreAuthenticationClientToken;
 use Sonrac\OAuth2\Security\Token\PreAuthenticationToken;
@@ -33,6 +34,11 @@ class OAuthAuthenticationHandler
      * @var \League\OAuth2\Server\AuthorizationValidators\AuthorizationValidatorInterface
      */
     private $authorizationValidator;
+
+    /**
+     * @var \Sonrac\OAuth2\Security\Scope\ScopeValidatorInterface
+     */
+    private $scopeValidator;
 
     /**
      * @var \League\OAuth2\Server\Repositories\ClientRepositoryInterface
@@ -62,6 +68,7 @@ class OAuthAuthenticationHandler
     /**
      * OAuthAuthenticationHandler constructor.
      * @param \League\OAuth2\Server\AuthorizationValidators\AuthorizationValidatorInterface $authorizationValidator
+     * @param \Sonrac\OAuth2\Security\Scope\ScopeValidatorInterface $scopeValidator
      * @param \League\OAuth2\Server\Repositories\ClientRepositoryInterface $clientRepository
      * @param \Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface $authenticationManager
      * @param \Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface $tokenStorage
@@ -70,6 +77,7 @@ class OAuthAuthenticationHandler
      */
     public function __construct(
         AuthorizationValidatorInterface $authorizationValidator,
+        ScopeValidatorInterface $scopeValidator,
         ClientRepositoryInterface $clientRepository,
         AuthenticationManagerInterface $authenticationManager,
         TokenStorageInterface $tokenStorage,
@@ -77,6 +85,7 @@ class OAuthAuthenticationHandler
         string $providerKey
     ) {
         $this->authorizationValidator = $authorizationValidator;
+        $this->scopeValidator = $scopeValidator;
         $this->clientRepository = $clientRepository;
         $this->authenticationManager = $authenticationManager;
         $this->tokenStorage = $tokenStorage;
@@ -97,6 +106,8 @@ class OAuthAuthenticationHandler
             $token = $this->createTokenFromRequest($request);
 
             $authenticatedToken = $this->authenticationManager->authenticate($token);
+
+            $this->scopeValidator->validateTokenScopes($authenticatedToken, $request);
 
             $this->tokenStorage->setToken($authenticatedToken);
 

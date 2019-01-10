@@ -77,9 +77,9 @@ class GenerateClientCommand extends DoctrineCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $identifier = $input->getOption('identifier');
-
         $name = $input->getOption('name');
+
+        $identifier = $input->getOption('identifier');
 
         if ('' === $identifier) {
             throw new InvalidOptionException('Option "identifier" can not be an empty string.');
@@ -108,8 +108,8 @@ class GenerateClientCommand extends DoctrineCommand
         }
 
         $output->writeln('Client successfully generated');
-        $output->writeln('Client ID: ' . $client->getIdentifier());
-        $output->writeln('Client secret: ' . $client->getSecret());
+        $output->writeln(\sprintf('Client ID: %s', $client->getIdentifier()));
+        $output->writeln(\sprintf('Client secret: %s', $client->getSecret()));
     }
 
     /**

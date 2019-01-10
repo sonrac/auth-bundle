@@ -24,13 +24,6 @@ class GenerateKeysCommand extends ContainerAwareCommand
     private $secureKeyFactory;
 
     /**
-     * Disable output.
-     *
-     * @var bool
-     */
-    private $disableOut = false;
-
-    /**
      * GenerateKeysCommand constructor.
      * @param \Sonrac\OAuth2\Factory\SecureKeyFactory $secureKeyFactory
      * @param string|null $name
@@ -60,11 +53,17 @@ class GenerateKeysCommand extends ContainerAwareCommand
                 'Force regenerate keys',
                 false
             )->addOption(
-                'disable-out',
-                'do',
+                'bits',
+                'b',
                 InputOption::VALUE_OPTIONAL,
-                'Disable output in console. By default is set',
-                false
+                'Number of bits in private key',
+                4096
+            )->addOption(
+                'digest-algorithm',
+                'digest',
+                InputOption::VALUE_OPTIONAL,
+                'Digest algorithm for private key',
+                'sha512'
             )->addOption(
                 'passphrase',
                 'p',
@@ -75,94 +74,99 @@ class GenerateKeysCommand extends ContainerAwareCommand
     }
 
     /**
-     * Execute command.
-     *
-     * @param \Symfony\Component\Console\Input\InputInterface $input
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     *
-     * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
-     * @throws \Symfony\Component\DependencyInjection\Exception\InvalidArgumentException
-     * @throws \LogicException
-     * @throws \RuntimeException
+     * {@inheritdoc}
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $force = false !== $input->getOption('force');
-        $phrase = $input->getOption('passphrase');
-        $this->disableOut = false !== $input->getOption('disable-out');
+        $bits = $input->getOption('bits');
+        $digestAlgorithm = $input->getOption('digest-algorithm');
+        $passPhrase = $input->getOption('passphrase');
 
-        if (!$phrase) {
-            $phrase = \getenv('SERVER_PASS_PHRASE') ?: $this->secureKeyFactory->getPassPhrase();
+        if (null === $passPhrase || '' === $passPhrase) {
+            $passPhrase = $this->secureKeyFactory->getPassPhrase();
         }
 
-        if ($force || !\file_exists($this->secureKeyFactory->getPrivateKeyPath())) {
-            if (!\is_dir($this->secureKeyFactory->getKeysPath()) && !@\mkdir($this->secureKeyFactory->getKeysPath(), 0755, true)) {
-                throw new \RuntimeException(
-                    sprintf("Error create path {%s}. Check folder permission", $this->secureKeyFactory->getKeysPath())
-                );
-            }
-            $this->generatePrivateKey($this->secureKeyFactory->getPrivateKeyPath(), $phrase);
-            $this->generatePublicKey(
-                $this->secureKeyFactory->getPublicKeyPath(),
-                $this->secureKeyFactory->getPrivateKeyPath(),
-                $phrase
-            );
+        $keyPath = $this->secureKeyFactory->getKeysPath();
+        $privateKeyPath = $this->secureKeyFactory->getPrivateKeyPath();
+        $publicKeyPath = $this->secureKeyFactory->getPublicKeyPath();
 
-            foreach ([$this->secureKeyFactory->getPrivateKeyPath(), $this->secureKeyFactory->getPublicKeyPath()] as $file) {
-                \chmod($file, 0660);
-            }
+        if ((\file_exists($privateKeyPath) && \file_exists($publicKeyPath)) && false === $force) {
+            throw new \RuntimeException('Key pair is already generated.');
+        }
 
-            // CryptKey class from League OAuth also checks a permission key folder
-            \chmod($this->secureKeyFactory->getKeysPath(), 0660);
+        if (false === \is_dir($keyPath) && false === @\mkdir($keyPath, 0755, true)) {
+            throw new \RuntimeException(\sprintf('Error create path {%s}. Check folder permission', $keyPath));
+        }
 
-            $output->writeln('Keys generated in: ' . $this->secureKeyFactory->getKeysPath());
+        [$privateKey, $publicKey] = $this->generateKeys((int)$bits, $digestAlgorithm, $passPhrase);
+
+        $this->saveKeys($privateKey, $publicKey);
+
+        $this->fixPermissions();
+
+        $output->writeln(\sprintf('Keys generated in: %s', $keyPath));
+    }
+
+    /**
+     * @param int $bits
+     * @param string $digestAlgorithm
+     * @param string|null $passPhrase
+     *
+     * @return array
+     */
+    private function generateKeys(int $bits, string $digestAlgorithm, ?string $passPhrase = null): array
+    {
+        $config = ['private_key_bits' => $bits, 'private_key_type' => OPENSSL_KEYTYPE_RSA, 'digest_alg' => $digestAlgorithm];
+
+        $keyResource = \openssl_pkey_new($config);
+
+        if (false === $keyResource) {
+            throw new \LogicException(\sprintf('Error generate key: {%s}', \openssl_error_string()));
+        }
+
+        $privateKey = null;
+
+        if (false === \openssl_pkey_export($keyResource, $privateKey, $passPhrase)) {
+            throw new \LogicException(\sprintf('Error generate key: {%s}', \openssl_error_string()));
+        }
+
+        $details = \openssl_pkey_get_details($keyResource);
+
+        if (false === $details) {
+            throw new \LogicException(\sprintf('Error generate key: {%s}', \openssl_error_string()));
+        }
+
+        \openssl_free_key($keyResource);
+
+        return [$privateKey, $details['key']];
+    }
+
+    /**
+     * @param string $privateKey
+     * @param string $publicKey
+     *
+     * @return void
+     */
+    private function saveKeys(string $privateKey, string $publicKey): void
+    {
+        if (false === \file_put_contents($this->secureKeyFactory->getPrivateKeyPath(), $privateKey)) {
+            throw new \LogicException(\sprintf('Error generate key: {%s}', \error_get_last()['message']));
+        }
+
+        if (false === \file_put_contents($this->secureKeyFactory->getPublicKeyPath(), $publicKey)) {
+            throw new \LogicException(\sprintf('Error generate key: {%s}', \error_get_last()['message']));
         }
     }
 
     /**
-     * Generate private oauth2 key.
-     *
-     * @param string $keyPath
-     * @param null|string $phrase Secret phrase
-     *
-     * @author Donii Sergii <doniysa@gmail.com>
+     * @return void
      */
-    protected function generatePrivateKey(string $keyPath, $phrase = null): void
+    private function fixPermissions(): void
     {
-        $command = 'openssl genrsa ';
-
-        if ($phrase) {
-            $command .= " -passout pass:$phrase";
-        }
-        $command .= " -out {$keyPath}";
-
-        if ($this->disableOut) {
-            $command .= ' 2> /dev/null';
-        }
-
-        \exec($command, $out, $res);
-    }
-
-    /**
-     * Generate public oauth2 server key.
-     *
-     * @param string $keyPath
-     * @param string $privateKeyPath
-     * @param string|null $phrase Secret phrase
-     */
-    protected function generatePublicKey(string $keyPath, string $privateKeyPath, $phrase = null): void
-    {
-        $command = "openssl rsa -in {$privateKeyPath}";
-        if ($phrase) {
-            $command .= " -passin pass:$phrase";
-        }
-        $command .= " -pubout -out {$keyPath} ";
-
-        if ($this->disableOut) {
-            $command .= ' 2> /dev/null';
-        }
-
-        \exec($command, $out, $res);
-
+        \chmod($this->secureKeyFactory->getPrivateKeyPath(), 0600);
+        \chmod($this->secureKeyFactory->getPublicKeyPath(), 0660);
+        // CryptKey class from League OAuth dependencies also checks a permission key folder
+        \chmod($this->secureKeyFactory->getKeysPath(), 0660);
     }
 }

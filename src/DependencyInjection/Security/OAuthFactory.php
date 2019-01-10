@@ -56,6 +56,7 @@ class OAuthFactory implements SecurityFactoryInterface
                 new ChildDefinition('sonrac_oauth.security.oauth_authentication_handler.abstract')
             )
             ->setArgument('$authorizationValidator', new Reference($config['authorization_validator']))
+            ->setArgument('$scopeValidator', new Reference($config['scope_validator']))
             ->setArgument('$providerKey', $id);
 
         // authentication listener
@@ -98,6 +99,9 @@ class OAuthFactory implements SecurityFactoryInterface
         $node
             ->scalarNode('authorization_validator')
                 ->defaultValue('sonrac_oauth.security.authorization_validator.bearer_token')
+            ->end()
+            ->scalarNode('scope_validator')
+                ->defaultValue('sonrac_oauth.security.scope_validator')
             ->end()
             ->arrayNode('paths')
                 ->isRequired()

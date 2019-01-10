@@ -50,15 +50,12 @@ docker stack deploy -c docker-compose.yml auth-bundle
 
 
 TODO:
-1. security-authentication-handler: add scope validator
-2. generate-keys-command: refactor to use ext-openssl, add options bits, hash alg, force
-3. generate-keys-command: add generation of encryption key
-4. security: add authentication entry point
-5. clear-tokens-command: refactor and extend bundle repository interfaces
-6. User repository bridge: add optional validation for grant type and client.
-7. Scope repository bridge: implement finalizeScopes.
-8. security-issue-token-handler: add optional csrf token data validation.
-9. security-authorization-handler: implement(low priority)
-10. add documentation for bundle configuration
-11. AuthorizeTest refactor
-12. $config['default_scopes'] = array_unique($config['default_scopes']) - check symfony configuration set up
+1. security: add authentication entry point
+2. clear-tokens-command: refactor and extend bundle repository interfaces
+3. User repository bridge: add optional validation for grant type and client.
+4. Scope repository bridge: implement finalizeScopes.
+5. security-authorization-handler: implement(low priority)
+6. add documentation for bundle configuration
+7. AuthorizeTest - restore commented 
+8. oauth path config: check if needed
+9. check if logout handler is needed with revoke token
