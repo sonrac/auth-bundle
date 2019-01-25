@@ -8,3 +8,4 @@
 /.rnd
 .htaccess
 docker-compose.override.yml
+/swagger.json

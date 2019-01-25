@@ -29,7 +29,8 @@ class GenerateKeysCommand extends ContainerAwareCommand
     public function __construct(
         SecureKeyFactory $secureKeyFactory,
         ?string $name = null
-    ) {
+    )
+    {
         parent::__construct($name);
 
         $this->secureKeyFactory = $secureKeyFactory;
@@ -43,14 +44,14 @@ class GenerateKeysCommand extends ContainerAwareCommand
     protected function configure(): void
     {
         $this->setName('sonrac_oauth:generate:keys')
-            ->setDescription('Generate oauth2 server keys')
-            ->addOption(
-                'force',
-                'f',
-                InputOption::VALUE_OPTIONAL,
-                'Force regenerate keys',
-                false
-            )->addOption(
+             ->setDescription('Generate oauth2 server keys')
+             ->addOption(
+                 'force',
+                 'f',
+                 InputOption::VALUE_OPTIONAL,
+                 'Force regenerate keys',
+                 false
+             )->addOption(
                 'bits',
                 'b',
                 InputOption::VALUE_OPTIONAL,
@@ -76,18 +77,18 @@ class GenerateKeysCommand extends ContainerAwareCommand
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $force           = false !== $input->getOption('force');
-        $bits            = $input->getOption('bits');
+        $force = false !== $input->getOption('force');
+        $bits = $input->getOption('bits');
         $digestAlgorithm = $input->getOption('digest-algorithm');
-        $passPhrase      = $input->getOption('passphrase');
+        $passPhrase = $input->getOption('passphrase');
 
         if (null === $passPhrase || '' === $passPhrase) {
             $passPhrase = $this->secureKeyFactory->getPassPhrase();
         }
 
-        $keyPath        = $this->secureKeyFactory->getKeysPath();
+        $keyPath = $this->secureKeyFactory->getKeysPath();
         $privateKeyPath = $this->secureKeyFactory->getPrivateKeyPath();
-        $publicKeyPath  = $this->secureKeyFactory->getPublicKeyPath();
+        $publicKeyPath = $this->secureKeyFactory->getPublicKeyPath();
 
         if ((\file_exists($privateKeyPath) && \file_exists($publicKeyPath)) && false === $force) {
             throw new \RuntimeException('Key pair is already generated.');
@@ -97,7 +98,7 @@ class GenerateKeysCommand extends ContainerAwareCommand
             throw new \RuntimeException(\sprintf('Error create path {%s}. Check folder permission', $keyPath));
         }
 
-        [$privateKey, $publicKey] = $this->generateKeys((int) $bits, $digestAlgorithm, $passPhrase);
+        [$privateKey, $publicKey] = $this->generateKeys((int)$bits, $digestAlgorithm, $passPhrase);
 
         $this->saveKeys($privateKey, $publicKey);
 
@@ -164,6 +165,9 @@ class GenerateKeysCommand extends ContainerAwareCommand
         \chmod($this->secureKeyFactory->getPrivateKeyPath(), 0600);
         \chmod($this->secureKeyFactory->getPublicKeyPath(), 0660);
         // CryptKey class from League OAuth dependencies also checks a permission key folder
-        \chmod($this->secureKeyFactory->getKeysPath(), 0660);
+        if (\chmod($this->secureKeyFactory->getKeysPath(), 0755)) { // Fix bad permission owner
+            // With permission 0600 directory does not readable for script
+            \chmod($this->secureKeyFactory->getKeysPath(), 0700);
+        }
     }
 }
