@@ -2,11 +2,13 @@
 
 declare(strict_types=1);
 
-namespace sonrac\Auth\Tests\Functional;
-use sonrac\Auth\Entity\Client;
+namespace Sonrac\OAuth2\Tests\Functional;
+
+use Sonrac\OAuth2\Bridge\Grant\ClientCredentialsGrant;
 
 /**
  * Class AbstractSecurityControllerTest
+ * @package Sonrac\OAuth2\Tests\Functional\
  */
 abstract class AbstractSecurityControllerTest extends BaseFunctionalTester
 {
@@ -14,6 +16,18 @@ abstract class AbstractSecurityControllerTest extends BaseFunctionalTester
      * {@inheritdoc}
      */
     protected $seeds = ['clients', 'users', 'scopes'];
+
+    /**
+     * @var array
+     */
+    protected $clearTablesList = [
+        'oauth2_access_tokens',
+        'oauth2_clients',
+        'oauth2_refresh_tokens',
+        'oauth2_auth_codes',
+        'oauth2_users',
+        'oauth2_scopes',
+    ];
 
     /**
      * Access token.
@@ -35,17 +49,18 @@ abstract class AbstractSecurityControllerTest extends BaseFunctionalTester
     /**
      * Get access token.
      */
-    protected function getToken(): string {
+    protected function getToken(): string
+    {
         if ($this->token) {
             return $this->token;
         }
 
         $client = static::createClient();
-        $client->request('POST', '/auth/token', [
-            'grant_type'    => Client::GRANT_CLIENT_CREDENTIALS,
-            'client_id'     => 'Test Client',
+        $client->request('POST', '/oauth/token', [
+            'grant_type' => ClientCredentialsGrant::TYPE,
+            'client_id' => 'test_client',
             'client_secret' => 'secret-key',
-            'scope'         => 'default',
+            'scope' => 'default',
         ]);
         $response = $client->getResponse();
 

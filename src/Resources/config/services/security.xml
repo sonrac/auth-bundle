@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services
+        http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+
+        <service id="sonrac_oauth.security.authorization_validator.bearer_token_configurator"
+                 class="Sonrac\OAuth2\Configurator\BearerTokenValidatorConfigurator" public="false">
+            <argument type="service" id="sonrac_oauth.oauth2.secure_key_factory"/>
+        </service>
+
+        <service id="sonrac_oauth.security.authorization_validator.bearer_token"
+                 class="League\OAuth2\Server\AuthorizationValidators\BearerTokenValidator">
+            <argument type="service" id="League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface"/>
+            <configurator service="sonrac_oauth.security.authorization_validator.bearer_token_configurator"
+                          method="configure"/>
+        </service>
+
+        <service id="sonrac_oauth.security.scope_validator"
+                 class="Sonrac\OAuth2\Security\Scope\DefaultScopeValidator" public="false">
+        </service>
+
+        <service id="sonrac_oauth.security.oauth2_authorization_handler"
+                 class="Sonrac\OAuth2\Security\Handler\OAuthAuthorizationHandler" public="false">
+            <argument type="service" id="sonrac_oauth.oauth2.authorization_server"/>
+            <argument type="service" id="sonrac_oauth.util.oauth_handler"/>
+        </service>
+
+        <service id="sonrac_oauth.security.oauth_issue_token_handler"
+                 class="Sonrac\OAuth2\Security\Handler\OAuthIssueTokenHandler" public="false">
+            <argument type="service" id="sonrac_oauth.oauth2.authorization_server"/>
+            <argument type="service" id="sonrac_oauth.util.oauth_handler"/>
+        </service>
+
+        <service id="sonrac_oauth.security.oauth_path_config.abstract"
+                 class="Sonrac\OAuth2\Security\Config\OAuthPathConfig" public="false" abstract="true">
+            <argument type="service" id="security.http_utils"/>
+        </service>
+
+        <service id="sonrac_oauth.security.authentication_provider.abstract"
+                 class="Sonrac\OAuth2\Security\Provider\OAuthAuthenticationProvider"
+                 public="false"
+                 abstract="true">
+        </service>
+
+        <service id="sonrac_oauth.security.oauth_authentication_handler.abstract"
+                 class="Sonrac\OAuth2\Security\Handler\OAuthAuthenticationHandler" public="false" abstract="true">
+            <argument/>
+            <argument/>
+            <argument type="service" id="League\OAuth2\Server\Repositories\ClientRepositoryInterface"/>
+            <argument type="service" id="security.authentication.manager"/>
+            <argument type="service" id="security.token_storage"/>
+            <argument type="service" id="sonrac_oauth.util.oauth_handler"/>
+            <argument/>
+        </service>
+
+        <service id="sonrac_oauth.security.authentication_listener.abstract"
+                 class="Sonrac\OAuth2\Security\Firewall\OAuthListener" public="false" abstract="true">
+        </service>
+
+    </services>
+</container>

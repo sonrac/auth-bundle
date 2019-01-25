@@ -1,0 +1,14 @@
+<routes xmlns="http://symfony.com/schema/routing"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://symfony.com/schema/routing
+        http://symfony.com/schema/routing/routing-1.0.xsd">
+
+    <route id="sonrac_oauth.authorization" path="/oauth/authorize">
+        <default key="_controller">Sonrac\OAuth2\Controller\OAuthController::authorizationAction</default>
+    </route>
+
+    <route id="sonrac_oauth.issue_token" path="/oauth/token">
+        <default key="_controller">Sonrac\OAuth2\Controller\OAuthController::issueTokenAction</default>
+    </route>
+
+</routes>

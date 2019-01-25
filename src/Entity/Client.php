@@ -2,19 +2,13 @@
 
 declare(strict_types=1);
 
-namespace sonrac\Auth\Entity;
+namespace Sonrac\OAuth2\Entity;
 
-use League\OAuth2\Server\Entities\ClientEntityInterface;
-use Openapi\Annotations as OA;
+use Sonrac\OAuth2\Adapter\Entity\ClientEntityInterface;
 
 /**
- * Class Client.
- *
- * @OA\Schema(
- *     title="OAuth clients",
- *     description="Oauth clients list",
- *     required={"redirect_uris", "allowed_grant_types", "name"}
- * )
+ * Class Client
+ * @package Sonrac\OAuth2\Entity
  */
 class Client implements ClientEntityInterface
 {
@@ -39,138 +33,89 @@ class Client implements ClientEntityInterface
     public const RESPONSE_TYPE_CODE = 'code';
 
     /**
-     * Client credentials grant type.
+     * Client identifier.
      *
-     * @const
-     *
-     * @var string
+     * @var string|null
      */
-    public const GRANT_CLIENT_CREDENTIALS = 'client_credentials';
+    private $id;
 
     /**
-     * Client credentials grant type.
+     * Client name.
      *
-     * @const
-     *
-     * @var string
-     */
-    public const GRANT_PASSWORD = 'password';
-
-    /**
-     * Implicit grant type.
-     *
-     * @const
-     *
-     * @var string
-     */
-    public const GRANT_IMPLICIT = 'implicit';
-
-    /**
-     * Auth code grant type.
-     *
-     * @const
-     *
-     * @var string
-     */
-    public const GRANT_AUTH_CODE = 'authorization_code';
-
-    /**
-     * Auth code grant type.
-     *
-     * @const
-     *
-     * @var string
-     */
-    public const GRANT_REFRESH_TOKEN = 'refresh_token';
-
-    /**
-     * Client secret key.
-     *
-     * @var string
-     *
-     * @OA\Property(example="secret", enum={"client_credentials", "password"}, maxLength=2000)
-     */
-    protected $secret;
-
-    /**
-     * User identifier.
-     *
-     * @var int
-     *
-     * @OA\Property(example=1)
-     */
-    protected $user_id;
-
-    /**
-     * Allowed grant types.
-     *
-     * @var array
-     *
-     * @OA\Property(
-     *     example={"client_credentials", "password"},
-     *     @OA\Items(
-     *         type="string"
-     *     )
-     * )
-     */
-    protected $allowed_grant_types;
-
-    /**
-     * Random client identifier.
-     *
-     * @var string
-     *
-     * @OA\Property(example="test_application", uniqueItems=true)
+     * @var string|null
      */
     protected $name;
 
     /**
      * Client app description,.
      *
-     * @var string
-     *
-     * @OA\Property(example="Test application", format="text")
+     * @var string|null
      */
     protected $description;
 
     /**
+     * Client secret key.
+     *
+     * @var string|null
+     */
+    protected $secret;
+
+    /**
+     * Allowed grant types.
+     *
+     * @var array|null
+     */
+    protected $allowedGrantTypes;
+
+    /**
      * Redirect url list.
      *
-     * @var array
-     *
-     * @OA\Property(
-     *     example={"https://test.com", "https://test.com/redirect"},
-     *     @OA\Items(
-     *         type="string"
-     *     )
-     * )
+     * @var array|null
      */
-    protected $redirect_uris;
+    protected $redirectUris;
 
     /**
      * Created time.
      *
      * @var int
-     *
-     * @OA\Property(format="bigInt", example="1529397813")
      */
-    protected $created_at;
+    protected $createdAt;
 
     /**
      * Updated time.
      *
      * @var int
-     *
-     * @OA\Property(format="bigInt", example="1529397813")
      */
-    protected $updated_at;
+    protected $updatedAt;
 
     /**
      * {@inheritdoc}
      */
-    public function getIdentifier(): ?string
+    public function getIdentifier()
     {
-        return $this->name;
+        return $this->id;
+    }
+
+    /**
+     * Get client id.
+     *
+     * @return string|null
+     */
+    public function getId(): ?string
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set client id.
+     *
+     * @param string $id
+     *
+     * @return void
+     */
+    public function setId(string $id): void
+    {
+        $this->id = $id;
     }
 
     /**
@@ -178,13 +123,15 @@ class Client implements ClientEntityInterface
      */
     public function getName(): string
     {
-        return $this->name ?? '';
+        return $this->name;
     }
 
     /**
      * Set client name.
      *
      * @param string $name
+     *
+     * @return void
      */
     public function setName(string $name): void
     {
@@ -192,51 +139,29 @@ class Client implements ClientEntityInterface
     }
 
     /**
-     * Set identifier.
+     * Get client app description.
      *
-     * @param string|int $identifier
+     * @return string|null
      */
-    public function setIdentifier(string $identifier): void
+    public function getDescription(): ?string
     {
-        $this->name = $identifier;
+        return $this->description;
+    }
+
+    /**
+     * Set client app description.
+     *
+     * @param string $description
+     *
+     * @return void
+     */
+    public function setDescription(string $description): void
+    {
+        $this->description = $description;
     }
 
     /**
      * {@inheritdoc}
-     */
-    public function getRedirectUri()
-    {
-        return $this->getRedirectUris();
-    }
-
-    /**
-     * Get redirect uris.
-     *
-     * @return array
-     */
-    public function getRedirectUris(): ?array
-    {
-        return $this->redirect_uris;
-    }
-
-    /**
-     * Set redirect uris.
-     *
-     * @param array $redirect_uris
-     */
-    public function setRedirectUris(array $redirect_uris): void
-    {
-        $redirect_uris = \array_map(function ($uri) {
-            return \mb_strtolower($uri);
-        }, $redirect_uris);
-
-        $this->redirect_uris = $redirect_uris;
-    }
-
-    /**
-     * Get secret key.
-     *
-     * @return string
      */
     public function getSecret(): string
     {
@@ -247,6 +172,8 @@ class Client implements ClientEntityInterface
      * Set secret key.
      *
      * @param string $secret
+     *
+     * @return void
      */
     public function setSecret(string $secret): void
     {
@@ -254,55 +181,76 @@ class Client implements ClientEntityInterface
     }
 
     /**
-     * Get allowed grant types.
-     *
-     * @return array
+     * {@inheritdoc}
      */
-    public function getAllowedGrantTypes(): ?array
+    public function getAllowedGrantTypes(): array
     {
-        return $this->allowed_grant_types;
+        return null !== $this->allowedGrantTypes ? $this->allowedGrantTypes : [];
     }
 
     /**
      * Set allowed grant types.
      *
-     * @param array $allowed_grant_types
+     * @param array $allowedGrantTypes
+     *
+     * @return void
      */
-    public function setAllowedGrantTypes(array $allowed_grant_types): void
+    public function setAllowedGrantTypes(array $allowedGrantTypes): void
     {
-        $this->allowed_grant_types = $allowed_grant_types;
+        $this->allowedGrantTypes = $allowedGrantTypes;
+    }
+
+    /**
+     * Add allowed grant type.
+     *
+     * @param string $grantType
+     *
+     * @return void
+     */
+    public function addAllowedGrantType(string $grantType): void
+    {
+        $grantType = \mb_strtolower($grantType);
+
+        if (false === \in_array($grantType, $this->allowedGrantTypes, true)) {
+            $this->allowedGrantTypes[] = $grantType;
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getRedirectUris(): array
+    {
+        return null !== $this->redirectUris ? $this->redirectUris : [];
+    }
+
+    /**
+     * Set redirect uris.
+     *
+     * @param array $redirectUris
+     *
+     * @return void
+     */
+    public function setRedirectUris(array $redirectUris): void
+    {
+        $this->redirectUris = \array_map(function ($uri) {
+            return \mb_strtolower($uri);
+        }, $redirectUris);
     }
 
     /**
      * Add redirect uri.
      *
      * @param string $uri
+     *
+     * @return void
      */
     public function addRedirectUri(string $uri): void
     {
         $uri = \mb_strtolower($uri);
-        if (!\in_array($uri, $this->redirect_uris, true)) {
-            $this->redirect_uris[] = $uri;
+
+        if (false === \in_array($uri, $this->redirectUris, true)) {
+            $this->redirectUris[] = $uri;
         }
-    }
-
-    /**
-     * Get client app description.
-     *
-     * @return string
-     */
-    public function getDescription(): string
-    {
-        return $this->description ?? '';
-    }
-
-    /**
-     * Set client app description.
-     *
-     * @param string $description
-     */
-    public function setDescription(string $description): void
-    {
-        $this->description = $description;
     }
 }

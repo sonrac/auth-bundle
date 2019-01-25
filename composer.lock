@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "87f821b9b6d1ae85115f52083b969069",
+    "content-hash": "24fa34c5b0172fa917700e58757108b8",
     "packages": [
         {
             "name": "defuse/php-encryption",
@@ -3032,34 +3032,35 @@
         },
         {
             "name": "symfony/psr-http-message-bridge",
-            "version": "v1.0.2",
+            "version": "v1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/psr-http-message-bridge.git",
-                "reference": "c2b757934f2d9681a287e662efbc27c41fe8ef86"
+                "reference": "53c15a6a7918e6c2ab16ae370ea607fb40cab196"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/psr-http-message-bridge/zipball/c2b757934f2d9681a287e662efbc27c41fe8ef86",
-                "reference": "c2b757934f2d9681a287e662efbc27c41fe8ef86",
+                "url": "https://api.github.com/repos/symfony/psr-http-message-bridge/zipball/53c15a6a7918e6c2ab16ae370ea607fb40cab196",
+                "reference": "53c15a6a7918e6c2ab16ae370ea607fb40cab196",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.3",
-                "psr/http-message": "~1.0",
-                "symfony/http-foundation": "~2.3|~3.0|~4.0"
+                "php": "^5.3.3 || ^7.0",
+                "psr/http-message": "^1.0",
+                "symfony/http-foundation": "^2.3.42 || ^3.4 || ^4.0"
             },
             "require-dev": {
-                "symfony/phpunit-bridge": "~3.2|4.0"
+                "symfony/phpunit-bridge": "^3.4 || 4.0"
             },
             "suggest": {
+                "psr/http-factory-implementation": "To use the PSR-17 factory",
                 "psr/http-message-implementation": "To use the HttpFoundation factory",
                 "zendframework/zend-diactoros": "To use the Zend Diactoros factory"
             },
             "type": "symfony-bridge",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.0-dev"
+                    "dev-master": "1.1-dev"
                 }
             },
             "autoload": {
@@ -3088,7 +3089,7 @@
                 "http-message",
                 "psr-7"
             ],
-            "time": "2017-12-19T00:31:44+00:00"
+            "time": "2018-08-30T16:28:28+00:00"
         },
         {
             "name": "symfony/routing",
@@ -6059,6 +6060,81 @@
             "time": "2018-07-26T11:00:49+00:00"
         },
         {
+            "name": "symfony/var-dumper",
+            "version": "v4.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/var-dumper.git",
+                "reference": "db61258540350725f4beb6b84006e32398acd120"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/db61258540350725f4beb6b84006e32398acd120",
+                "reference": "db61258540350725f4beb6b84006e32398acd120",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.1.3",
+                "symfony/polyfill-mbstring": "~1.0",
+                "symfony/polyfill-php72": "~1.5"
+            },
+            "conflict": {
+                "phpunit/phpunit": "<4.8.35|<5.4.3,>=5.0",
+                "symfony/console": "<3.4"
+            },
+            "require-dev": {
+                "ext-iconv": "*",
+                "symfony/process": "~3.4|~4.0",
+                "twig/twig": "~1.34|~2.4"
+            },
+            "suggest": {
+                "ext-iconv": "To convert non-UTF-8 strings to UTF-8 (or symfony/polyfill-iconv in case ext-iconv cannot be used).",
+                "ext-intl": "To show region name in time zone dump",
+                "symfony/console": "To use the ServerDumpCommand and/or the bin/var-dump-server script"
+            },
+            "bin": [
+                "Resources/bin/var-dump-server"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "4.2-dev"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "Resources/functions/dump.php"
+                ],
+                "psr-4": {
+                    "Symfony\\Component\\VarDumper\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Grekas",
+                    "email": "p@tchwork.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony mechanism for exploring and dumping PHP variables",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "debug",
+                "dump"
+            ],
+            "time": "2018-11-25T12:50:42+00:00"
+        },
+        {
             "name": "theseer/tokenizer",
             "version": "1.1.0",
             "source": {
@@ -6219,7 +6295,8 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=7.1"
+        "php": ">=7.1",
+        "ext-json": "*"
     },
     "platform-dev": []
 }

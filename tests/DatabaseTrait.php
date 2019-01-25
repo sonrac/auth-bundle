@@ -2,13 +2,14 @@
 
 declare(strict_types=1);
 
-namespace sonrac\Auth\Tests;
+namespace Sonrac\OAuth2\Tests;
 
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
- * Trait DatabaseTrait.
+ * Trait DatabaseTrait
+ * @package Sonrac\OAuth2\Tests
  */
 trait DatabaseTrait
 {
@@ -38,13 +39,17 @@ trait DatabaseTrait
      *
      * @var string
      */
-    protected $seedNameSpace = 'sonrac\Auth\Tests\Seeds\\';
+    protected $seedNameSpace = 'Sonrac\OAuth2\Tests\Seeds\\';
 
     /**
      * Setup database.
      */
     protected function setUpDatabase(): void
     {
+        $this->runCommand('doctrine:schema:update', [
+            '--force' => true,
+        ]);
+
         if (empty($this->seeds)) {
             return;
         }
@@ -65,9 +70,9 @@ trait DatabaseTrait
      */
     protected function getSeedClassName(string $class): string
     {
-        $className = \class_exists($class) ? $class : $this->seedNameSpace.$class;
+        $className = \class_exists($class) ? $class : $this->seedNameSpace . $class;
 
-        return \class_exists($className) ? $className : $this->seedNameSpace.\ucfirst($class).'TableSeeder';
+        return \class_exists($className) ? $className : $this->seedNameSpace . \ucfirst($class) . 'TableSeeder';
     }
 
     /**
@@ -99,15 +104,17 @@ trait DatabaseTrait
      * Run console command.
      *
      * @param string $commandName
-     * @param array  $arguments
+     * @param array $arguments
      *
      * @return string
      */
     protected function runCommand(string $commandName, array $arguments = []): ?string
     {
+        $arguments['--env'] = 'test';
+
         $command = $this->getConsoleApp()->find($commandName);
-        $tester  = new CommandTester($command);
-        $tester->execute($arguments);
+        $tester = new CommandTester($command);
+        $tester->execute($arguments, ['interactive' => false]);
 
         return $tester->getDisplay();
     }

@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-namespace sonrac\Auth\Tests\Seeds;
+namespace Sonrac\OAuth2\Tests\Seeds;
 
 use sonrac\SimpleSeed\RollBackSeedWithCheckExists;
 
 /**
- * Class AuthCodesTableSeeder.
+ * Class AuthCodesTableSeeder
+ * @package Sonrac\OAuth2\Tests\Seeds
  */
 class AuthCodesTableSeeder extends RollBackSeedWithCheckExists
 {
@@ -16,7 +17,7 @@ class AuthCodesTableSeeder extends RollBackSeedWithCheckExists
      */
     protected function getTable(): string
     {
-        return 'auth_codes';
+        return 'oauth2_auth_codes';
     }
 
     /**
@@ -26,13 +27,14 @@ class AuthCodesTableSeeder extends RollBackSeedWithCheckExists
     {
         return [
             [
-                'code'         => 'test_code',
+                'id' => 'test_code',
+                'client_id' => 'test_client',
+                'user_id' => 1,
                 'redirect_uri' => 'test',
-                'token_scopes' => \json_encode(['client', 'admin']),
-                'client_id'    => 'Test Client',
-                'user_id'      => 1,
-                'expire_at'    => \time(),
-                'created_at'   => \time(),
+                'scopes' => \json_encode(['client', 'admin']),
+                'expire_at' => \time(),
+                'is_revoked' => 0,
+                'created_at' => \time(),
             ],
         ];
     }
@@ -50,6 +52,6 @@ class AuthCodesTableSeeder extends RollBackSeedWithCheckExists
      */
     protected function getWhereForRow($data): array
     {
-        return ['code' => $data['code']];
+        return ['id' => $data['id']];
     }
 }

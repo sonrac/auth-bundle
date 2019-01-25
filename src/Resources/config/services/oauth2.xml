@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services
+        http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+
+        <service id="League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface"
+                 class="Sonrac\OAuth2\Bridge\Repository\AccessTokenRepository"
+                 public="true">
+            <argument/>
+        </service>
+
+        <service id="League\OAuth2\Server\Repositories\AuthCodeRepositoryInterface"
+                 class="Sonrac\OAuth2\Bridge\Repository\AuthCodeRepository"
+                 public="true">
+            <argument/>
+        </service>
+
+        <service id="League\OAuth2\Server\Repositories\ClientRepositoryInterface"
+                 class="Sonrac\OAuth2\Bridge\Repository\ClientRepository"
+                 public="true">
+            <argument/>
+        </service>
+
+        <service id="League\OAuth2\Server\Repositories\RefreshTokenRepositoryInterface"
+                 class="Sonrac\OAuth2\Bridge\Repository\RefreshTokenRepository"
+                 public="true">
+            <argument/>
+        </service>
+
+        <service id="League\OAuth2\Server\Repositories\ScopeRepositoryInterface"
+                 class="Sonrac\OAuth2\Bridge\Repository\ScopeRepository"
+                 public="true">
+            <argument/>
+        </service>
+
+        <service id="League\OAuth2\Server\Repositories\UserRepositoryInterface"
+                 class="Sonrac\OAuth2\Bridge\Repository\UserRepository"
+                 public="true">
+            <argument/>
+            <argument type="service" id="security.user_password_encoder.generic"/>
+        </service>
+
+        <service id="sonrac_oauth.util.oauth_handler" class="Sonrac\OAuth2\Bridge\Util\OAuthHandler" public="false">
+            <argument type="service" id="sensio_framework_extra.psr7.http_message_factory"/>
+            <argument type="service" id="sensio_framework_extra.psr7.http_foundation_factory"/>
+            <argument>%kernel.debug%</argument>
+        </service>
+
+        <service id="sonrac_oauth.oauth2.secure_key_factory" class="Sonrac\OAuth2\Factory\SecureKeyFactory"
+                 public="false">
+            <argument/>
+            <argument/>
+            <argument/>
+            <argument/>
+        </service>
+
+        <service id="sonrac_oauth.oauth2.grant_type_factory" class="Sonrac\OAuth2\Factory\GrantTypeFactory"
+                 public="false">
+            <argument type="service" id="service_container"/>
+        </service>
+
+        <service id="sonrac_oauth.oauth2.authorization_server_configurator"
+                 class="Sonrac\OAuth2\Configurator\AuthorizationServerConfigurator"
+                 public="false">
+            <argument type="service" id="sonrac_oauth.oauth2.grant_type_factory"/>
+            <argument/>
+            <argument/>
+            <argument/>
+        </service>
+
+        <service id="sonrac_oauth.oauth2.authorization_server"
+                 class="League\OAuth2\Server\AuthorizationServer" public="false">
+            <factory class="Sonrac\OAuth2\Factory\AuthorizationServerFactory" method="createServer"/>
+            <argument type="service" id="League\OAuth2\Server\Repositories\ClientRepositoryInterface"/>
+            <argument type="service" id="League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface"/>
+            <argument type="service" id="League\OAuth2\Server\Repositories\ScopeRepositoryInterface"/>
+            <argument type="service" id="sonrac_oauth.oauth2.secure_key_factory"/>
+            <configurator service="sonrac_oauth.oauth2.authorization_server_configurator" method="configure"/>
+        </service>
+
+    </services>
+</container>

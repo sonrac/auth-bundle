@@ -2,33 +2,67 @@
 
 declare(strict_types=1);
 
-namespace sonrac\Auth\Tests\Units\Commands;
+namespace Sonrac\OAuth2\Tests\Units\Commands;
 
-use sonrac\Auth\Tests\Units\BaseUnitTester;
+use Sonrac\OAuth2\Adapter\Exception\NotUniqueClientIdentifierException;
+use Sonrac\OAuth2\Tests\Units\BaseUnitTester;
+use Symfony\Component\Console\Exception\InvalidOptionException;
 
 /**
- * Class GenerateClientTest.
+ * Class GenerateClientTest
+ * @package Sonrac\OAuth2\Tests\Units\Commands
  */
 class GenerateClientTest extends BaseUnitTester
 {
     /**
-     * {@inheritdoc}
+     * @var array
      */
-    protected $clearTablesList = ['clients'];
+    protected $seeds = ['clients'];
+
+    /**
+     * @var array
+     */
+    protected $clearTablesList = ['oauth2_clients'];
 
     /**
      * Test generate client.
      */
     public function testGenerateClient(): void
     {
-        $output = $this->runCommand('sonrac_auth:generate:client', [
-           '--name'        => 'client_tester',
-           '--description' => 'Test application',
+        $this->runCommand('sonrac_oauth:generate:client', [
+            '--identifier' => 'client_tester',
+            '--name' => 'client_tester',
         ]);
 
-        $this->seeCountInDatabase(1, 'clients', ['name' => 'client_tester']);
+        $this->seeCountInDatabase(1, 'oauth2_clients', ['id' => 'client_tester']);
+    }
 
-        $this->assertContains('Client ID:', $output);
-        $this->assertContains('Client secret:', $output);
+    /**
+     * Test generate with not unique identifier
+     */
+    public function testGenerateClientNotUniqueIdentifier()
+    {
+        $this->expectException(InvalidOptionException::class);
+        $this->expectExceptionMessage('Option "identifier" is not unique.');
+
+        $this->runCommand('sonrac_oauth:generate:client', [
+            '--identifier' => 'test_client',
+            '--name' => 'client_tester',
+        ]);
+    }
+
+    /**
+     * Test generate with invalid grant type option
+     */
+    public function testGenerateClientWithInvalidGrantType()
+    {
+        $this->expectException(InvalidOptionException::class);
+        $this->expectExceptionMessage('Option "grant-types" contains invalid value.');
+
+        $this->runCommand('sonrac_oauth:generate:client', [
+            '--identifier' => 'client_tester',
+            '--name' => 'client_tester',
+            '--grant-types' => 'invalid_grant',
+        ]);
     }
 }

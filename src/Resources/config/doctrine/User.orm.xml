@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity repository-class="Sonrac\OAuth2\Repository\UserRepository" name="Sonrac\OAuth2\Entity\User"
+            table="oauth2_users">
+        <id name="id" column="id" type="integer">
+            <generator strategy="AUTO"/>
+            <options>
+                <option name="unsigned">1</option>
+            </options>
+        </id>
+
+        <field name="username" column="username" type="string" length="255" nullable="false" unique="true"/>
+
+        <field name="email" column="email" type="string" length="255" nullable="false" unique="true"/>
+
+        <field name="password" column="password" type="string" length="255" nullable="false"/>
+
+        <field name="roles" column="roles" type="json_array" nullable="false"/>
+
+        <field name="firstName" column="first_name" type="string" length="255" nullable="false"/>
+
+        <field name="lastName" column="last_name" type="string" length="255" nullable="false"/>
+
+        <field name="birthday" column="birthday" type="integer" nullable="true">
+            <options>
+                <option name="unsigned">1</option>
+            </options>
+        </field>
+
+        <field name="avatar" column="avatar" type="string" length="512" nullable="true"/>
+
+        <field name="status" column="status" type="string" length="50" nullable="false"/>
+
+        <field name="additionalPermissions" column="additional_permissions" type="json_array" nullable="true"/>
+
+        <field name="lastLogin" column="last_login" type="integer" nullable="true">
+            <options>
+                <option name="unsigned">1</option>
+            </options>
+        </field>
+
+        <field name="createdAt" column="created_at" type="integer" nullable="false"/>
+
+        <field name="updatedAt" column="updated_at" type="integer" nullable="true"/>
+
+    </entity>
+</doctrine-mapping>

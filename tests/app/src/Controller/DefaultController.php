@@ -1,8 +1,9 @@
 <?php
 
-namespace sonrac\Auth\Tests\App\Controller;
+declare(strict_types=1);
 
-use sonrac\Auth\Repository\Users;
+namespace Sonrac\OAuth2\Tests\App\Controller;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -13,13 +14,11 @@ class DefaultController extends AbstractController
 {
     public function index(Request $request)
     {
-        \var_dump($this->get('service_container')->get('sonrac_auth.resource_server'));
-
         return $this->json([]);
     }
 
-    public function security(Request $request) {
-
+    public function security(Request $request)
+    {
         return $this->json([
             'status' => true
         ]);

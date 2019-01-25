@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace sonrac\Auth\Tests\Seeds;
+namespace Sonrac\OAuth2\Tests\Seeds;
 
 use sonrac\SimpleSeed\RollBackSeedWithCheckExists;
 
@@ -16,7 +16,7 @@ class ScopesTableSeeder extends RollBackSeedWithCheckExists
      */
     protected function getTable(): string
     {
-        return 'scopes';
+        return 'oauth2_scopes';
     }
 
     /**
@@ -26,16 +26,16 @@ class ScopesTableSeeder extends RollBackSeedWithCheckExists
     {
         return [
             [
-                'scope'       => 'default',
-                'title'       => 'Default scope',
+                'id' => 'default',
+                'title' => 'Default scope',
                 'description' => 'Default scope',
-                'created_at'  => \time(),
+                'created_at' => \time(),
             ],
             [
-                'scope'       => 'client',
-                'title'       => 'Default scope',
+                'id' => 'client',
+                'title' => 'Default scope',
                 'description' => 'Client scope',
-                'created_at'  => \time(),
+                'created_at' => \time(),
             ],
         ];
     }
@@ -45,7 +45,7 @@ class ScopesTableSeeder extends RollBackSeedWithCheckExists
      */
     protected function getWhereForRow($data): array
     {
-        return ['scope' => $data['scope']];
+        return ['id' => $data['id']];
     }
 
     /**

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace sonrac\Auth\Tests\Units;
+namespace Sonrac\OAuth2\Tests\Units;
 
-use sonrac\Auth\Tests\DatabaseTrait;
+use Sonrac\OAuth2\Tests\DatabaseTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -37,9 +37,9 @@ abstract class BaseUnitTester extends KernelTestCase
     /**
      * See count records in database.
      *
-     * @param int    $count
+     * @param int $count
      * @param string $table
-     * @param array  $condition
+     * @param array $condition
      */
     protected function seeCountInDatabase(int $count, string $table, array $condition = []): void
     {
@@ -57,6 +57,6 @@ abstract class BaseUnitTester extends KernelTestCase
         }
 
         $data = $query->execute()->fetchColumn();
-        $this->assertEquals($count, (int) $data);
+        $this->assertEquals($count, (int)$data);
     }
 }

@@ -2,13 +2,18 @@
 
 declare(strict_types=1);
 
-namespace sonrac\Auth\Tests\Seeds;
+namespace Sonrac\OAuth2\Tests\Seeds;
 
-use sonrac\Auth\Entity\Client;
+use Sonrac\OAuth2\Bridge\Grant\AuthCodeGrant;
+use Sonrac\OAuth2\Bridge\Grant\ClientCredentialsGrant;
+use Sonrac\OAuth2\Bridge\Grant\ImplicitGrant;
+use Sonrac\OAuth2\Bridge\Grant\PasswordGrant;
+use Sonrac\OAuth2\Bridge\Grant\RefreshTokenGrant;
 use sonrac\SimpleSeed\RollBackSeedWithCheckExists;
 
 /**
- * Class Clients.
+ * Class ClientsTableSeeder
+ * @package Sonrac\OAuth2\Tests\Seeds
  */
 class ClientsTableSeeder extends RollBackSeedWithCheckExists
 {
@@ -17,7 +22,7 @@ class ClientsTableSeeder extends RollBackSeedWithCheckExists
      */
     protected function getTable(): string
     {
-        return 'clients';
+        return 'oauth2_clients';
     }
 
     /**
@@ -27,21 +32,22 @@ class ClientsTableSeeder extends RollBackSeedWithCheckExists
     {
         return [
             [
-                'name'                => 'Test Client',
-                'description'         => 'First test client',
-                'secret'              => 'secret-key',
-                'created_at'          => \time(),
+                'id' => 'test_client',
+                'name' => 'Test Client',
+                'description' => 'First test client',
+                'secret' => 'secret-key',
                 'allowed_grant_types' => \json_encode([
-                    Client::GRANT_CLIENT_CREDENTIALS,
-                    Client::GRANT_PASSWORD,
-                    Client::GRANT_IMPLICIT,
-                    Client::GRANT_AUTH_CODE,
-                    Client::GRANT_REFRESH_TOKEN,
+                    ClientCredentialsGrant::TYPE,
+                    AuthCodeGrant::TYPE,
+                    ImplicitGrant::TYPE,
+                    PasswordGrant::TYPE,
+                    RefreshTokenGrant::TYPE,
                 ]),
                 'redirect_uris' => \json_encode([
                     'http://test.com',
                     'https://test.com',
                 ]),
+                'created_at' => \time(),
             ],
         ];
     }
@@ -51,7 +57,7 @@ class ClientsTableSeeder extends RollBackSeedWithCheckExists
      */
     protected function getWhereForRow($data): array
     {
-        return ['name' => $data['name']];
+        return ['id' => $data['id']];
     }
 
     /**

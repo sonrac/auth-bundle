@@ -1,15 +1,8 @@
 index:
-    path: /
-    controller: sonrac\Auth\Tests\App\Controller\DefaultController::index
-    requirements: ['@request_stack', 'League\OAuth2\Server\Repositories\ClientRepositoryInterface']
-authorize:
-  path: /auth/token
-  controller: sonrac\Auth\Controller\AuthorizeController::token
-  requirements: ['@request_stack']
-authennticate:
-  path: /auth/authorize
-  controller: sonrac\Auth\Controller\AuthorizeController::authorize
-  requirements: ['@request_stack']
+  path: /
+  controller: Sonrac\OAuth2\Tests\App\Controller\DefaultController::index
 test_security:
   path: /api/security/test
-  controller: sonrac\Auth\Tests\App\Controller\DefaultController::security
+  controller: Sonrac\OAuth2\Tests\App\Controller\DefaultController::security
+sonrac_oauth:
+  resource: '@AuthBundle/Resources/config/routes.xml'

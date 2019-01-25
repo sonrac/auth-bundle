@@ -2,16 +2,17 @@
 
 declare(strict_types=1);
 
-namespace sonrac\Auth;
+namespace Sonrac\OAuth2;
 
 use Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappingsPass;
-use sonrac\Auth\DependencyInjection\SonracAuthExtension;
+use Sonrac\OAuth2\DependencyInjection\Security\OAuthFactory;
+use Sonrac\OAuth2\DependencyInjection\SonracOAuthExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 /**
- * Class AuthBundle.
- * Auth bundle.
+ * Class AuthBundle
+ * @package Sonrac\OAuth2
  */
 class AuthBundle extends Bundle
 {
@@ -23,16 +24,16 @@ class AuthBundle extends Bundle
         parent::build($container);
 
         $mappings = [
-            __DIR__.'/Resources/config/doctrine/' => 'sonrac\Auth\Entity',
+            __DIR__ . '/Resources/config/doctrine/' => 'Sonrac\OAuth2\Entity',
         ];
 
         if (\class_exists('Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappingsPass')) {
-            $container->addCompilerPass(
-                DoctrineOrmMappingsPass::createYamlMappingDriver(
-                    $mappings
-                )
-            );
+            $container->addCompilerPass(DoctrineOrmMappingsPass::createXmlMappingDriver($mappings));
         }
+
+        /** @var \Symfony\Bundle\SecurityBundle\DependencyInjection\SecurityExtension $security */
+        $security = $container->getExtension('security');
+        $security->addSecurityListenerFactory(new OAuthFactory());
     }
 
     /**
@@ -40,6 +41,6 @@ class AuthBundle extends Bundle
      */
     public function getContainerExtension()
     {
-        return new SonracAuthExtension();
+        return new SonracOAuthExtension();
     }
 }

@@ -1,0 +1,9 @@
+sonrac_oauth:
+  keys:
+    encryption: asdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasd
+    pair:
+      path: '%kernel.project_dir%/resources/keys'
+  swagger_constants:
+    url: ~
+  default_scopes:
+    - default

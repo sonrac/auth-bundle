@@ -47,3 +47,15 @@ docker stack deploy -c docker-compose.yml auth-bundle
 ```
 
 * [Open local application with bundle for test](http://auth.devinf)
+
+
+TODO:
+1. security: add authentication entry point
+2. clear-tokens-command: refactor and extend bundle repository interfaces
+3. User repository bridge: add optional validation for grant type and client.
+4. Scope repository bridge: implement finalizeScopes.
+5. security-authorization-handler: implement(low priority)
+6. add documentation for bundle configuration
+7. AuthorizeTest - restore commented 
+8. oauth path config: check if needed
+9. check if logout handler is needed with revoke token

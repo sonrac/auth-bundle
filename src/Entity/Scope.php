@@ -2,120 +2,118 @@
 
 declare(strict_types=1);
 
-namespace sonrac\Auth\Entity;
+namespace Sonrac\OAuth2\Entity;
 
-use League\OAuth2\Server\Entities\ScopeEntityInterface;
-use Openapi\Annotations as OA;
+use Sonrac\OAuth2\Adapter\Entity\ScopeEntityInterface;
 
 /**
- * Class Scope.
- * Scope entity.
- *
- * @OA\Schema(
- *     title="Scope",
- *     description="Scope entity"
- * )
+ * Class Scope
+ * @package Sonrac\OAuth2\Entity
  */
 class Scope implements ScopeEntityInterface
 {
     use TimeEntityTrait;
 
     /**
-     * Scope name.
+     * Scope identifier.
      *
-     * @var string
-     *
-     * @OA\Property(example=1, uniqueItems=true)
+     * @var string|null
      */
-    protected $scope;
+    protected $id;
 
     /**
-     * Scope description.
+     * Scope title.
      *
-     * @var string
-     *
-     * @OA\Property(
-     *     example="Client scope description",
-     *     format="text"
-     * )
-     */
-    protected $description;
-
-    /**
-     * Scope description.
-     *
-     * @var string
-     *
-     * @OA\Property(
-     *     example="Client scope title"
-     * )
+     * @var string|null
      */
     protected $title;
 
     /**
+     * Scope description.
+     *
+     * @var string|null
+     */
+    protected $description;
+
+    /**
      * Scope permissions.
      *
-     * @var array
-     *
-     * @OA\Property(
-     *     example={"permission1", "permission2"},
-     *     @OA\Items(
-     *         type="string"
-     *     )
-     * )
+     * @var array|null
      */
     protected $permissions;
 
     /**
      * Created time.
      *
-     * @var int
-     *
-     * @OA\Property(format="bigInt", example="1529397813")
+     * @var int|null
      */
-    protected $created_at;
+    protected $createdAt;
 
     /**
      * Updated time.
      *
-     * @var int
-     *
-     * @OA\Property(format="bigInt", example="1529397813")
+     * @var int|null
      */
-    protected $updated_at;
-
-    /**
-     * Set scope identifier.
-     *
-     * @param string $identifier
-     */
-    public function setIdentifier(string $identifier): void
-    {
-        $this->scope = $identifier;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function jsonSerialize()
-    {
-        return [$this->getIdentifier()];
-    }
+    protected $updatedAt;
 
     /**
      * {@inheritdoc}
      */
     public function getIdentifier(): string
     {
-        return $this->scope;
+        return $this->id;
+    }
+
+    /**
+     * Get scope identifier
+     *
+     * @return string|null
+     */
+    public function getId(): ?string
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set scope identifier.
+     *
+     * @param string $id
+     *
+     * @return void
+     */
+    public function setId(string $id): void
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * Get scope title.
+     *
+     * @return string|null
+     */
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
+    /**
+     * Set scope title.
+     *
+     * @param string $title
+     *
+     * @return void
+     */
+    public function setTitle(string $title): void
+    {
+        $this->title = $title;
     }
 
     /**
      * Get scope description.
      *
-     * @return string
+     * @return string|null
      */
-    public function getDescription(): string
+    public function getDescription(): ?string
     {
         return $this->description;
     }
@@ -124,30 +122,12 @@ class Scope implements ScopeEntityInterface
      * Set scope description.
      *
      * @param string $description
+     *
+     * @return void
      */
     public function setDescription(string $description): void
     {
         $this->description = $description;
-    }
-
-    /**
-     * Get scope title.
-     *
-     * @return string
-     */
-    public function getTitle(): string
-    {
-        return $this->title ?? '';
-    }
-
-    /**
-     * Set scope title.
-     *
-     * @param string $title
-     */
-    public function setTitle(string $title): void
-    {
-        $this->title = $title;
     }
 
     /**
@@ -157,11 +137,7 @@ class Scope implements ScopeEntityInterface
      */
     public function getPermissions(): array
     {
-        if (\is_string($this->permissions)) {
-            $this->permissions = \explode('|', $this->permissions);
-        }
-
-        return $this->permissions;
+        return null !== $this->permissions ? $this->permissions : [];
     }
 
     /**

@@ -2,13 +2,14 @@
 
 declare(strict_types=1);
 
-namespace sonrac\Auth\Tests\Functional;
+namespace Sonrac\OAuth2\Tests\Functional;
 
-use sonrac\Auth\Tests\DatabaseTrait;
+use Sonrac\OAuth2\Tests\DatabaseTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 /**
- * Class BaseFunctionalTester.
+ * Class BaseFunctionalTester
+ * @package Sonrac\OAuth2\Tests\Functional
  */
 class BaseFunctionalTester extends WebTestCase
 {
@@ -46,7 +47,9 @@ class BaseFunctionalTester extends WebTestCase
     {
         parent::setUp();
 
-        $this->runCommand('sonrac_auth:generate:keys');
+        $this->runCommand('sonrac_oauth:generate:keys', [
+            '--force' => true,
+        ]);
 
         $this->setUpDatabase();
     }

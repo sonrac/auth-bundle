@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity repository-class="Sonrac\OAuth2\Repository\AuthCodeRepository" name="Sonrac\OAuth2\Entity\AuthCode"
+            table="oauth2_auth_codes">
+        <id name="id" column="id" type="string" length="255">
+        </id>
+
+        <field name="clientId" column="client_id" type="string" length="255" nullable="false"/>
+
+        <field name="userId" column="user_id" type="integer" nullable="true"/>
+
+        <field name="redirectUri" column="redirect_uri" type="string" length="255" nullable="true"/>
+
+        <field name="scopes" column="scopes" type="json_array" nullable="false"/>
+
+        <field name="expireAt" column="expire_at" type="integer" nullable="false"/>
+
+        <field name="isRevoked" column="is_revoked" type="boolean" nullable="false"/>
+
+        <field name="createdAt" column="created_at" type="integer" nullable="false"/>
+
+        <field name="updatedAt" column="updated_at" type="integer" nullable="true"/>
+
+    </entity>
+</doctrine-mapping>

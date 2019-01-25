@@ -14,17 +14,6 @@ services:
 
   # makes classes in src/ available to be used as services
   # this creates a service per class whose id is the fully-qualified class name
-  service_container:
-    class: Symfony\Component\DependencyInjection\ContainerInterface
-    tags: ['service_container']
-    public: true
-    shared: true
-    synthetic: true
+
   sonrac_seed_command:
     class: sonrac\SimpleSeed\SeedCommand
-
-  # authentication failure event listener
-#  admin.security.authentication_event_listener:
-#    class: sonrac\Auth\Security\OAuthAuthenticationListener
-#    tags:
-#      - { name: kernel.event_subscriber }
