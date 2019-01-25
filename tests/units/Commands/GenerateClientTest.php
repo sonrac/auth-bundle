@@ -29,7 +29,7 @@ class GenerateClientTest extends BaseUnitTester
     {
         $this->runCommand('sonrac_oauth:generate:client', [
             '--identifier' => 'client_tester',
-            '--name'       => 'client_tester',
+            '--name' => 'client_tester',
         ]);
 
         $this->seeCountInDatabase(1, 'oauth2_clients', ['id' => 'client_tester']);
@@ -45,7 +45,7 @@ class GenerateClientTest extends BaseUnitTester
 
         $this->runCommand('sonrac_oauth:generate:client', [
             '--identifier' => 'test_client',
-            '--name'       => 'client_tester',
+            '--name' => 'client_tester',
         ]);
     }
 
@@ -58,8 +58,8 @@ class GenerateClientTest extends BaseUnitTester
         $this->expectExceptionMessage('Option "grant-types" contains invalid value.');
 
         $this->runCommand('sonrac_oauth:generate:client', [
-            '--identifier'  => 'client_tester',
-            '--name'        => 'client_tester',
+            '--identifier' => 'client_tester',
+            '--name' => 'client_tester',
             '--grant-types' => 'invalid_grant',
         ]);
     }

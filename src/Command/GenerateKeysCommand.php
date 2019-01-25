@@ -29,8 +29,7 @@ class GenerateKeysCommand extends ContainerAwareCommand
     public function __construct(
         SecureKeyFactory $secureKeyFactory,
         ?string $name = null
-    )
-    {
+    ) {
         parent::__construct($name);
 
         $this->secureKeyFactory = $secureKeyFactory;
@@ -98,7 +97,7 @@ class GenerateKeysCommand extends ContainerAwareCommand
             throw new \RuntimeException(\sprintf('Error create path {%s}. Check folder permission', $keyPath));
         }
 
-        [$privateKey, $publicKey] = $this->generateKeys((int)$bits, $digestAlgorithm, $passPhrase);
+        [$privateKey, $publicKey] = $this->generateKeys((int) $bits, $digestAlgorithm, $passPhrase);
 
         $this->saveKeys($privateKey, $publicKey);
 
@@ -119,7 +118,7 @@ class GenerateKeysCommand extends ContainerAwareCommand
         $config = [
             'private_key_bits' => $bits,
             'private_key_type' => OPENSSL_KEYTYPE_RSA,
-            'digest_alg'       => $digestAlgorithm,
+            'digest_alg' => $digestAlgorithm,
         ];
 
         $keyResource = \openssl_pkey_new($config);

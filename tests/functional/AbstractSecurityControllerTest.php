@@ -56,10 +56,10 @@ abstract class AbstractSecurityControllerTest extends BaseFunctionalTester
 
         $client = static::createClient();
         $client->request('POST', '/oauth/token', [
-            'grant_type'    => ClientCredentialsGrant::TYPE,
-            'client_id'     => 'test_client',
+            'grant_type' => ClientCredentialsGrant::TYPE,
+            'client_id' => 'test_client',
             'client_secret' => 'secret-key',
-            'scope'         => 'default',
+            'scope' => 'default',
         ]);
         $response = $client->getResponse();
 

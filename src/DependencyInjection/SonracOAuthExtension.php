@@ -65,7 +65,7 @@ class SonracOAuthExtension extends Extension
         if (isset($config['swagger_constants']) && \is_array($config['swagger_constants'])) {
             foreach ($config['swagger_constants'] as $swagger_constant => $value) {
                 $swagger_constant = 'SWAGGER_'.\mb_strtoupper($swagger_constant);
-                if ($value === '{url}') {
+                if ('{url}' === $value) {
                     $value = $container->get('router')->generate('home');
                 }
                 \defined($swagger_constant) or \define($swagger_constant, $value);
