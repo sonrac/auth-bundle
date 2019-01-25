@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: alex
  * Date: 12/1/18
- * Time: 11:46 PM
+ * Time: 11:46 PM.
  */
 
 declare(strict_types=1);
@@ -13,8 +13,7 @@ namespace Sonrac\OAuth2\Factory;
 use League\OAuth2\Server\CryptKey;
 
 /**
- * Class SecureKeyFactory
- * @package Sonrac\OAuth2\Factory
+ * Class SecureKeyFactory.
  */
 class SecureKeyFactory
 {
@@ -55,10 +54,11 @@ class SecureKeyFactory
 
     /**
      * SecureKeyFactory constructor.
-     * @param string $encryptionKey
-     * @param string $keyPath
-     * @param string $privateKeyName
-     * @param string $publicKeyName
+     *
+     * @param string      $encryptionKey
+     * @param string      $keyPath
+     * @param string      $privateKeyName
+     * @param string      $publicKeyName
      * @param string|null $passPhrase
      */
     public function __construct(
@@ -68,11 +68,11 @@ class SecureKeyFactory
         string $publicKeyName,
         ?string $passPhrase = null
     ) {
-        $this->encryptionKey = $encryptionKey;
-        $this->keyPath = $keyPath;
+        $this->encryptionKey  = $encryptionKey;
+        $this->keyPath        = $keyPath;
         $this->privateKeyName = $privateKeyName;
-        $this->publicKeyName = $publicKeyName;
-        $this->passPhrase = $passPhrase;
+        $this->publicKeyName  = $publicKeyName;
+        $this->passPhrase     = $passPhrase;
     }
 
     /**
@@ -124,7 +124,7 @@ class SecureKeyFactory
      */
     public function getPrivateKeyPath(): string
     {
-        return $this->keyPath . DIRECTORY_SEPARATOR . $this->privateKeyName;
+        return $this->keyPath.DIRECTORY_SEPARATOR.$this->privateKeyName;
     }
 
     /**
@@ -132,7 +132,7 @@ class SecureKeyFactory
      */
     public function getPublicKeyPath(): string
     {
-        return $this->keyPath . DIRECTORY_SEPARATOR . $this->publicKeyName;
+        return $this->keyPath.DIRECTORY_SEPARATOR.$this->publicKeyName;
     }
 
     /**

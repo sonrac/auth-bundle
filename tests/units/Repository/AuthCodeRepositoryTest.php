@@ -51,22 +51,22 @@ class AuthCodeRepositoryTest extends BaseUnitTester
     {
         parent::setUp();
 
-        $this->repository = static::$container->get(AuthCodeRepositoryInterface::class);
+        $this->repository       = static::$container->get(AuthCodeRepositoryInterface::class);
         $this->clientRepository = static::$container->get(ClientRepositoryInterface::class);
-        $this->scopeRepository = static::$container->get(ScopeRepositoryInterface::class);
+        $this->scopeRepository  = static::$container->get(ScopeRepositoryInterface::class);
     }
 
     /**
      * Test get new auth code.
      *
-     * @return \League\OAuth2\Server\Entities\AuthCodeEntityInterface
-     *
      * @throws \Exception
+     *
+     * @return \League\OAuth2\Server\Entities\AuthCodeEntityInterface
      */
     public function testGetNewAuthCode(): AuthCodeEntityInterface
     {
         $client = $this->clientRepository->getClientEntity('test_client', null, null, false);
-        $scope = $this->scopeRepository->getScopeEntityByIdentifier('default');
+        $scope  = $this->scopeRepository->getScopeEntityByIdentifier('default');
 
         $authCode = $this->repository->getNewAuthCode();
         $authCode->setClient($client);

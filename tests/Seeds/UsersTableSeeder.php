@@ -8,8 +8,7 @@ use sonrac\SimpleSeed\RollBackSeedWithCheckExists;
 use Symfony\Component\Security\Core\Encoder\BCryptPasswordEncoder;
 
 /**
- * Class UsersTableSeeder
- * @package Sonrac\OAuth2\Tests\Seeds
+ * Class UsersTableSeeder.
  */
 class UsersTableSeeder extends RollBackSeedWithCheckExists
 {
@@ -31,10 +30,10 @@ class UsersTableSeeder extends RollBackSeedWithCheckExists
                 'username'   => 'username',
                 'email'      => 'email@email.com',
                 'password'   => (new BCryptPasswordEncoder(12))->encodePassword('password', null),
-                'roles' => \json_encode(['ROLE_USER']),
+                'roles'      => \json_encode(['ROLE_USER']),
                 'first_name' => 'John',
                 'last_name'  => 'Doe',
-                'status'  => 'active',
+                'status'     => 'active',
                 'created_at' => \time(),
             ],
         ];

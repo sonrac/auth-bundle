@@ -7,8 +7,7 @@ namespace Sonrac\OAuth2\Entity;
 use Sonrac\OAuth2\Adapter\Entity\ScopeEntityInterface;
 
 /**
- * Class Scope
- * @package Sonrac\OAuth2\Entity
+ * Class Scope.
  */
 class Scope implements ScopeEntityInterface
 {
@@ -65,7 +64,7 @@ class Scope implements ScopeEntityInterface
     }
 
     /**
-     * Get scope identifier
+     * Get scope identifier.
      *
      * @return string|null
      */
@@ -78,8 +77,6 @@ class Scope implements ScopeEntityInterface
      * Set scope identifier.
      *
      * @param string $id
-     *
-     * @return void
      */
     public function setId(string $id): void
     {
@@ -100,8 +97,6 @@ class Scope implements ScopeEntityInterface
      * Set scope title.
      *
      * @param string $title
-     *
-     * @return void
      */
     public function setTitle(string $title): void
     {
@@ -122,8 +117,6 @@ class Scope implements ScopeEntityInterface
      * Set scope description.
      *
      * @param string $description
-     *
-     * @return void
      */
     public function setDescription(string $description): void
     {

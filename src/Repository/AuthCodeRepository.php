@@ -14,8 +14,7 @@ use Sonrac\OAuth2\Entity\AuthCode;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * Class AuthCodeRepository
- * @package Sonrac\OAuth2\Repository
+ * Class AuthCodeRepository.
  *
  * @method AuthCode|null find($id, $lockMode = null, $lockVersion = null)
  * @method AuthCode|null findOneBy(array $criteria, array $orderBy = null)
@@ -26,6 +25,7 @@ class AuthCodeRepository extends ServiceEntityRepository implements AuthCodeRepo
 {
     /**
      * AuthCodeRepository constructor.
+     *
      * @param \Symfony\Bridge\Doctrine\RegistryInterface $registry
      */
     public function __construct(RegistryInterface $registry)
@@ -45,15 +45,15 @@ class AuthCodeRepository extends ServiceEntityRepository implements AuthCodeRepo
         $authCode->setId($authCodeEntity->getIdentifier());
         $authCode->setClientId($authCodeEntity->getClient()->getIdentifier());
         $authCode->setUserId(
-            null !== $authCodeEntity->getUserIdentifier() ? (int)$authCodeEntity->getUserIdentifier() : null
+            null !== $authCodeEntity->getUserIdentifier() ? (int) $authCodeEntity->getUserIdentifier() : null
         );
         $authCode->setRedirectUri($authCodeEntity->getRedirectUri());
-        $authCode->setScopes(array_map(function (ScopeEntityInterface $scope) {
+        $authCode->setScopes(\array_map(function (ScopeEntityInterface $scope) {
             return $scope->getIdentifier();
         }, $authCodeEntity->getScopes()));
         $authCode->setExpireAt($authCodeEntity->getExpiryDateTime()->getTimestamp());
         $authCode->setIsRevoked(false);
-        $authCode->setCreatedAt(time());
+        $authCode->setCreatedAt(\time());
 
         try {
             $this->_em->persist($authCode);

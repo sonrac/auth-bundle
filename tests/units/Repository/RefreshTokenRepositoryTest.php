@@ -14,8 +14,7 @@ use League\OAuth2\Server\Repositories\ScopeRepositoryInterface;
 use Sonrac\OAuth2\Tests\Units\BaseUnitTester;
 
 /**
- * Class RefreshTokenRepositoryTest
- * @package Sonrac\OAuth2\Tests\Units\Repository
+ * Class RefreshTokenRepositoryTest.
  */
 class RefreshTokenRepositoryTest extends BaseUnitTester
 {
@@ -58,10 +57,10 @@ class RefreshTokenRepositoryTest extends BaseUnitTester
     {
         parent::setUp();
 
-        $this->repository = static::$container->get(RefreshTokenRepositoryInterface::class);
+        $this->repository            = static::$container->get(RefreshTokenRepositoryInterface::class);
         $this->accessTokenRepository = static::$container->get(AccessTokenRepositoryInterface::class);
-        $this->clientRepository = static::$container->get(ClientRepositoryInterface::class);
-        $this->scopeRepository = static::$container->get(ScopeRepositoryInterface::class);
+        $this->clientRepository      = static::$container->get(ClientRepositoryInterface::class);
+        $this->scopeRepository       = static::$container->get(ScopeRepositoryInterface::class);
     }
 
     /**
@@ -74,7 +73,7 @@ class RefreshTokenRepositoryTest extends BaseUnitTester
         $token = $this->repository->getNewRefreshToken();
 
         $client = $this->clientRepository->getClientEntity('test_client', null, null, false);
-        $scope = $this->scopeRepository->getScopeEntityByIdentifier('default');
+        $scope  = $this->scopeRepository->getScopeEntityByIdentifier('default');
 
         $accessToken = $this->accessTokenRepository->getNewToken($client, [$scope]);
         $accessToken->setIdentifier('test_access_token');

@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace Sonrac\OAuth2\Entity;
 
 /**
- * Class AuthCode
- * @package Sonrac\OAuth2\Entity
+ * Class AuthCode.
  */
 class AuthCode
 {
@@ -89,8 +88,6 @@ class AuthCode
      * Set id.
      *
      * @param string $id
-     *
-     * @return void
      */
     public function setId(string $id): void
     {
@@ -111,8 +108,6 @@ class AuthCode
      * Set client identifier.
      *
      * @param string $clientId
-     *
-     * @return void
      */
     public function setClientId(string $clientId): void
     {
@@ -133,8 +128,6 @@ class AuthCode
      * Set user identifier.
      *
      * @param int|null $userId
-     *
-     * @return void
      */
     public function setUserId(?int $userId): void
     {
@@ -155,8 +148,6 @@ class AuthCode
      * Set redirect uri.
      *
      * @param string|null $redirectUri
-     *
-     * @return void
      */
     public function setRedirectUri(?string $redirectUri): void
     {
@@ -177,8 +168,6 @@ class AuthCode
      * Set scopes.
      *
      * @param array $scopes
-     *
-     * @return void
      */
     public function setScopes(array $scopes): void
     {
@@ -199,8 +188,6 @@ class AuthCode
      * Set expire time.
      *
      * @param int $expireAt
-     *
-     * @return void
      */
     public function setExpireAt(int $expireAt): void
     {
@@ -221,8 +208,6 @@ class AuthCode
      * Set auth code revoked.
      *
      * @param bool $isRevoked
-     *
-     * @return void
      */
     public function setIsRevoked(bool $isRevoked): void
     {

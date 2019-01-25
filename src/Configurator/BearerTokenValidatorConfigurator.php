@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: alex
  * Date: 12/1/18
- * Time: 11:57 PM
+ * Time: 11:57 PM.
  */
 
 declare(strict_types=1);
@@ -14,8 +14,7 @@ use League\OAuth2\Server\AuthorizationValidators\BearerTokenValidator;
 use Sonrac\OAuth2\Factory\SecureKeyFactory;
 
 /**
- * Class BearerTokenValidatorConfigurator
- * @package Sonrac\OAuth2\Configurator
+ * Class BearerTokenValidatorConfigurator.
  */
 class BearerTokenValidatorConfigurator
 {
@@ -26,6 +25,7 @@ class BearerTokenValidatorConfigurator
 
     /**
      * BearerTokenValidatorConfigurator constructor.
+     *
      * @param \Sonrac\OAuth2\Factory\SecureKeyFactory $keyFactory
      */
     public function __construct(SecureKeyFactory $keyFactory)

@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace Sonrac\OAuth2\Tests\Units\Commands;
 
-use Sonrac\OAuth2\Adapter\Exception\NotUniqueClientIdentifierException;
 use Sonrac\OAuth2\Tests\Units\BaseUnitTester;
 use Symfony\Component\Console\Exception\InvalidOptionException;
 
 /**
- * Class GenerateClientTest
- * @package Sonrac\OAuth2\Tests\Units\Commands
+ * Class GenerateClientTest.
  */
 class GenerateClientTest extends BaseUnitTester
 {
@@ -31,14 +29,14 @@ class GenerateClientTest extends BaseUnitTester
     {
         $this->runCommand('sonrac_oauth:generate:client', [
             '--identifier' => 'client_tester',
-            '--name' => 'client_tester',
+            '--name'       => 'client_tester',
         ]);
 
         $this->seeCountInDatabase(1, 'oauth2_clients', ['id' => 'client_tester']);
     }
 
     /**
-     * Test generate with not unique identifier
+     * Test generate with not unique identifier.
      */
     public function testGenerateClientNotUniqueIdentifier()
     {
@@ -47,12 +45,12 @@ class GenerateClientTest extends BaseUnitTester
 
         $this->runCommand('sonrac_oauth:generate:client', [
             '--identifier' => 'test_client',
-            '--name' => 'client_tester',
+            '--name'       => 'client_tester',
         ]);
     }
 
     /**
-     * Test generate with invalid grant type option
+     * Test generate with invalid grant type option.
      */
     public function testGenerateClientWithInvalidGrantType()
     {
@@ -60,8 +58,8 @@ class GenerateClientTest extends BaseUnitTester
         $this->expectExceptionMessage('Option "grant-types" contains invalid value.');
 
         $this->runCommand('sonrac_oauth:generate:client', [
-            '--identifier' => 'client_tester',
-            '--name' => 'client_tester',
+            '--identifier'  => 'client_tester',
+            '--name'        => 'client_tester',
             '--grant-types' => 'invalid_grant',
         ]);
     }

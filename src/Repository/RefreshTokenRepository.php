@@ -13,8 +13,7 @@ use Sonrac\OAuth2\Entity\RefreshToken;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * Class RefreshTokenRepository
- * @package Sonrac\OAuth2\Repository
+ * Class RefreshTokenRepository.
  *
  * @method RefreshToken|null find($id, $lockMode = null, $lockVersion = null)
  * @method RefreshToken|null findOneBy(array $criteria, array $orderBy = null)
@@ -25,6 +24,7 @@ class RefreshTokenRepository extends ServiceEntityRepository implements RefreshT
 {
     /**
      * RefreshTokenRepository constructor.
+     *
      * @param \Symfony\Bridge\Doctrine\RegistryInterface $registry
      */
     public function __construct(RegistryInterface $registry)
@@ -45,7 +45,7 @@ class RefreshTokenRepository extends ServiceEntityRepository implements RefreshT
         $refreshToken->setAccessToken($refreshTokenEntity->getAccessToken()->getIdentifier());
         $refreshToken->setExpireAt($refreshTokenEntity->getExpiryDateTime()->getTimestamp());
         $refreshToken->setIsRevoked(false);
-        $refreshToken->setCreatedAt(time());
+        $refreshToken->setCreatedAt(\time());
 
         try {
             $this->_em->persist($refreshToken);

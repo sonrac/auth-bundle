@@ -11,8 +11,7 @@ use Sonrac\OAuth2\Bridge\Grant\ClientCredentialsGrant;
 use Sonrac\OAuth2\Tests\Units\BaseUnitTester;
 
 /**
- * Class ClientRepositoryTest
- * @package sonrac\Auth\Tests\Units\Repository
+ * Class ClientRepositoryTest.
  */
 class ClientRepositoryTest extends BaseUnitTester
 {

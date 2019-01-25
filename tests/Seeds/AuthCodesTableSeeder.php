@@ -7,8 +7,7 @@ namespace Sonrac\OAuth2\Tests\Seeds;
 use sonrac\SimpleSeed\RollBackSeedWithCheckExists;
 
 /**
- * Class AuthCodesTableSeeder
- * @package Sonrac\OAuth2\Tests\Seeds
+ * Class AuthCodesTableSeeder.
  */
 class AuthCodesTableSeeder extends RollBackSeedWithCheckExists
 {
@@ -27,14 +26,14 @@ class AuthCodesTableSeeder extends RollBackSeedWithCheckExists
     {
         return [
             [
-                'id' => 'test_code',
-                'client_id' => 'test_client',
-                'user_id' => 1,
+                'id'           => 'test_code',
+                'client_id'    => 'test_client',
+                'user_id'      => 1,
                 'redirect_uri' => 'test',
-                'scopes' => \json_encode(['client', 'admin']),
-                'expire_at' => \time(),
-                'is_revoked' => 0,
-                'created_at' => \time(),
+                'scopes'       => \json_encode(['client', 'admin']),
+                'expire_at'    => \time(),
+                'is_revoked'   => 0,
+                'created_at'   => \time(),
             ],
         ];
     }

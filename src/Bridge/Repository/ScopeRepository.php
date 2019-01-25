@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: alex
  * Date: 12/15/18
- * Time: 11:31 PM
+ * Time: 11:31 PM.
  */
 
 declare(strict_types=1);
@@ -17,8 +17,7 @@ use Sonrac\OAuth2\Adapter\Repository\ScopeRepositoryInterface as OAuthScopeRepos
 use Sonrac\OAuth2\Bridge\Entity\Scope;
 
 /**
- * Class ScopeRepository
- * @package Sonrac\OAuth2\Bridge\Repository
+ * Class ScopeRepository.
  */
 class ScopeRepository implements ScopeRepositoryInterface
 {
@@ -29,6 +28,7 @@ class ScopeRepository implements ScopeRepositoryInterface
 
     /**
      * ScopeRepository constructor.
+     *
      * @param \Sonrac\OAuth2\Adapter\Repository\ScopeRepositoryInterface $scopeRepository
      */
     public function __construct(OAuthScopeRepositoryInterface $scopeRepository)
@@ -53,8 +53,12 @@ class ScopeRepository implements ScopeRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function finalizeScopes(array $scopes, $grantType, ClientEntityInterface $clientEntity, $userIdentifier = null)
-    {
+    public function finalizeScopes(
+        array $scopes,
+        $grantType,
+        ClientEntityInterface $clientEntity,
+        $userIdentifier = null
+    ) {
         return $scopes;
     }
 }

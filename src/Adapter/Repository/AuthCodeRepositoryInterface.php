@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: alex
  * Date: 12/18/18
- * Time: 10:52 PM
+ * Time: 10:52 PM.
  */
 
 declare(strict_types=1);
@@ -13,15 +13,12 @@ namespace Sonrac\OAuth2\Adapter\Repository;
 use League\OAuth2\Server\Entities\AuthCodeEntityInterface;
 
 /**
- * Interface AuthCodeRepositoryInterface
- * @package Sonrac\OAuth2\Adapter\Repository
+ * Interface AuthCodeRepositoryInterface.
  */
 interface AuthCodeRepositoryInterface
 {
     /**
      * @param \League\OAuth2\Server\Entities\AuthCodeEntityInterface $authCodeEntity
-     *
-     * @return void
      *
      * @throws \League\OAuth2\Server\Exception\UniqueTokenIdentifierConstraintViolationException
      *
@@ -31,8 +28,6 @@ interface AuthCodeRepositoryInterface
 
     /**
      * @param string|int $codeId
-     *
-     * @return void
      *
      * @see \League\OAuth2\Server\Repositories\AuthCodeRepositoryInterface::revokeAuthCode()
      */

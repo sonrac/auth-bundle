@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: alex
  * Date: 12/1/18
- * Time: 9:53 PM
+ * Time: 9:53 PM.
  */
 
 declare(strict_types=1);
@@ -19,8 +19,7 @@ use Sonrac\OAuth2\Bridge\Grant\RefreshTokenGrant;
 use Sonrac\OAuth2\Factory\GrantTypeFactory;
 
 /**
- * Class AuthorizationServerConfigurator
- * @package Sonrac\OAuth2\Configurator
+ * Class AuthorizationServerConfigurator.
  */
 class AuthorizationServerConfigurator
 {
@@ -51,10 +50,11 @@ class AuthorizationServerConfigurator
 
     /**
      * AuthorizationServerConfigurator constructor.
+     *
      * @param \Sonrac\OAuth2\Factory\GrantTypeFactory $grantTypeFactory
-     * @param string $authCodeTTL
-     * @param string $accessTokenTTL
-     * @param string $refreshTokenTTL
+     * @param string                                  $authCodeTTL
+     * @param string                                  $accessTokenTTL
+     * @param string                                  $refreshTokenTTL
      *
      * @throws \Exception
      */
@@ -65,15 +65,13 @@ class AuthorizationServerConfigurator
         string $refreshTokenTTL
     ) {
         $this->grantTypeFactory = $grantTypeFactory;
-        $this->authCodeTTL = new \DateInterval($authCodeTTL);
-        $this->accessTokenTTL = new \DateInterval($accessTokenTTL);
-        $this->refreshTokenTTL = new \DateInterval($refreshTokenTTL);
+        $this->authCodeTTL      = new \DateInterval($authCodeTTL);
+        $this->accessTokenTTL   = new \DateInterval($accessTokenTTL);
+        $this->refreshTokenTTL  = new \DateInterval($refreshTokenTTL);
     }
 
     /**
      * @param string $grantType
-     *
-     * @return void
      */
     public function enableGrantType(string $grantType): void
     {
@@ -90,7 +88,8 @@ class AuthorizationServerConfigurator
         foreach ($this->grantTypes as $grantType) {
             switch ($grantType) {
                 case AuthCodeGrant::TYPE:
-                    $grantType = $this->grantTypeFactory->createAuthCodeGrant($this->authCodeTTL, $this->refreshTokenTTL);
+                    $grantType = $this->grantTypeFactory
+                        ->createAuthCodeGrant($this->authCodeTTL, $this->refreshTokenTTL);
                     break;
                 case ClientCredentialsGrant::TYPE:
                     $grantType = $this->grantTypeFactory->createClientCredentialsGrant($this->refreshTokenTTL);

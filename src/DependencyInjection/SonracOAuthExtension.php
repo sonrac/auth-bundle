@@ -18,8 +18,7 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * Class SonracOAuthExtension
- * @package Sonrac\OAuth2\DependencyInjection
+ * Class SonracOAuthExtension.
  */
 class SonracOAuthExtension extends Extension
 {
@@ -30,8 +29,8 @@ class SonracOAuthExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container): void
     {
-        $fileLocator = new FileLocator(__DIR__ . '/../Resources/config');
-        $loader = new XmlFileLoader($container, $fileLocator);
+        $fileLocator = new FileLocator(__DIR__.'/../Resources/config');
+        $loader      = new XmlFileLoader($container, $fileLocator);
 
         $loader->load('services/repository.xml');
         $loader->load('services/oauth2.xml');
@@ -45,8 +44,8 @@ class SonracOAuthExtension extends Extension
             throw new \LogicException('Configuration does not found');
         }
 
-        $config = $this->processConfiguration($configuration, $configs);
-        $config['default_scopes'] = array_unique($config['default_scopes']);
+        $config                   = $this->processConfiguration($configuration, $configs);
+        $config['default_scopes'] = \array_unique($config['default_scopes']);
 
         $this->setParameters($container, $config);
 
@@ -57,7 +56,7 @@ class SonracOAuthExtension extends Extension
      * Set bundle parameters.
      *
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-     * @param array $config
+     * @param array                                                   $config
      *
      * @throws \Exception
      */
@@ -65,7 +64,7 @@ class SonracOAuthExtension extends Extension
     {
         if (isset($config['swagger_constants']) && \is_array($config['swagger_constants'])) {
             foreach ($config['swagger_constants'] as $swagger_constant => $value) {
-                $swagger_constant = 'SWAGGER_' . \mb_strtoupper($swagger_constant);
+                $swagger_constant = 'SWAGGER_'.\mb_strtoupper($swagger_constant);
                 if ($value === '{url}') {
                     $value = $container->get('router')->generate('home');
                 }
@@ -76,9 +75,7 @@ class SonracOAuthExtension extends Extension
 
     /**
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-     * @param array $config
-     *
-     * @return void
+     * @param array                                                   $config
      */
     private function configureServiceDefinitions(ContainerBuilder $container, array &$config): void
     {
@@ -136,7 +133,7 @@ class SonracOAuthExtension extends Extension
 
         foreach ($authorizationControllerIds as $controllerId => $tags) {
             $container->getDefinition($controllerId)->addMethodCall('setOAuthAuthorizationHandler', [
-                new Reference('sonrac_oauth.security.oauth2_authorization_handler')
+                new Reference('sonrac_oauth.security.oauth2_authorization_handler'),
             ]);
         }
 
@@ -144,7 +141,7 @@ class SonracOAuthExtension extends Extension
 
         foreach ($issueTokenControllerIds as $controllerId => $tags) {
             $container->getDefinition($controllerId)->addMethodCall('setOAuthIssueTokenHandler', [
-                new Reference('sonrac_oauth.security.oauth_issue_token_handler')
+                new Reference('sonrac_oauth.security.oauth_issue_token_handler'),
             ]);
         }
 
@@ -153,9 +150,9 @@ class SonracOAuthExtension extends Extension
         if (\count($config['default_scopes']) > 0) {
             $container->getDefinition('sonrac_oauth.oauth2.authorization_server')
                 ->addMethodCall(
-                    'setDefaultScope', [implode(AbstractGrant::SCOPE_DELIMITER_STRING, $config['default_scopes'])]
+                    'setDefaultScope',
+                    [\implode(AbstractGrant::SCOPE_DELIMITER_STRING, $config['default_scopes'])]
                 );
-
         }
     }
 

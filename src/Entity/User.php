@@ -8,8 +8,7 @@ use OpenApi\Annotations as OA;
 use Sonrac\OAuth2\Adapter\Entity\UserEntityInterface;
 
 /**
- * Class User
- * @package Sonrac\OAuth2\Entity
+ * Class User.
  */
 class User implements UserEntityInterface
 {
@@ -229,8 +228,6 @@ class User implements UserEntityInterface
      * Set username.
      *
      * @param string $username
-     *
-     * @return void
      */
     public function setUsername(string $username): void
     {
@@ -251,8 +248,6 @@ class User implements UserEntityInterface
      * Set email.
      *
      * @param string $email
-     *
-     * @return void
      */
     public function setEmail(string $email): void
     {
@@ -273,8 +268,6 @@ class User implements UserEntityInterface
      * Set user password.
      *
      * @param string $password
-     *
-     * @return void
      */
     public function setPassword(string $password): void
     {
@@ -295,8 +288,6 @@ class User implements UserEntityInterface
      * Set user roles.
      *
      * @param array $roles
-     *
-     * @return void
      */
     public function setRoles(array $roles): void
     {
@@ -317,8 +308,6 @@ class User implements UserEntityInterface
      * Set user first name.
      *
      * @param string $firstName
-     *
-     * @return void
      */
     public function setFirstName(string $firstName): void
     {
@@ -339,8 +328,6 @@ class User implements UserEntityInterface
      * Set user last name.
      *
      * @param string $lastName
-     *
-     * @return void
      */
     public function setLastName(string $lastName): void
     {
@@ -361,8 +348,6 @@ class User implements UserEntityInterface
      * Set birth date.
      *
      * @param int $birthday
-     *
-     * @return void
      */
     public function setBirthday(int $birthday): void
     {
@@ -383,8 +368,6 @@ class User implements UserEntityInterface
      * Set user avatar.
      *
      * @param string|null $avatar
-     *
-     * @return void
      */
     public function setAvatar(?string $avatar): void
     {
@@ -405,8 +388,6 @@ class User implements UserEntityInterface
      * Set user status.
      *
      * @param string $status
-     *
-     * @return void
      */
     public function setStatus(string $status): void
     {
@@ -427,8 +408,6 @@ class User implements UserEntityInterface
      * Set last login time.
      *
      * @param int $lastLogin
-     *
-     * @return void
      */
     public function setLastLogin(int $lastLogin): void
     {
@@ -449,8 +428,6 @@ class User implements UserEntityInterface
      * Get additional user permissions.
      *
      * @param array $additionalPermissions
-     *
-     * @return void
      */
     public function setAdditionalPermissions(array $additionalPermissions): void
     {

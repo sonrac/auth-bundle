@@ -14,8 +14,7 @@ use Sonrac\OAuth2\Entity\AccessToken;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * Class AccessTokenRepository
- * @package Sonrac\OAuth2\Repository
+ * Class AccessTokenRepository.
  *
  * @method AccessToken|null find($id, $lockMode = null, $lockVersion = null)
  * @method AccessToken|null findOneBy(array $criteria, array $orderBy = null)
@@ -26,6 +25,7 @@ class AccessTokenRepository extends ServiceEntityRepository implements AccessTok
 {
     /**
      * AccessTokenRepository constructor.
+     *
      * @param \Symfony\Bridge\Doctrine\RegistryInterface $registry
      */
     public function __construct(RegistryInterface $registry)
@@ -45,14 +45,14 @@ class AccessTokenRepository extends ServiceEntityRepository implements AccessTok
         $accessToken->setId($accessTokenEntity->getIdentifier());
         $accessToken->setClientId($accessTokenEntity->getClient()->getIdentifier());
         $accessToken->setUserId(
-            null !== $accessTokenEntity->getUserIdentifier() ? (int)$accessTokenEntity->getUserIdentifier() : null
+            null !== $accessTokenEntity->getUserIdentifier() ? (int) $accessTokenEntity->getUserIdentifier() : null
         );
-        $accessToken->setScopes(array_map(function (ScopeEntityInterface $scope) {
+        $accessToken->setScopes(\array_map(function (ScopeEntityInterface $scope) {
             return $scope->getIdentifier();
         }, $accessTokenEntity->getScopes()));
         $accessToken->setExpireAt($accessTokenEntity->getExpiryDateTime()->getTimestamp());
         $accessToken->setIsRevoked(false);
-        $accessToken->setCreatedAt(time());
+        $accessToken->setCreatedAt(\time());
 
         try {
             $this->_em->persist($accessToken);

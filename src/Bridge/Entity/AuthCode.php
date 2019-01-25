@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: alex
  * Date: 12/16/18
- * Time: 12:08 AM
+ * Time: 12:08 AM.
  */
 
 declare(strict_types=1);
@@ -16,8 +16,7 @@ use League\OAuth2\Server\Entities\Traits\EntityTrait;
 use League\OAuth2\Server\Entities\Traits\TokenEntityTrait;
 
 /**
- * Class AuthCode
- * @package Sonrac\OAuth2\Bridge\Entity
+ * Class AuthCode.
  */
 class AuthCode implements AuthCodeEntityInterface
 {

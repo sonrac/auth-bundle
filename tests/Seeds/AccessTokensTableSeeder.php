@@ -7,8 +7,7 @@ namespace Sonrac\OAuth2\Tests\Seeds;
 use sonrac\SimpleSeed\RollBackSeedWithCheckExists;
 
 /**
- * Class AccessTokensTableSeeder
- * @package Sonrac\OAuth2\Tests\Seeds
+ * Class AccessTokensTableSeeder.
  */
 class AccessTokensTableSeeder extends RollBackSeedWithCheckExists
 {
@@ -27,18 +26,18 @@ class AccessTokensTableSeeder extends RollBackSeedWithCheckExists
     {
         return [
             [
-                'id' => 'test_token',
-                'client_id' => 'test_client',
-                'scopes' => \json_encode(['default']),
-                'expire_at' => \time() - 3600,
+                'id'         => 'test_token',
+                'client_id'  => 'test_client',
+                'scopes'     => \json_encode(['default']),
+                'expire_at'  => \time() - 3600,
                 'is_revoked' => 0,
                 'created_at' => \time(),
             ],
             [
-                'id' => 'test_token1',
-                'client_id' => 'test_client',
-                'scopes' => \json_encode(['default']),
-                'expire_at' => \time() + 3600,
+                'id'         => 'test_token1',
+                'client_id'  => 'test_client',
+                'scopes'     => \json_encode(['default']),
+                'expire_at'  => \time() + 3600,
                 'is_revoked' => 0,
                 'created_at' => \time(),
             ],

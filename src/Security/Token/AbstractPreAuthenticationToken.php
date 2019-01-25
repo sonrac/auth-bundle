@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: alex
  * Date: 12/5/18
- * Time: 9:10 PM
+ * Time: 9:10 PM.
  */
 
 declare(strict_types=1);
@@ -15,8 +15,7 @@ use Symfony\Component\Security\Core\Authentication\Token\AbstractToken;
 use Symfony\Component\Security\Core\Role\Role;
 
 /**
- * Class AbstractPreAuthenticationToken
- * @package Sonrac\OAuth2\Security\Token
+ * Class AbstractPreAuthenticationToken.
  */
 abstract class AbstractPreAuthenticationToken extends AbstractToken
 {
@@ -42,11 +41,12 @@ abstract class AbstractPreAuthenticationToken extends AbstractToken
 
     /**
      * AbstractPreAuthenticationToken constructor.
+     *
      * @param \League\OAuth2\Server\Entities\ClientEntityInterface $client
-     * @param string $providerKey
-     * @param string|null $credentials
-     * @param array $scopes
-     * @param array $roles
+     * @param string                                               $providerKey
+     * @param string|null                                          $credentials
+     * @param array                                                $scopes
+     * @param array                                                $roles
      */
     public function __construct(
         ClientEntityInterface $client,
@@ -57,10 +57,10 @@ abstract class AbstractPreAuthenticationToken extends AbstractToken
     ) {
         parent::__construct($roles);
 
-        $this->client = $client;
+        $this->client      = $client;
         $this->providerKey = $providerKey;
         $this->credentials = $credentials;
-        $this->scopes = $scopes;
+        $this->scopes      = $scopes;
     }
 
     /**
@@ -117,7 +117,6 @@ abstract class AbstractPreAuthenticationToken extends AbstractToken
         $this->credentials = null;
     }
 
-
     /**
      * {@inheritdoc}
      */
@@ -154,20 +153,20 @@ abstract class AbstractPreAuthenticationToken extends AbstractToken
     public function __toString()
     {
         $class = \get_class($this);
-        $class = substr($class, strrpos($class, '\\') + 1);
+        $class = \mb_substr($class, \mb_strrpos($class, '\\') + 1);
 
-        $roles = array_map(function (Role $role) {
+        $roles = \array_map(function (Role $role) {
             return $role->getRole();
         }, $this->getRoles());
 
-        return sprintf(
+        return \sprintf(
             '%s(client="%s", user="%s", authenticated=%s, scopes="%s", roles="%s")',
             $class,
             $this->client->getIdentifier(),
             $this->getUsername(),
-            json_encode($this->isAuthenticated()),
-            implode(', ', $this->scopes),
-            implode(', ', $roles)
+            \json_encode($this->isAuthenticated()),
+            \implode(', ', $this->scopes),
+            \implode(', ', $roles)
         );
     }
 }

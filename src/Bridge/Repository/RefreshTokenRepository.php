@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: alex
  * Date: 12/16/18
- * Time: 12:55 AM
+ * Time: 12:55 AM.
  */
 
 declare(strict_types=1);
@@ -16,8 +16,7 @@ use Sonrac\OAuth2\Adapter\Repository\RefreshTokenRepositoryInterface as OAuthRef
 use Sonrac\OAuth2\Bridge\Entity\RefreshToken;
 
 /**
- * Class RefreshTokenRepository
- * @package Sonrac\OAuth2\Bridge\Repository
+ * Class RefreshTokenRepository.
  */
 class RefreshTokenRepository implements RefreshTokenRepositoryInterface
 {
@@ -28,6 +27,7 @@ class RefreshTokenRepository implements RefreshTokenRepositoryInterface
 
     /**
      * RefreshTokenRepository constructor.
+     *
      * @param \Sonrac\OAuth2\Adapter\Repository\RefreshTokenRepositoryInterface $refreshTokenRepository
      */
     public function __construct(OAuthRefreshTokenRepositoryInterface $refreshTokenRepository)

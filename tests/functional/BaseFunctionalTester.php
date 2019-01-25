@@ -8,8 +8,7 @@ use Sonrac\OAuth2\Tests\DatabaseTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 /**
- * Class BaseFunctionalTester
- * @package Sonrac\OAuth2\Tests\Functional
+ * Class BaseFunctionalTester.
  */
 class BaseFunctionalTester extends WebTestCase
 {

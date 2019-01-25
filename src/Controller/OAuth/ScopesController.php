@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace sonrac\Auth\Controller\OAuth;
+namespace Sonrac\OAuth2\Controller\OAuth;
 
 /**
  * Class ScopesController.

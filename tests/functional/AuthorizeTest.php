@@ -9,8 +9,7 @@ use Sonrac\OAuth2\Bridge\Grant\PasswordGrant;
 use Sonrac\OAuth2\Bridge\Grant\RefreshTokenGrant;
 
 /**
- * Class AuthorizeTest
- * @package Sonrac\OAuth2\Tests\Functional
+ * Class AuthorizeTest.
  */
 class AuthorizeTest extends BaseFunctionalTester
 {
@@ -77,10 +76,10 @@ class AuthorizeTest extends BaseFunctionalTester
     {
         $client = static::createClient();
         $client->request('POST', '/oauth/token', [
-            'grant_type' => ClientCredentialsGrant::TYPE,
-            'client_id' => 'test_client',
+            'grant_type'    => ClientCredentialsGrant::TYPE,
+            'client_id'     => 'test_client',
             'client_secret' => 'secret-key',
-            'scope' => 'default',
+            'scope'         => 'default',
         ]);
         $response = $client->getResponse();
 
@@ -104,12 +103,12 @@ class AuthorizeTest extends BaseFunctionalTester
     {
         $client = static::createClient();
         $client->request('POST', '/oauth/token', [
-            'grant_type' => PasswordGrant::TYPE,
-            'client_id' => 'test_client',
+            'grant_type'    => PasswordGrant::TYPE,
+            'client_id'     => 'test_client',
             'client_secret' => 'secret-key',
-            'scope' => 'default',
-            'username' => 'username',
-            'password' => 'password',
+            'scope'         => 'default',
+            'username'      => 'username',
+            'password'      => 'password',
         ]);
         $response = $client->getResponse();
 
@@ -122,7 +121,7 @@ class AuthorizeTest extends BaseFunctionalTester
         $this->assertArrayHasKey('refresh_token', $data);
         $this->assertEquals('bearer', \mb_strtolower($data['token_type']));
 
-        $tokens = $this->checkToken(true);
+        $tokens   = $this->checkToken(true);
         $tokens[] = $data['refresh_token'];
 
         return $tokens;
@@ -146,11 +145,11 @@ class AuthorizeTest extends BaseFunctionalTester
 
         $client = static::createClient();
         $client->request('POST', '/oauth/token', [
-            'grant_type' => RefreshTokenGrant::TYPE,
-            'client_id' => 'test_client',
+            'grant_type'    => RefreshTokenGrant::TYPE,
+            'client_id'     => 'test_client',
             'refresh_token' => $tokens[2],
             'client_secret' => 'secret-key',
-            'scope' => 'default',
+            'scope'         => 'default',
         ]);
         $response = $client->getResponse();
 
@@ -171,6 +170,8 @@ class AuthorizeTest extends BaseFunctionalTester
 
     /**
      * Test implicit grant authorize.
+     *
+     * @param bool $withRefresh
      */
 //    public function testImplicitGrant(): void
 //    {
@@ -303,7 +304,7 @@ class AuthorizeTest extends BaseFunctionalTester
      * Get revoked tokens.
      *
      * @param string $table
-     * @param bool $revoked
+     * @param bool   $revoked
      *
      * @return array
      */

@@ -9,19 +9,19 @@ use Symfony\Component\Security\Core\Authentication\Token\AbstractToken;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * Class OAuthToken
- * @package Sonrac\OAuth2\Security\Token
+ * Class OAuthToken.
  */
 class OAuthToken extends AbstractOAuthToken
 {
     /**
      * OAuthToken constructor.
-     * @param \Symfony\Component\Security\Core\User\UserInterface $user
+     *
+     * @param \Symfony\Component\Security\Core\User\UserInterface  $user
      * @param \League\OAuth2\Server\Entities\ClientEntityInterface $client
-     * @param string $providerKey
-     * @param string $credentials
-     * @param array $scopes
-     * @param array $roles
+     * @param string                                               $providerKey
+     * @param string                                               $credentials
+     * @param array                                                $scopes
+     * @param array                                                $roles
      */
     public function __construct(
         UserInterface $user,

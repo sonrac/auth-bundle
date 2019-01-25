@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: alex
  * Date: 12/5/18
- * Time: 10:30 PM
+ * Time: 10:30 PM.
  */
 
 declare(strict_types=1);
@@ -14,8 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Http\HttpUtils;
 
 /**
- * Class OAuthPathConfig
- * @package Sonrac\OAuth2\Util
+ * Class OAuthPathConfig.
  */
 class OAuthPathConfig
 {
@@ -36,18 +35,19 @@ class OAuthPathConfig
 
     /**
      * OAuthPathConfig constructor.
+     *
      * @param \Symfony\Component\Security\Http\HttpUtils $httpUtils
-     * @param string|null $authorizationPath
-     * @param string|null $issueTokenPath
+     * @param string|null                                $authorizationPath
+     * @param string|null                                $issueTokenPath
      */
     public function __construct(
         HttpUtils $httpUtils,
         ?string $authorizationPath = null,
         ?string $issueTokenPath = null
     ) {
-        $this->httpUtils = $httpUtils;
+        $this->httpUtils         = $httpUtils;
         $this->authorizationPath = $authorizationPath;
-        $this->issueTokenPath = $issueTokenPath;
+        $this->issueTokenPath    = $issueTokenPath;
     }
 
     /**
@@ -63,7 +63,6 @@ class OAuthPathConfig
 
     /**
      * @param \Symfony\Component\HttpFoundation\Request $request
-     *
      *
      * @return bool
      */

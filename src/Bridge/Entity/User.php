@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: alex
  * Date: 12/16/18
- * Time: 1:04 AM
+ * Time: 1:04 AM.
  */
 
 declare(strict_types=1);
@@ -14,8 +14,7 @@ use League\OAuth2\Server\Entities\Traits\EntityTrait;
 use League\OAuth2\Server\Entities\UserEntityInterface;
 
 /**
- * Class User
- * @package Sonrac\OAuth2\Bridge\Entity
+ * Class User.
  */
 class User implements UserEntityInterface
 {
@@ -23,6 +22,7 @@ class User implements UserEntityInterface
 
     /**
      * User constructor.
+     *
      * @param $userIdentifier
      */
     public function __construct($userIdentifier)

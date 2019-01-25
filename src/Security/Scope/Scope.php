@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: alex
  * Date: 11/4/18
- * Time: 9:48 PM
+ * Time: 9:48 PM.
  */
 
 declare(strict_types=1);
@@ -11,8 +11,7 @@ declare(strict_types=1);
 namespace Sonrac\OAuth2\Security\Scope;
 
 /**
- * Class Scope
- * @package Sonrac\OAuth2\Security\Scope
+ * Class Scope.
  */
 class Scope
 {
@@ -20,6 +19,7 @@ class Scope
 
     /**
      * Scope constructor.
+     *
      * @param string $scope
      */
     public function __construct(string $scope)

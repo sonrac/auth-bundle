@@ -11,8 +11,7 @@ use Sonrac\OAuth2\Entity\Scope;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * Class ScopeRepository
- * @package Sonrac\OAuth2\Repository
+ * Class ScopeRepository.
  *
  * @method Scope|null find($id, $lockMode = null, $lockVersion = null)
  * @method Scope|null findOneBy(array $criteria, array $orderBy = null)
@@ -23,6 +22,7 @@ class ScopeRepository extends ServiceEntityRepository implements ScopeRepository
 {
     /**
      * ScopeRepository constructor.
+     *
      * @param \Symfony\Bridge\Doctrine\RegistryInterface $registry
      */
     public function __construct(RegistryInterface $registry)

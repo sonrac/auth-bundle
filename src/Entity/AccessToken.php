@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace Sonrac\OAuth2\Entity;
 
 /**
- * Class AccessToken
- * @package Sonrac\OAuth2\Entity
+ * Class AccessToken.
  */
 class AccessToken
 {
@@ -82,8 +81,6 @@ class AccessToken
      * Set id.
      *
      * @param string $id
-     *
-     * @return void
      */
     public function setId(string $id): void
     {
@@ -124,8 +121,6 @@ class AccessToken
      * Set user identifier.
      *
      * @param int|null $userId
-     *
-     * @return void
      */
     public function setUserId(?int $userId): void
     {
@@ -146,8 +141,6 @@ class AccessToken
      * Set scopes.
      *
      * @param array $scopes
-     *
-     * @return void
      */
     public function setScopes(array $scopes): void
     {
@@ -168,8 +161,6 @@ class AccessToken
      * Set expire time.
      *
      * @param int $expireAt
-     *
-     * @return void
      */
     public function setExpireAt(int $expireAt): void
     {
@@ -190,8 +181,6 @@ class AccessToken
      * Set auth code revoked.
      *
      * @param bool $isRevoked
-     *
-     * @return void
      */
     public function setIsRevoked(bool $isRevoked): void
     {

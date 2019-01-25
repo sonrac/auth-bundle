@@ -11,8 +11,7 @@ use Sonrac\OAuth2\Entity\User;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * Class UserRepository
- * @package Sonrac\OAuth2\Repository
+ * Class UserRepository.
  *
  * @method User|null find($id, $lockMode = null, $lockVersion = null)
  * @method User|null findOneBy(array $criteria, array $orderBy = null)
@@ -46,9 +45,9 @@ class UserRepository extends ServiceEntityRepository implements UserRepositoryIn
      *
      * @param string $username
      *
-     * @return \Sonrac\OAuth2\Entity\User|null
-     *
      * @throws \Doctrine\ORM\NonUniqueResultException
+     *
+     * @return \Sonrac\OAuth2\Entity\User|null
      */
     public function findByUsernameOrEmail(string $username): ?User
     {

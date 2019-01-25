@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: alex
  * Date: 12/1/18
- * Time: 8:09 PM
+ * Time: 8:09 PM.
  */
 
 declare(strict_types=1);
@@ -21,8 +21,7 @@ use Sonrac\OAuth2\Bridge\Grant\RefreshTokenGrant;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class GrantTypeFactory
- * @package Sonrac\OAuth2\Factory
+ * Class GrantTypeFactory.
  */
 class GrantTypeFactory
 {
@@ -33,6 +32,7 @@ class GrantTypeFactory
 
     /**
      * GrantTypeFactory constructor.
+     *
      * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
      */
     public function __construct(ContainerInterface $container)
@@ -76,7 +76,7 @@ class GrantTypeFactory
 
     /**
      * @param \DateInterval $accessTokenTTL
-     * @param string $queryDelimiter
+     * @param string        $queryDelimiter
      *
      * @return \Sonrac\OAuth2\Bridge\Grant\ImplicitGrant
      */

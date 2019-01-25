@@ -37,9 +37,9 @@ abstract class BaseUnitTester extends KernelTestCase
     /**
      * See count records in database.
      *
-     * @param int $count
+     * @param int    $count
      * @param string $table
-     * @param array $condition
+     * @param array  $condition
      */
     protected function seeCountInDatabase(int $count, string $table, array $condition = []): void
     {
@@ -57,6 +57,6 @@ abstract class BaseUnitTester extends KernelTestCase
         }
 
         $data = $query->execute()->fetchColumn();
-        $this->assertEquals($count, (int)$data);
+        $this->assertEquals($count, (int) $data);
     }
 }

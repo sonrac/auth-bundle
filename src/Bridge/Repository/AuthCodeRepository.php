@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: alex
  * Date: 12/16/18
- * Time: 12:19 AM
+ * Time: 12:19 AM.
  */
 
 declare(strict_types=1);
@@ -16,8 +16,7 @@ use Sonrac\OAuth2\Adapter\Repository\AuthCodeRepositoryInterface as OAuthAuthCod
 use Sonrac\OAuth2\Bridge\Entity\AuthCode;
 
 /**
- * Class AuthCodeRepository
- * @package Sonrac\OAuth2\Bridge\Repository
+ * Class AuthCodeRepository.
  */
 class AuthCodeRepository implements AuthCodeRepositoryInterface
 {
@@ -28,6 +27,7 @@ class AuthCodeRepository implements AuthCodeRepositoryInterface
 
     /**
      * AuthCodeRepository constructor.
+     *
      * @param \Sonrac\OAuth2\Adapter\Repository\AuthCodeRepositoryInterface $authCodeRepository
      */
     public function __construct(OAuthAuthCodeRepositoryInterface $authCodeRepository)

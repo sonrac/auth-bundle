@@ -8,8 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
- * Trait DatabaseTrait
- * @package Sonrac\OAuth2\Tests
+ * Trait DatabaseTrait.
  */
 trait DatabaseTrait
 {
@@ -70,9 +69,9 @@ trait DatabaseTrait
      */
     protected function getSeedClassName(string $class): string
     {
-        $className = \class_exists($class) ? $class : $this->seedNameSpace . $class;
+        $className = \class_exists($class) ? $class : $this->seedNameSpace.$class;
 
-        return \class_exists($className) ? $className : $this->seedNameSpace . \ucfirst($class) . 'TableSeeder';
+        return \class_exists($className) ? $className : $this->seedNameSpace.\ucfirst($class).'TableSeeder';
     }
 
     /**
@@ -104,7 +103,7 @@ trait DatabaseTrait
      * Run console command.
      *
      * @param string $commandName
-     * @param array $arguments
+     * @param array  $arguments
      *
      * @return string
      */
@@ -113,7 +112,7 @@ trait DatabaseTrait
         $arguments['--env'] = 'test';
 
         $command = $this->getConsoleApp()->find($commandName);
-        $tester = new CommandTester($command);
+        $tester  = new CommandTester($command);
         $tester->execute($arguments, ['interactive' => false]);
 
         return $tester->getDisplay();

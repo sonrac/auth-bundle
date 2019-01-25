@@ -9,8 +9,7 @@ use Doctrine\DBAL\Types\Type;
 use Sonrac\OAuth2\Factory\GrantTypeFactory;
 
 /**
- * Class GrantTypesEnum
- * @package Sonrac\OAuth2\Doctrine\Type
+ * Class GrantTypesEnum.
  */
 class GrantTypesEnum extends Type
 {
@@ -31,7 +30,7 @@ class GrantTypesEnum extends Type
         $statuses = '';
 
         foreach (GrantTypeFactory::grantTypes() as $status) {
-            $statuses .= (\mb_strlen($statuses) ? ', ' : '') . "'{$status}'";
+            $statuses .= (\mb_strlen($statuses) ? ', ' : '')."'{$status}'";
         }
 
         return "ENUM({$statuses})";

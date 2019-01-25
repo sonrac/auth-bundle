@@ -10,10 +10,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Class GenerateEncryptionKeyCommand
- * @package Sonrac\OAuth2\Command
- *
- * Generate oauth2 server keys.
+ * Class GenerateEncryptionKeyCommand.
  */
 class GenerateEncryptionKeyCommand extends Command
 {

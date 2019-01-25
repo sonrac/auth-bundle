@@ -4,12 +4,6 @@ declare(strict_types=1);
 
 namespace Sonrac\OAuth2\DependencyInjection;
 
-use League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface;
-use League\OAuth2\Server\Repositories\AuthCodeRepositoryInterface;
-use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
-use League\OAuth2\Server\Repositories\RefreshTokenRepositoryInterface;
-use League\OAuth2\Server\Repositories\ScopeRepositoryInterface;
-use League\OAuth2\Server\Repositories\UserRepositoryInterface;
 use Sonrac\OAuth2\Bridge\Grant\AuthCodeGrant;
 use Sonrac\OAuth2\Bridge\Grant\ClientCredentialsGrant;
 use Sonrac\OAuth2\Bridge\Grant\ImplicitGrant;
@@ -19,8 +13,7 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 /**
- * Class Configuration
- * @package Sonrac\OAuth2\DependencyInjection
+ * Class Configuration.
  */
 class Configuration implements ConfigurationInterface
 {
@@ -42,7 +35,8 @@ class Configuration implements ConfigurationInterface
                     ->scalarNode('access_token')->defaultValue('sonrac_oauth.doctrine.repository.access_token')->end()
                     ->scalarNode('auth_code')->defaultValue('sonrac_oauth.doctrine.repository.auth_code')->end()
                     ->scalarNode('client')->defaultValue('sonrac_oauth.doctrine.repository.client')->end()
-                    ->scalarNode('refresh_token')->defaultValue('sonrac_oauth.doctrine.repository.refresh_token')->end()
+                    ->scalarNode('refresh_token')->defaultValue('sonrac_oauth.doctrine.repository.refresh_token')
+                                                 ->end()
                     ->scalarNode('scope')->defaultValue('sonrac_oauth.doctrine.repository.scope')->end()
                     ->scalarNode('user')->defaultValue('sonrac_oauth.doctrine.repository.user')->end()
                 ->end()
@@ -99,7 +93,8 @@ class Configuration implements ConfigurationInterface
 
                                     return false;
                                 })->thenInvalid(
-                                    'Key pair directory does not exists. Generate keys with command sonrac:auth:generate:keys'
+                                    'Key pair directory does not exists. Generate keys with command '.
+                                    'sonrac:auth:generate:keys'
                                 )
                                 ->end()
                             ->end()

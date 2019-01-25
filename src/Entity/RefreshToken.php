@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace Sonrac\OAuth2\Entity;
 
 /**
- * Class RefreshToken
- * @package Sonrac\OAuth2\Entity
+ * Class RefreshToken.
  */
 class RefreshToken
 {
@@ -68,8 +67,6 @@ class RefreshToken
      * Set id.
      *
      * @param string $id
-     *
-     * @return void
      */
     public function setId(string $id): void
     {
@@ -90,8 +87,6 @@ class RefreshToken
      * Set access token.
      *
      * @param string $accessToken
-     *
-     * @return void
      */
     public function setAccessToken(string $accessToken): void
     {
@@ -112,8 +107,6 @@ class RefreshToken
      * Set expire time.
      *
      * @param int $expireAt
-     *
-     * @return void
      */
     public function setExpireAt(int $expireAt): void
     {
@@ -134,8 +127,6 @@ class RefreshToken
      * Set auth code revoked.
      *
      * @param bool $isRevoked
-     *
-     * @return void
      */
     public function setIsRevoked(bool $isRevoked): void
     {

@@ -7,6 +7,7 @@ namespace Sonrac\OAuth2\Security\Provider;
 use Sonrac\OAuth2\Security\Token\AbstractPreAuthenticationToken;
 use Sonrac\OAuth2\Security\Token\OAuthClientToken;
 use Sonrac\OAuth2\Security\Token\OAuthToken;
+use Sonrac\OAuth2\Security\Token\PreAuthenticationToken;
 use Symfony\Component\Security\Core\Authentication\Provider\AuthenticationProviderInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
@@ -17,8 +18,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 /**
- * Class OAuthAuthenticationProvider
- * @package Sonrac\OAuth2\Security\Provider
+ * Class OAuthAuthenticationProvider.
  */
 class OAuthAuthenticationProvider implements AuthenticationProviderInterface
 {
@@ -39,9 +39,10 @@ class OAuthAuthenticationProvider implements AuthenticationProviderInterface
 
     /**
      * OAuthAuthenticationProvider constructor.
+     *
      * @param \Symfony\Component\Security\Core\User\UserProviderInterface $userProvider
-     * @param \Symfony\Component\Security\Core\User\UserCheckerInterface $userChecker
-     * @param string $providerKey
+     * @param \Symfony\Component\Security\Core\User\UserCheckerInterface  $userChecker
+     * @param string                                                      $providerKey
      */
     public function __construct(
         UserProviderInterface $userProvider,
@@ -49,14 +50,14 @@ class OAuthAuthenticationProvider implements AuthenticationProviderInterface
         string $providerKey
     ) {
         $this->userProvider = $userProvider;
-        $this->userChecker = $userChecker;
-        $this->providerKey = $providerKey;
+        $this->userChecker  = $userChecker;
+        $this->providerKey  = $providerKey;
     }
 
     /**
      * {@inheritdoc}
      *
-     * @param \Symfony\Component\Security\Core\Authentication\Token\TokenInterface|\Sonrac\OAuth2\Security\Token\PreAuthenticationToken $token
+     * @param TokenInterface|PreAuthenticationToken $token
      */
     public function authenticate(TokenInterface $token)
     {
@@ -75,14 +76,24 @@ class OAuthAuthenticationProvider implements AuthenticationProviderInterface
         }
 
         if (false === $user instanceof UserInterface) {
-            return new OAuthClientToken($token->getClient(), $token->getProviderKey(), $token->getCredentials(), $token->getScopes());
+            return new OAuthClientToken(
+                $token->getClient(),
+                $token->getProviderKey(),
+                $token->getCredentials(),
+                $token->getScopes()
+            );
         }
 
         $this->userChecker->checkPreAuth($user);
         $this->userChecker->checkPostAuth($user);
 
         return new OAuthToken(
-            $user, $token->getClient(), $token->getProviderKey(), $token->getCredentials(), $token->getScopes(), $user->getRoles()
+            $user,
+            $token->getClient(),
+            $token->getProviderKey(),
+            $token->getCredentials(),
+            $token->getScopes(),
+            $user->getRoles()
         );
     }
 

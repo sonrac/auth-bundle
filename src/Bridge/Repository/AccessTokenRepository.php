@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: alex
  * Date: 12/16/18
- * Time: 12:43 AM
+ * Time: 12:43 AM.
  */
 
 declare(strict_types=1);
@@ -17,8 +17,7 @@ use Sonrac\OAuth2\Adapter\Repository\AccessTokenRepositoryInterface as OAuthAcce
 use Sonrac\OAuth2\Bridge\Entity\AccessToken;
 
 /**
- * Class AccessTokenRepository
- * @package Sonrac\OAuth2\Bridge\Repository
+ * Class AccessTokenRepository.
  */
 class AccessTokenRepository implements AccessTokenRepositoryInterface
 {
@@ -29,6 +28,7 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface
 
     /**
      * AccessTokenRepository constructor.
+     *
      * @param \Sonrac\OAuth2\Adapter\Repository\AccessTokenRepositoryInterface $accessTokenRepository
      */
     public function __construct(OAuthAccessTokenRepositoryInterface $accessTokenRepository)

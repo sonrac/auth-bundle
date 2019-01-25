@@ -11,10 +11,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Class GenerateKeysCommand
- * @package Sonrac\OAuth2\Command
- *
- * Generate oauth2 server keys.
+ * Class GenerateKeysCommand.
  */
 class GenerateKeysCommand extends ContainerAwareCommand
 {
@@ -25,8 +22,9 @@ class GenerateKeysCommand extends ContainerAwareCommand
 
     /**
      * GenerateKeysCommand constructor.
+     *
      * @param \Sonrac\OAuth2\Factory\SecureKeyFactory $secureKeyFactory
-     * @param string|null $name
+     * @param string|null                             $name
      */
     public function __construct(
         SecureKeyFactory $secureKeyFactory,
@@ -78,18 +76,18 @@ class GenerateKeysCommand extends ContainerAwareCommand
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $force = false !== $input->getOption('force');
-        $bits = $input->getOption('bits');
+        $force           = false !== $input->getOption('force');
+        $bits            = $input->getOption('bits');
         $digestAlgorithm = $input->getOption('digest-algorithm');
-        $passPhrase = $input->getOption('passphrase');
+        $passPhrase      = $input->getOption('passphrase');
 
         if (null === $passPhrase || '' === $passPhrase) {
             $passPhrase = $this->secureKeyFactory->getPassPhrase();
         }
 
-        $keyPath = $this->secureKeyFactory->getKeysPath();
+        $keyPath        = $this->secureKeyFactory->getKeysPath();
         $privateKeyPath = $this->secureKeyFactory->getPrivateKeyPath();
-        $publicKeyPath = $this->secureKeyFactory->getPublicKeyPath();
+        $publicKeyPath  = $this->secureKeyFactory->getPublicKeyPath();
 
         if ((\file_exists($privateKeyPath) && \file_exists($publicKeyPath)) && false === $force) {
             throw new \RuntimeException('Key pair is already generated.');
@@ -99,7 +97,7 @@ class GenerateKeysCommand extends ContainerAwareCommand
             throw new \RuntimeException(\sprintf('Error create path {%s}. Check folder permission', $keyPath));
         }
 
-        [$privateKey, $publicKey] = $this->generateKeys((int)$bits, $digestAlgorithm, $passPhrase);
+        [$privateKey, $publicKey] = $this->generateKeys((int) $bits, $digestAlgorithm, $passPhrase);
 
         $this->saveKeys($privateKey, $publicKey);
 
@@ -109,15 +107,19 @@ class GenerateKeysCommand extends ContainerAwareCommand
     }
 
     /**
-     * @param int $bits
-     * @param string $digestAlgorithm
+     * @param int         $bits
+     * @param string      $digestAlgorithm
      * @param string|null $passPhrase
      *
      * @return array
      */
     private function generateKeys(int $bits, string $digestAlgorithm, ?string $passPhrase = null): array
     {
-        $config = ['private_key_bits' => $bits, 'private_key_type' => OPENSSL_KEYTYPE_RSA, 'digest_alg' => $digestAlgorithm];
+        $config = [
+            'private_key_bits' => $bits,
+            'private_key_type' => OPENSSL_KEYTYPE_RSA,
+            'digest_alg'       => $digestAlgorithm,
+        ];
 
         $keyResource = \openssl_pkey_new($config);
 
@@ -145,8 +147,6 @@ class GenerateKeysCommand extends ContainerAwareCommand
     /**
      * @param string $privateKey
      * @param string $publicKey
-     *
-     * @return void
      */
     private function saveKeys(string $privateKey, string $publicKey): void
     {
@@ -159,9 +159,6 @@ class GenerateKeysCommand extends ContainerAwareCommand
         }
     }
 
-    /**
-     * @return void
-     */
     private function fixPermissions(): void
     {
         \chmod($this->secureKeyFactory->getPrivateKeyPath(), 0600);

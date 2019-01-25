@@ -13,8 +13,7 @@ use Sonrac\OAuth2\Entity\Client;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * Class ClientRepository
- * @package Sonrac\OAuth2\Repository
+ * Class ClientRepository.
  *
  * @method Client|null find($id, $lockMode = null, $lockVersion = null)
  * @method Client|null findOneBy(array $criteria, array $orderBy = null)
@@ -25,6 +24,7 @@ class ClientRepository extends ServiceEntityRepository implements ClientReposito
 {
     /**
      * ClientRepository constructor.
+     *
      * @param \Symfony\Bridge\Doctrine\RegistryInterface $registry
      */
     public function __construct(RegistryInterface $registry)
@@ -65,7 +65,7 @@ class ClientRepository extends ServiceEntityRepository implements ClientReposito
             $this->_em->flush();
         } catch (UniqueConstraintViolationException $exception) {
             throw new NotUniqueClientIdentifierException(
-                sprintf('Client with id "%s" already exists', $identifier),
+                \sprintf('Client with id "%s" already exists', $identifier),
                 $exception->getCode(),
                 $exception
             );

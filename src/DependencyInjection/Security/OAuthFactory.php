@@ -11,8 +11,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * Class OAuthFactory
- * @package Sonrac\OAuth2\DependencyInjection\Security
+ * Class OAuthFactory.
  */
 class OAuthFactory implements SecurityFactoryInterface
 {
@@ -23,16 +22,17 @@ class OAuthFactory implements SecurityFactoryInterface
      */
     public function create(ContainerBuilder $container, $id, $config, $userProvider, $defaultEntryPoint)
     {
-        $pathConfigId = 'sonrac_oauth.security.oauth_path_config.' . $id;
-        $authenticationProviderId = 'sonrac_oauth.security.authentication_provider.' . $id;
-        $authenticationHandlerId = 'sonrac_oauth.security.oauth_authentication_handler.' . $id;
-        $authenticationListenerId = 'sonrac_oauth.security.authentication_listener.' . $id;
+        $pathConfigId             = 'sonrac_oauth.security.oauth_path_config.'.$id;
+        $authenticationProviderId = 'sonrac_oauth.security.authentication_provider.'.$id;
+        $authenticationHandlerId  = 'sonrac_oauth.security.oauth_authentication_handler.'.$id;
+        $authenticationListenerId = 'sonrac_oauth.security.authentication_listener.'.$id;
 
         // path config service set up
 
         $container
             ->setDefinition(
-                $pathConfigId, new ChildDefinition('sonrac_oauth.security.oauth_path_config.abstract')
+                $pathConfigId,
+                new ChildDefinition('sonrac_oauth.security.oauth_path_config.abstract')
             )
             ->setArgument('$authorizationPath', $config['paths']['authorization'])
             ->setArgument('$issueTokenPath', $config['paths']['token']);
@@ -45,7 +45,7 @@ class OAuthFactory implements SecurityFactoryInterface
                 new ChildDefinition('sonrac_oauth.security.authentication_provider.abstract')
             )
             ->setArgument('$userProvider', new Reference($userProvider))
-            ->setArgument('$userChecker', new Reference('security.user_checker.' . $id))
+            ->setArgument('$userChecker', new Reference('security.user_checker.'.$id))
             ->setArgument('$providerKey', $id);
 
         // authentication handler

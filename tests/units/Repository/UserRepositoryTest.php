@@ -12,8 +12,7 @@ use Sonrac\OAuth2\Bridge\Grant\ClientCredentialsGrant;
 use Sonrac\OAuth2\Tests\Units\BaseUnitTester;
 
 /**
- * Class UserRepositoryTest
- * @package Sonrac\OAuth2\Tests\Units\Repository
+ * Class UserRepositoryTest.
  */
 class UserRepositoryTest extends BaseUnitTester
 {
@@ -48,7 +47,7 @@ class UserRepositoryTest extends BaseUnitTester
     {
         parent::setUp();
 
-        $this->repository = static::$container->get(UserRepositoryInterface::class);
+        $this->repository        = static::$container->get(UserRepositoryInterface::class);
         $this->clientsRepository = static::$container->get(ClientRepositoryInterface::class);
     }
 

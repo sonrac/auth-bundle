@@ -26,16 +26,16 @@ class ScopesTableSeeder extends RollBackSeedWithCheckExists
     {
         return [
             [
-                'id' => 'default',
-                'title' => 'Default scope',
+                'id'          => 'default',
+                'title'       => 'Default scope',
                 'description' => 'Default scope',
-                'created_at' => \time(),
+                'created_at'  => \time(),
             ],
             [
-                'id' => 'client',
-                'title' => 'Default scope',
+                'id'          => 'client',
+                'title'       => 'Default scope',
                 'description' => 'Client scope',
-                'created_at' => \time(),
+                'created_at'  => \time(),
             ],
         ];
     }

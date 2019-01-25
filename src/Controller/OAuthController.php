@@ -9,8 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class OAuthController
- * @package Sonrac\OAuth2\Controller
+ * Class OAuthController.
  */
 class OAuthController extends AbstractController
 {

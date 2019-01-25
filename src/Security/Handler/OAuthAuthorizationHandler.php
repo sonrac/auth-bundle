@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: alex
  * Date: 12/4/18
- * Time: 11:16 PM
+ * Time: 11:16 PM.
  */
 
 declare(strict_types=1);
@@ -18,8 +18,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class OAuthAuthorizationHandler
- * @package Sonrac\OAuth2\Security\Handler
+ * Class OAuthAuthorizationHandler.
  */
 class OAuthAuthorizationHandler
 {
@@ -35,13 +34,14 @@ class OAuthAuthorizationHandler
 
     /**
      * OAuthAuthorizationHandler constructor.
+     *
      * @param \League\OAuth2\Server\AuthorizationServer $authorizationServer
-     * @param \Sonrac\OAuth2\Bridge\Util\OAuthHandler $OAuthHandler
+     * @param \Sonrac\OAuth2\Bridge\Util\OAuthHandler   $OAuthHandler
      */
     public function __construct(AuthorizationServer $authorizationServer, OAuthHandler $OAuthHandler)
     {
         $this->authorizationServer = $authorizationServer;
-        $this->OAuthHandler = $OAuthHandler;
+        $this->OAuthHandler        = $OAuthHandler;
     }
 
     /**

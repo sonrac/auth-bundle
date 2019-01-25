@@ -14,8 +14,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Class GenerateClientCommand
- * @package Sonrac\OAuth2\Command
+ * Class GenerateClientCommand.
  */
 class GenerateClientCommand extends DoctrineCommand
 {
@@ -26,8 +25,9 @@ class GenerateClientCommand extends DoctrineCommand
 
     /**
      * GenerateClientCommand constructor.
+     *
      * @param \Sonrac\OAuth2\Adapter\Repository\ClientRepositoryInterface $clientRepository
-     * @param string|null $name
+     * @param string|null                                                 $name
      */
     public function __construct(ClientRepositoryInterface $clientRepository, ?string $name = null)
     {
@@ -90,7 +90,7 @@ class GenerateClientCommand extends DoctrineCommand
             ? $grantTypes
             : (null === $grantTypes || '' === $grantTypes ? [] : [$grantTypes]);
 
-        if (\count($grantTypes) !== \count(array_intersect(GrantTypeFactory::grantTypes(), $grantTypes))) {
+        if (\count($grantTypes) !== \count(\array_intersect(GrantTypeFactory::grantTypes(), $grantTypes))) {
             throw new InvalidOptionException('Option "grant-types" contains invalid value.');
         }
 
@@ -101,7 +101,12 @@ class GenerateClientCommand extends DoctrineCommand
 
         try {
             $client = $this->clientRepository->createClientEntity(
-                $name, $secret, $grantTypes, $redirectUris, $identifier, $input->getOptions()
+                $name,
+                $secret,
+                $grantTypes,
+                $redirectUris,
+                $identifier,
+                $input->getOptions()
             );
         } catch (NotUniqueClientIdentifierException $exception) {
             throw new InvalidOptionException('Option "identifier" is not unique.');
@@ -121,9 +126,9 @@ class GenerateClientCommand extends DoctrineCommand
      */
     private function generateRandomString($length = 255): string
     {
-        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()<>?.,+=-_';
+        $characters       = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()<>?.,+=-_';
         $charactersLength = \mb_strlen($characters);
-        $randomString = '';
+        $randomString     = '';
 
         for ($i = 0; $i < $length; ++$i) {
             $randomString .= $characters[\rand(0, $charactersLength - 1)];

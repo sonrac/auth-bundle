@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: alex
  * Date: 12/16/18
- * Time: 2:16 PM
+ * Time: 2:16 PM.
  */
 
 declare(strict_types=1);
@@ -18,8 +18,7 @@ use Sonrac\OAuth2\Bridge\Entity\User;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
- * Class UserRepository
- * @package Sonrac\OAuth2\Bridge\Repository
+ * Class UserRepository.
  */
 class UserRepository implements UserRepositoryInterface
 {
@@ -35,20 +34,27 @@ class UserRepository implements UserRepositoryInterface
 
     /**
      * UserRepository constructor.
-     * @param \Sonrac\OAuth2\Adapter\Repository\UserRepositoryInterface $userRepository
+     *
+     * @param \Sonrac\OAuth2\Adapter\Repository\UserRepositoryInterface             $userRepository
      * @param \Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface $passwordEncoder
      */
-    public function __construct(OAuthUserRepositoryInterface $userRepository, UserPasswordEncoderInterface $passwordEncoder)
-    {
-        $this->userRepository = $userRepository;
+    public function __construct(
+        OAuthUserRepositoryInterface $userRepository,
+        UserPasswordEncoderInterface $passwordEncoder
+    ) {
+        $this->userRepository  = $userRepository;
         $this->passwordEncoder = $passwordEncoder;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getUserEntityByUserCredentials($username, $password, $grantType, ClientEntityInterface $clientEntity)
-    {
+    public function getUserEntityByUserCredentials(
+        $username,
+        $password,
+        $grantType,
+        ClientEntityInterface $clientEntity
+    ) {
         $user = $this->userRepository->findUserByUsername($username);
 
         if (null === $user || false === $this->passwordEncoder->isPasswordValid($user, $password)) {

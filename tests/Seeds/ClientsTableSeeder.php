@@ -12,8 +12,7 @@ use Sonrac\OAuth2\Bridge\Grant\RefreshTokenGrant;
 use sonrac\SimpleSeed\RollBackSeedWithCheckExists;
 
 /**
- * Class ClientsTableSeeder
- * @package Sonrac\OAuth2\Tests\Seeds
+ * Class ClientsTableSeeder.
  */
 class ClientsTableSeeder extends RollBackSeedWithCheckExists
 {
@@ -32,10 +31,10 @@ class ClientsTableSeeder extends RollBackSeedWithCheckExists
     {
         return [
             [
-                'id' => 'test_client',
-                'name' => 'Test Client',
-                'description' => 'First test client',
-                'secret' => 'secret-key',
+                'id'                  => 'test_client',
+                'name'                => 'Test Client',
+                'description'         => 'First test client',
+                'secret'              => 'secret-key',
                 'allowed_grant_types' => \json_encode([
                     ClientCredentialsGrant::TYPE,
                     AuthCodeGrant::TYPE,

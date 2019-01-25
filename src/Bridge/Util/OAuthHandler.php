@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: alex
  * Date: 12/18/18
- * Time: 9:59 PM
+ * Time: 9:59 PM.
  */
 
 declare(strict_types=1);
@@ -21,8 +21,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
 /**
- * Class OAuthHandler
- * @package Sonrac\OAuth2\Bridge\Util
+ * Class OAuthHandler.
  */
 class OAuthHandler
 {
@@ -48,24 +47,23 @@ class OAuthHandler
 
     /**
      * OAuthHandler constructor.
-     * @param \Symfony\Bridge\PsrHttpMessage\Factory\DiactorosFactory $diactorosFactory
+     *
+     * @param \Symfony\Bridge\PsrHttpMessage\Factory\DiactorosFactory      $diactorosFactory
      * @param \Symfony\Bridge\PsrHttpMessage\Factory\HttpFoundationFactory $httpFoundationFactory
-     * @param bool $debug
+     * @param bool                                                         $debug
      */
     public function __construct(
         DiactorosFactory $diactorosFactory,
         HttpFoundationFactory $httpFoundationFactory,
         bool $debug = false
     ) {
-        $this->diactorosFactory = $diactorosFactory;
+        $this->diactorosFactory      = $diactorosFactory;
         $this->httpFoundationFactory = $httpFoundationFactory;
-        $this->debug = $debug;
+        $this->debug                 = $debug;
     }
 
     /**
      * @param \Psr\Log\LoggerInterface $logger
-     *
-     * @return void
      */
     public function setLogger(LoggerInterface $logger): void
     {
@@ -73,15 +71,15 @@ class OAuthHandler
     }
 
     /**
-     * @param \Closure $handler
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Closure                                        $handler
+     * @param \Symfony\Component\HttpFoundation\Request       $request
      * @param \Symfony\Component\HttpFoundation\Response|null $response
      *
      * @return \Symfony\Component\HttpFoundation\Response|null
      */
     public function handle(Closure $handler, Request $request, ?Response $response = null): ?Response
     {
-        $psrRequest = $this->diactorosFactory->createRequest($request);
+        $psrRequest  = $this->diactorosFactory->createRequest($request);
         $psrResponse = $this->diactorosFactory->createResponse($response ?? new Response());
 
         try {

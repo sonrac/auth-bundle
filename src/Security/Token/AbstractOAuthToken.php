@@ -11,8 +11,7 @@ use Symfony\Component\Security\Core\Role\Role;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * Class AbstractOAuthToken
- * @package Sonrac\OAuth2\Security\Token
+ * Class AbstractOAuthToken.
  */
 abstract class AbstractOAuthToken extends AbstractToken
 {
@@ -38,11 +37,12 @@ abstract class AbstractOAuthToken extends AbstractToken
 
     /**
      * OAuthToken constructor.
+     *
      * @param \League\OAuth2\Server\Entities\ClientEntityInterface $client
-     * @param string $providerKey
-     * @param string $credentials
-     * @param array $scopes
-     * @param array $roles
+     * @param string                                               $providerKey
+     * @param string                                               $credentials
+     * @param array                                                $scopes
+     * @param array                                                $roles
      */
     public function __construct(
         ClientEntityInterface $client,
@@ -57,7 +57,7 @@ abstract class AbstractOAuthToken extends AbstractToken
             throw new \InvalidArgumentException('$providerKey must not be empty.');
         }
 
-        $this->client = $client;
+        $this->client      = $client;
         $this->providerKey = $providerKey;
         $this->credentials = $credentials;
 
@@ -65,13 +65,18 @@ abstract class AbstractOAuthToken extends AbstractToken
             if (\is_string($scope)) {
                 $scope = new Scope($scope);
             } elseif (false === $scope instanceof Scope) {
-                throw new \InvalidArgumentException(sprintf('$scopes must be an array of strings, or Scope instances, but got %s.', \gettype($scope)));
+                throw new \InvalidArgumentException(
+                    \sprintf(
+                        '$scopes must be an array of strings, or Scope instances, but got %s.',
+                        \gettype($scope)
+                    )
+                );
             }
 
             $this->scopes[] = $scope;
         }
 
-        if (0 !== count($this->scopes)) {
+        if (0 !== \count($this->scopes)) {
             parent::setAuthenticated(true);
         }
     }
@@ -146,14 +151,14 @@ abstract class AbstractOAuthToken extends AbstractToken
     public function serialize()
     {
         return \serialize([
-            clone $this->client,
-            $this->providerKey,
-            $this->credentials,
-            array_map(function (Scope $scope) {
-                return clone $scope;
-            }, $this->getScopes()),
-            parent::serialize(),
-        ]);
+                              clone $this->client,
+                              $this->providerKey,
+                              $this->credentials,
+                              \array_map(function (Scope $scope) {
+                                  return clone $scope;
+                              }, $this->getScopes()),
+                              parent::serialize(),
+                          ]);
     }
 
     /**
@@ -166,8 +171,9 @@ abstract class AbstractOAuthToken extends AbstractToken
             $this->providerKey,
             $this->credentials,
             $this->scopes,
-            $parent
-        ] = \unserialize($serialized);
+            $parent,
+        ]
+            = \unserialize($serialized);
 
         parent::unserialize($parent);
     }
@@ -178,24 +184,24 @@ abstract class AbstractOAuthToken extends AbstractToken
     public function __toString()
     {
         $class = \get_class($this);
-        $class = substr($class, strrpos($class, '\\') + 1);
+        $class = \mb_substr($class, \mb_strrpos($class, '\\') + 1);
 
-        $roles = array_map(function (Role $role) {
+        $roles = \array_map(function (Role $role) {
             return $role->getRole();
         }, $this->getRoles());
 
-        $scopes = array_map(function (Scope $scope) {
+        $scopes = \array_map(function (Scope $scope) {
             return $scope->getScope();
         }, $this->scopes);
 
-        return sprintf(
+        return \sprintf(
             '%s(client="%s", user="%s", authenticated=%s, scopes="%s", roles="%s")',
             $class,
             $this->client->getIdentifier(),
             $this->getUsername(),
-            json_encode($this->isAuthenticated()),
-            implode(', ', $scopes),
-            implode(', ', $roles)
+            \json_encode($this->isAuthenticated()),
+            \implode(', ', $scopes),
+            \implode(', ', $roles)
         );
     }
 }

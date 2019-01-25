@@ -7,8 +7,7 @@ namespace Sonrac\OAuth2\Entity;
 use Sonrac\OAuth2\Adapter\Entity\ClientEntityInterface;
 
 /**
- * Class Client
- * @package Sonrac\OAuth2\Entity
+ * Class Client.
  */
 class Client implements ClientEntityInterface
 {
@@ -110,8 +109,6 @@ class Client implements ClientEntityInterface
      * Set client id.
      *
      * @param string $id
-     *
-     * @return void
      */
     public function setId(string $id): void
     {
@@ -130,8 +127,6 @@ class Client implements ClientEntityInterface
      * Set client name.
      *
      * @param string $name
-     *
-     * @return void
      */
     public function setName(string $name): void
     {
@@ -152,8 +147,6 @@ class Client implements ClientEntityInterface
      * Set client app description.
      *
      * @param string $description
-     *
-     * @return void
      */
     public function setDescription(string $description): void
     {
@@ -172,8 +165,6 @@ class Client implements ClientEntityInterface
      * Set secret key.
      *
      * @param string $secret
-     *
-     * @return void
      */
     public function setSecret(string $secret): void
     {
@@ -192,8 +183,6 @@ class Client implements ClientEntityInterface
      * Set allowed grant types.
      *
      * @param array $allowedGrantTypes
-     *
-     * @return void
      */
     public function setAllowedGrantTypes(array $allowedGrantTypes): void
     {
@@ -204,8 +193,6 @@ class Client implements ClientEntityInterface
      * Add allowed grant type.
      *
      * @param string $grantType
-     *
-     * @return void
      */
     public function addAllowedGrantType(string $grantType): void
     {
@@ -228,8 +215,6 @@ class Client implements ClientEntityInterface
      * Set redirect uris.
      *
      * @param array $redirectUris
-     *
-     * @return void
      */
     public function setRedirectUris(array $redirectUris): void
     {
@@ -242,8 +227,6 @@ class Client implements ClientEntityInterface
      * Add redirect uri.
      *
      * @param string $uri
-     *
-     * @return void
      */
     public function addRedirectUri(string $uri): void
     {

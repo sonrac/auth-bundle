@@ -20,7 +20,7 @@ class DefaultController extends AbstractController
     public function security(Request $request)
     {
         return $this->json([
-            'status' => true
+            'status' => true,
         ]);
     }
 }

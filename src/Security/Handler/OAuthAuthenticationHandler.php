@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: alex
  * Date: 12/4/18
- * Time: 11:42 PM
+ * Time: 11:42 PM.
  */
 
 declare(strict_types=1);
@@ -25,8 +25,7 @@ use Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterfac
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /**
- * Class OAuthAuthenticationHandler
- * @package Sonrac\OAuth2\Security\Handler
+ * Class OAuthAuthenticationHandler.
  */
 class OAuthAuthenticationHandler
 {
@@ -67,13 +66,14 @@ class OAuthAuthenticationHandler
 
     /**
      * OAuthAuthenticationHandler constructor.
-     * @param \League\OAuth2\Server\AuthorizationValidators\AuthorizationValidatorInterface $authorizationValidator
-     * @param \Sonrac\OAuth2\Security\Scope\ScopeValidatorInterface $scopeValidator
-     * @param \League\OAuth2\Server\Repositories\ClientRepositoryInterface $clientRepository
+     *
+     * @param AuthorizationValidatorInterface                                                $authorizationValidator
+     * @param \Sonrac\OAuth2\Security\Scope\ScopeValidatorInterface                          $scopeValidator
+     * @param \League\OAuth2\Server\Repositories\ClientRepositoryInterface                   $clientRepository
      * @param \Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface $authenticationManager
-     * @param \Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface $tokenStorage
-     * @param \Sonrac\OAuth2\Bridge\Util\OAuthHandler $OAuthHandler
-     * @param string $providerKey
+     * @param TokenStorageInterface                                                          $tokenStorage
+     * @param \Sonrac\OAuth2\Bridge\Util\OAuthHandler                                        $OAuthHandler
+     * @param string                                                                         $providerKey
      */
     public function __construct(
         AuthorizationValidatorInterface $authorizationValidator,
@@ -85,12 +85,12 @@ class OAuthAuthenticationHandler
         string $providerKey
     ) {
         $this->authorizationValidator = $authorizationValidator;
-        $this->scopeValidator = $scopeValidator;
-        $this->clientRepository = $clientRepository;
-        $this->authenticationManager = $authenticationManager;
-        $this->tokenStorage = $tokenStorage;
-        $this->providerKey = $providerKey;
-        $this->OAuthHandler = $OAuthHandler;
+        $this->scopeValidator         = $scopeValidator;
+        $this->clientRepository       = $clientRepository;
+        $this->authenticationManager  = $authenticationManager;
+        $this->tokenStorage           = $tokenStorage;
+        $this->providerKey            = $providerKey;
+        $this->OAuthHandler           = $OAuthHandler;
     }
 
     /**
@@ -125,7 +125,10 @@ class OAuthAuthenticationHandler
         $clientId = $request->getAttribute('oauth_client_id');
 
         $client = $this->clientRepository->getClientEntity(
-            $clientId, null, null, false
+            $clientId,
+            null,
+            null,
+            false
         );
 
         $userId = $request->getAttribute('oauth_user_id');

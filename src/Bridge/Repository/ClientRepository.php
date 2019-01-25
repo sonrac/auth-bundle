@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: alex
  * Date: 12/15/18
- * Time: 11:35 PM
+ * Time: 11:35 PM.
  */
 
 declare(strict_types=1);
@@ -17,8 +17,7 @@ use Sonrac\OAuth2\Adapter\Repository\ClientRepositoryInterface as OAuthClientRep
 use Sonrac\OAuth2\Bridge\Entity\Client;
 
 /**
- * Class ClientRepository
- * @package Sonrac\OAuth2\Bridge\Repository
+ * Class ClientRepository.
  */
 class ClientRepository implements ClientRepositoryInterface
 {
@@ -29,6 +28,7 @@ class ClientRepository implements ClientRepositoryInterface
 
     /**
      * ClientRepository constructor.
+     *
      * @param \Sonrac\OAuth2\Adapter\Repository\ClientRepositoryInterface $clientRepository
      */
     public function __construct(OAuthClientRepositoryInterface $clientRepository)
@@ -39,8 +39,12 @@ class ClientRepository implements ClientRepositoryInterface
     /**
      * {@inheritdoc}
      */
-    public function getClientEntity($clientIdentifier, $grantType = null, $clientSecret = null, $mustValidateSecret = true)
-    {
+    public function getClientEntity(
+        $clientIdentifier,
+        $grantType = null,
+        $clientSecret = null,
+        $mustValidateSecret = true
+    ) {
         $client = $this->clientRepository->findClientEntityByIdentifier($clientIdentifier);
 
         if (null === $client) {
@@ -60,7 +64,7 @@ class ClientRepository implements ClientRepositoryInterface
 
     /**
      * @param \Sonrac\OAuth2\Adapter\Entity\ClientEntityInterface $client
-     * @param string $grantType
+     * @param string                                              $grantType
      *
      * @return bool
      */

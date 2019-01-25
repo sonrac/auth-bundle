@@ -11,8 +11,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 /**
- * Class AuthBundle
- * @package Sonrac\OAuth2
+ * Class AuthBundle.
  */
 class AuthBundle extends Bundle
 {
@@ -24,7 +23,7 @@ class AuthBundle extends Bundle
         parent::build($container);
 
         $mappings = [
-            __DIR__ . '/Resources/config/doctrine/' => 'Sonrac\OAuth2\Entity',
+            __DIR__.'/Resources/config/doctrine/' => 'Sonrac\OAuth2\Entity',
         ];
 
         if (\class_exists('Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappingsPass')) {

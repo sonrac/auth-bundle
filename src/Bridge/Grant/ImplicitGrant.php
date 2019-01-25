@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: alex
  * Date: 12/2/18
- * Time: 4:38 PM
+ * Time: 4:38 PM.
  */
 
 declare(strict_types=1);
@@ -11,8 +11,7 @@ declare(strict_types=1);
 namespace Sonrac\OAuth2\Bridge\Grant;
 
 /**
- * Class ImplicitGrant
- * @package Sonrac\OAuth2\Bridge\Grant
+ * Class ImplicitGrant.
  */
 class ImplicitGrant extends \League\OAuth2\Server\Grant\ImplicitGrant
 {

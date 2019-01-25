@@ -13,8 +13,7 @@ use League\OAuth2\Server\Repositories\ScopeRepositoryInterface;
 use Sonrac\OAuth2\Tests\Units\BaseUnitTester;
 
 /**
- * Class AccessTokenRepositoryTest
- * @package Sonrac\OAuth2\Tests\Units\Repository
+ * Class AccessTokenRepositoryTest.
  */
 class AccessTokenRepositoryTest extends BaseUnitTester
 {
@@ -54,17 +53,17 @@ class AccessTokenRepositoryTest extends BaseUnitTester
     {
         parent::setUp();
 
-        $this->repository = static::$container->get(AccessTokenRepositoryInterface::class);
+        $this->repository       = static::$container->get(AccessTokenRepositoryInterface::class);
         $this->clientRepository = static::$container->get(ClientRepositoryInterface::class);
-        $this->scopeRepository = static::$container->get(ScopeRepositoryInterface::class);
+        $this->scopeRepository  = static::$container->get(ScopeRepositoryInterface::class);
     }
 
     /**
      * Test get new token.
      *
-     * @return \League\OAuth2\Server\Entities\AccessTokenEntityInterface $token
-     *
      * @throws \Exception
+     *
+     * @return \League\OAuth2\Server\Entities\AccessTokenEntityInterface $token
      */
     public function testGetNewToken(): AccessTokenEntityInterface
     {
