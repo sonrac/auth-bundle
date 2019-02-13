@@ -29,8 +29,7 @@ class GenerateKeysCommand extends ContainerAwareCommand
     public function __construct(
         SecureKeyFactory $secureKeyFactory,
         ?string $name = null
-    )
-    {
+    ) {
         parent::__construct($name);
 
         $this->secureKeyFactory = $secureKeyFactory;
@@ -52,11 +51,11 @@ class GenerateKeysCommand extends ContainerAwareCommand
                  'Force regenerate keys',
                  false
              )->addOption(
-                'bits',
-                'b',
-                InputOption::VALUE_OPTIONAL,
-                'Number of bits in private key',
-                4096
+                 'bits',
+                 'b',
+                 InputOption::VALUE_OPTIONAL,
+                 'Number of bits in private key',
+                 4096
             )->addOption(
                 'digest-algorithm',
                 'digest',
@@ -77,18 +76,18 @@ class GenerateKeysCommand extends ContainerAwareCommand
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $force = false !== $input->getOption('force');
-        $bits = $input->getOption('bits');
+        $force           = false !== $input->getOption('force');
+        $bits            = $input->getOption('bits');
         $digestAlgorithm = $input->getOption('digest-algorithm');
-        $passPhrase = $input->getOption('passphrase');
+        $passPhrase      = $input->getOption('passphrase');
 
         if (null === $passPhrase || '' === $passPhrase) {
             $passPhrase = $this->secureKeyFactory->getPassPhrase();
         }
 
-        $keyPath = $this->secureKeyFactory->getKeysPath();
+        $keyPath        = $this->secureKeyFactory->getKeysPath();
         $privateKeyPath = $this->secureKeyFactory->getPrivateKeyPath();
-        $publicKeyPath = $this->secureKeyFactory->getPublicKeyPath();
+        $publicKeyPath  = $this->secureKeyFactory->getPublicKeyPath();
 
         if ((\file_exists($privateKeyPath) && \file_exists($publicKeyPath)) && false === $force) {
             throw new \RuntimeException('Key pair is already generated.');
@@ -98,7 +97,7 @@ class GenerateKeysCommand extends ContainerAwareCommand
             throw new \RuntimeException(\sprintf('Error create path {%s}. Check folder permission', $keyPath));
         }
 
-        [$privateKey, $publicKey] = $this->generateKeys((int)$bits, $digestAlgorithm, $passPhrase);
+        [$privateKey, $publicKey] = $this->generateKeys((int) $bits, $digestAlgorithm, $passPhrase);
 
         $this->saveKeys($privateKey, $publicKey);
 
