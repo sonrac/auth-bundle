@@ -90,18 +90,23 @@ class AuthorizationServerConfigurator
                 case AuthCodeGrant::TYPE:
                     $grantType = $this->grantTypeFactory
                         ->createAuthCodeGrant($this->authCodeTTL, $this->refreshTokenTTL);
+
                     break;
                 case ClientCredentialsGrant::TYPE:
                     $grantType = $this->grantTypeFactory->createClientCredentialsGrant($this->refreshTokenTTL);
+
                     break;
                 case ImplicitGrant::TYPE:
                     $grantType = $this->grantTypeFactory->createImplicitGrant($this->accessTokenTTL);
+
                     break;
                 case PasswordGrant::TYPE:
                     $grantType = $this->grantTypeFactory->createPasswordGrant($this->refreshTokenTTL);
+
                     break;
                 case RefreshTokenGrant::TYPE:
                     $grantType = $this->grantTypeFactory->createRefreshTokenGrant($this->refreshTokenTTL);
+
                     break;
                 default:
                     continue 2;

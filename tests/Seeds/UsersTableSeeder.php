@@ -27,13 +27,13 @@ class UsersTableSeeder extends RollBackSeedWithCheckExists
     {
         return [
             [
-                'username'   => 'username',
-                'email'      => 'email@email.com',
-                'password'   => (new BCryptPasswordEncoder(12))->encodePassword('password', null),
-                'roles'      => \json_encode(['ROLE_USER']),
+                'username' => 'username',
+                'email' => 'email@email.com',
+                'password' => (new BCryptPasswordEncoder(12))->encodePassword('password', null),
+                'roles' => \json_encode(['ROLE_USER']),
                 'first_name' => 'John',
-                'last_name'  => 'Doe',
-                'status'     => 'active',
+                'last_name' => 'Doe',
+                'status' => 'active',
                 'created_at' => \time(),
             ],
         ];
