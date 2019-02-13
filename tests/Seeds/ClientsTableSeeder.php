@@ -31,10 +31,10 @@ class ClientsTableSeeder extends RollBackSeedWithCheckExists
     {
         return [
             [
-                'id'                  => 'test_client',
-                'name'                => 'Test Client',
-                'description'         => 'First test client',
-                'secret'              => 'secret-key',
+                'id' => 'test_client',
+                'name' => 'Test Client',
+                'description' => 'First test client',
+                'secret' => 'secret-key',
                 'allowed_grant_types' => \json_encode([
                     ClientCredentialsGrant::TYPE,
                     AuthCodeGrant::TYPE,

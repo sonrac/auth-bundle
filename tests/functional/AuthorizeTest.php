@@ -76,10 +76,10 @@ class AuthorizeTest extends BaseFunctionalTester
     {
         $client = static::createClient();
         $client->request('POST', '/oauth/token', [
-            'grant_type'    => ClientCredentialsGrant::TYPE,
-            'client_id'     => 'test_client',
+            'grant_type' => ClientCredentialsGrant::TYPE,
+            'client_id' => 'test_client',
             'client_secret' => 'secret-key',
-            'scope'         => 'default',
+            'scope' => 'default',
         ]);
         $response = $client->getResponse();
 
@@ -103,12 +103,12 @@ class AuthorizeTest extends BaseFunctionalTester
     {
         $client = static::createClient();
         $client->request('POST', '/oauth/token', [
-            'grant_type'    => PasswordGrant::TYPE,
-            'client_id'     => 'test_client',
+            'grant_type' => PasswordGrant::TYPE,
+            'client_id' => 'test_client',
             'client_secret' => 'secret-key',
-            'scope'         => 'default',
-            'username'      => 'username',
-            'password'      => 'password',
+            'scope' => 'default',
+            'username' => 'username',
+            'password' => 'password',
         ]);
         $response = $client->getResponse();
 
@@ -145,11 +145,11 @@ class AuthorizeTest extends BaseFunctionalTester
 
         $client = static::createClient();
         $client->request('POST', '/oauth/token', [
-            'grant_type'    => RefreshTokenGrant::TYPE,
-            'client_id'     => 'test_client',
+            'grant_type' => RefreshTokenGrant::TYPE,
+            'client_id' => 'test_client',
             'refresh_token' => $tokens[2],
             'client_secret' => 'secret-key',
-            'scope'         => 'default',
+            'scope' => 'default',
         ]);
         $response = $client->getResponse();
 

@@ -140,7 +140,7 @@ class ClearTokensCommand extends DoctrineCommand
 
             $tokens = $queryToken->getQuery()->getArrayResult();
 
-            if (\count($tokens) === 0) {
+            if (0 === \count($tokens)) {
                 return;
             }
 
